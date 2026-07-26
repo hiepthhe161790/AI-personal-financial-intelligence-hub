@@ -1,54 +1,95 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
 # Dependencies
-/node_modules
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
 /.pnp
-.pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-# Testing
-/coverage
-
-# Next.js build output
+# Build & Output
+/build/
+/dist/
 /.next/
 /out/
+/.turbo/
+/.swc/
+*.tsbuildinfo
+next-env.d.ts
 
-# Production build
-/build
-/dist
+# Testing & Coverage
+/coverage/
+/.pytest_cache/
+/.mypy_cache/
+/.ruff_cache/
+htmlcov/
 
-# Debug logs
+# Logs & Debug
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+.pnpm-debug.log*
+.eslintcache
+.stylelintcache
+.node_repl_history
 
-# Environment variables & secrets
+# Environment & Secrets
 .env
-.env*.local
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env*.local
+!.env.example
+*.pem
+*.key
+*.crt
 
-# Vercel & Turbo
-.vercel
-.turbo
+# Local Databases & Temporary Storage
+*.sqlite
+*.sqlite3
+*.db
+.cache/
+/tmp/
+/temp/
 
-# IDEs and Editors
+# IDEs & Code Editors
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
 
-# System Files
+# OS System Files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Temporary / Log files
-*.log
+# Office Temporary Lock Files
+~$*.doc*
+~$*.xls*
+~$*.ppt*
+
+# Platform & Deployment
+.vercel
+

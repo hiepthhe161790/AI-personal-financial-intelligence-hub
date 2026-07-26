@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Next.js Fullstack Core Application
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: financial_hub_web
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/ai_financial_hub
+      - PYTHON_SERVICE_URL=http://analytics:8000
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=production_super_secret_jwt_key_2026
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - mongo
+      - analytics
+    networks:
+      - hub_net
+
+  # Python FastAPI Analytics & Market Crawler Sidecar
+  analytics:
+    build:
+      context: .
+      dockerfile: Dockerfile.analytics
+    container_name: financial_hub_analytics
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/ai_financial_hub
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+    depends_on:
+      - mongo
+    networks:
+      - hub_net
+
+  # MongoDB Database Server
+  mongo:
+    image: mongo:7.0
+    container_name: financial_hub_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - hub_net
+
+volumes:
+  mongo_data:
+
+networks:
+  hub_net:
+    driver: bridge
