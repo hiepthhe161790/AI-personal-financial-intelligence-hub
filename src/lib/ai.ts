@@ -29,8 +29,8 @@ QUY TẮC BẮT BUỘC:
 3. KHÔNG ĐƯỢC TƯ VẤN MUA/BÁN TRÁI PHÉP các mã cổ phiếu cụ thể. Chỉ phân tích ở cấp độ quản trị rủi ro danh mục tài sản cá nhân.
 4. Trả về đúng định dạng JSON tuân thủ Schema.`;
 
-export async function generateResearchBrief(evidencePack: EvidencePack): Promise<AIResearchBrief> {
-  const apiKey = process.env.GEMINI_API_KEY;
+export async function generateResearchBrief(evidencePack: EvidencePack, userApiKey?: string): Promise<AIResearchBrief> {
+  const apiKey = userApiKey || process.env.GEMINI_API_KEY;
 
   // 1. If real Gemini API key is configured, invoke Google Gemini 2.0 Flash / 1.5 Flash
   if (apiKey && apiKey !== 'mock_dev_key' && apiKey.length > 10) {

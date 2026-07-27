@@ -234,4 +234,8 @@ async def get_market_summary():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import os
+    port = int(os.getenv("PORT", 8000))
+    # Disable reload in production to save CPU/memory resources
+    reload_mode = os.getenv("NODE_ENV") != "production"
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=reload_mode)

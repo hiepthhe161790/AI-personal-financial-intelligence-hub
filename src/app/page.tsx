@@ -51,6 +51,20 @@ export default function Home() {
   const [isOcrOpen, setIsOcrOpen] = useState(false);
   const [isRebalanceOpen, setIsRebalanceOpen] = useState(false);
 
+  // Load stealth mode from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('stealth_mode') === 'true';
+    setIsPrivate(saved);
+  }, []);
+
+  const handleTogglePrivate = () => {
+    setIsPrivate((prev) => {
+      const next = !prev;
+      localStorage.setItem('stealth_mode', String(next));
+      return next;
+    });
+  };
+
   const fetchAccounts = useCallback(async () => {
     setLoading(true);
     try {
@@ -131,7 +145,7 @@ export default function Home() {
           
           <nav className="flex items-center space-x-3">
             <button
-              onClick={() => setIsPrivate(!isPrivate)}
+              onClick={handleTogglePrivate}
               className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition-all cursor-pointer flex items-center gap-1.5 text-xs font-semibold"
               title={isPrivate ? 'Hiện số tiền' : 'Ẩn số tiền bảo mật'}
             >
@@ -258,7 +272,7 @@ export default function Home() {
               data={netWorthData} 
               loading={loading} 
               isPrivate={isPrivate} 
-              onTogglePrivacy={() => setIsPrivate(!isPrivate)} 
+              onTogglePrivacy={handleTogglePrivate} 
             />
 
             {/* Personal Wealth Goal & Discipline Checklist */}
