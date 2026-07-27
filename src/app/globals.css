@@ -68,3 +68,22 @@ body {
   color: var(--foreground);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Force modal-dark class to always use dark palette */
+.modal-dark {
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-color: #334155;
+}
+.modal-dark * {
+  --tw-ring-shadow: none;
+}

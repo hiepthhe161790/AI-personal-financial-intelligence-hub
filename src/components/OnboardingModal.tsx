@@ -15,9 +15,9 @@ interface OnboardingModalProps {
 const STEPS = [
   {
     icon: BrainCircuit,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10',
-    border: 'border-emerald-500/20',
+    iconBg: 'bg-emerald-500/20',
+    iconText: 'text-emerald-400',
+    dotColor: 'bg-emerald-400',
     title: 'Chào mừng đến AI Financial Hub! 🎉',
     subtitle: 'Hệ thống quản lý tài sản cá nhân thông minh',
     description:
@@ -32,9 +32,9 @@ const STEPS = [
   },
   {
     icon: Wallet,
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/20',
+    iconBg: 'bg-blue-500/20',
+    iconText: 'text-blue-400',
+    dotColor: 'bg-blue-400',
     title: 'Bước 1: Thêm Tài Khoản Tài Sản 💼',
     subtitle: 'Ghi nhận tất cả tài sản và khoản nợ của bạn',
     description:
@@ -49,9 +49,9 @@ const STEPS = [
   },
   {
     icon: Target,
-    color: 'text-amber-400',
-    bg: 'bg-amber-500/10',
-    border: 'border-amber-500/20',
+    iconBg: 'bg-amber-500/20',
+    iconText: 'text-amber-400',
+    dotColor: 'bg-amber-400',
     title: 'Bước 2: Đặt Mục Tiêu Tài Chính 🎯',
     subtitle: 'Xác định đích đến để có hướng đi rõ ràng',
     description:
@@ -94,12 +94,26 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
   const isLast = step === STEPS.length - 1;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="relative bg-slate-900 border border-slate-700 rounded-3xl p-8 max-w-lg w-full shadow-2xl shadow-black/50 animate-in slide-in-from-bottom-4 duration-300">
+    /* Backdrop */
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
+      style={{ backgroundColor: 'rgba(2, 6, 23, 0.75)', backdropFilter: 'blur(6px)' }}
+    >
+      {/* Card — always dark regardless of theme */}
+      <div
+        className="relative rounded-3xl p-8 max-w-lg w-full shadow-2xl animate-in slide-in-from-bottom-4 duration-300 border"
+        style={{
+          backgroundColor: '#0f172a',
+          borderColor: '#1e293b',
+          color: '#f8fafc',
+        }}
+      >
         {/* Skip button */}
         <button
           onClick={handleSkip}
-          className="absolute top-4 right-4 p-1.5 text-slate-500 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-1.5 rounded-xl transition-colors cursor-pointer"
+          style={{ color: '#64748b' }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#f8fafc')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = '#64748b')}
           title="Bỏ qua"
         >
           <X className="w-4 h-4" />
@@ -107,26 +121,35 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
 
         {/* Step dots */}
         <div className="flex items-center justify-center gap-2 mb-8">
-          {STEPS.map((_, i) => (
+          {STEPS.map((s, i) => (
             <div
               key={i}
               className={`h-1.5 rounded-full transition-all ${
-                i === step ? 'w-6 bg-emerald-400' : i < step ? 'w-2 bg-emerald-600' : 'w-2 bg-slate-700'
+                i === step ? `w-6 ${s.dotColor}` : i < step ? 'w-2 bg-slate-600' : 'w-2 bg-slate-700'
               }`}
             />
           ))}
         </div>
 
         {/* Icon */}
-        <div className={`w-16 h-16 rounded-2xl ${current.bg} border ${current.border} flex items-center justify-center mx-auto mb-6`}>
-          <Icon className={`w-8 h-8 ${current.color}`} />
+        <div
+          className={`w-16 h-16 rounded-2xl ${current.iconBg} flex items-center justify-center mx-auto mb-6 border`}
+          style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+        >
+          <Icon className={`w-8 h-8 ${current.iconText}`} />
         </div>
 
         {/* Text */}
         <div className="text-center mb-6">
-          <h2 className="text-xl font-bold text-white mb-1">{current.title}</h2>
-          <p className="text-xs text-slate-400 mb-4">{current.subtitle}</p>
-          <p className="text-sm text-slate-300 leading-relaxed">{current.description}</p>
+          <h2 className="text-xl font-bold mb-1" style={{ color: '#f8fafc' }}>
+            {current.title}
+          </h2>
+          <p className="text-xs mb-4" style={{ color: '#64748b' }}>
+            {current.subtitle}
+          </p>
+          <p className="text-sm leading-relaxed" style={{ color: '#cbd5e1' }}>
+            {current.description}
+          </p>
         </div>
 
         {/* Tips */}
@@ -134,10 +157,13 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
           {current.tips.map((tip) => (
             <div
               key={tip}
-              className="flex items-start gap-2 bg-slate-800/60 rounded-xl p-2.5 border border-slate-700/50"
+              className="flex items-start gap-2 rounded-xl p-2.5 border"
+              style={{ backgroundColor: 'rgba(30,41,59,0.8)', borderColor: '#334155' }}
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-              <span className="text-[11px] text-slate-300 leading-snug">{tip}</span>
+              <span className="text-[11px] leading-snug" style={{ color: '#cbd5e1' }}>
+                {tip}
+              </span>
             </div>
           ))}
         </div>
@@ -147,14 +173,20 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
           {step > 0 ? (
             <button
               onClick={() => setStep((s) => s - 1)}
-              className="text-xs text-slate-400 hover:text-white transition-colors cursor-pointer px-3 py-2"
+              className="text-xs transition-colors cursor-pointer px-3 py-2"
+              style={{ color: '#64748b' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#f8fafc')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#64748b')}
             >
               ← Quay lại
             </button>
           ) : (
             <button
               onClick={handleSkip}
-              className="text-xs text-slate-500 hover:text-slate-300 transition-colors cursor-pointer px-3 py-2"
+              className="text-xs transition-colors cursor-pointer px-3 py-2"
+              style={{ color: '#475569' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#94a3b8')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}
             >
               Bỏ qua
             </button>
@@ -162,7 +194,8 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
 
           <button
             onClick={isLast ? handleComplete : () => setStep((s) => s + 1)}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm transition-all cursor-pointer shadow-lg shadow-emerald-500/20"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 font-bold text-sm transition-all cursor-pointer shadow-lg"
+            style={{ color: '#0f172a' }}
           >
             <Sparkles className="w-4 h-4" />
             {current.cta}
