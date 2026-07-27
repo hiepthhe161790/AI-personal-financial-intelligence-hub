@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { Scale, RefreshCw, X, ArrowUpRight, ArrowDownRight, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Scale, X, ArrowUpRight, ArrowDownRight, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { NetWorthOverview } from '@/domain/net-worth';
 import { calculatePortfolioRebalance, DEFAULT_TARGET_ALLOCATION, TargetAllocation } from '@/domain/portfolio-rebalance';
 import { formatMoney } from '@/domain/money';
@@ -19,8 +19,6 @@ export default function PortfolioRebalanceModal({
 }: PortfolioRebalanceModalProps) {
   const [targets, setTargets] = useState<TargetAllocation>(DEFAULT_TARGET_ALLOCATION);
 
-  if (!isOpen) return null;
-
   const totalTargetPercent = useMemo(() => {
     return Object.values(targets).reduce((sum, val) => sum + val, 0);
   }, [targets]);
@@ -28,6 +26,8 @@ export default function PortfolioRebalanceModal({
   const analysis = useMemo(() => {
     return calculatePortfolioRebalance(netWorthData, targets);
   }, [netWorthData, targets]);
+
+  if (!isOpen) return null;
 
   const handleSliderChange = (key: keyof TargetAllocation, value: number) => {
     setTargets((prev) => ({
