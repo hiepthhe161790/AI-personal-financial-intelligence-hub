@@ -40,6 +40,12 @@ import PersonalWealthTracker from '@/components/PersonalWealthTracker';
 import AssetRiskHeatmap from '@/components/AssetRiskHeatmap';
 import CashFlowLedger from '@/components/CashFlowLedger';
 import DebtStrategyPlanner from '@/components/DebtStrategyPlanner';
+import BudgetManager from '@/components/BudgetManager';
+import FinancialFreedomMilestones from '@/components/FinancialFreedomMilestones';
+import WealthGoalsTracker from '@/components/WealthGoalsTracker';
+import MarketIndicesTicker from '@/components/MarketIndicesTicker';
+import PortfolioAllocationChart from '@/components/PortfolioAllocationChart';
+import SmartAlertsPanel from '@/components/SmartAlertsPanel';
 
 type ActiveTab = 'net-worth' | 'scenario' | 'ai-brief' | 'market' | 'ai-academy';
 
@@ -117,6 +123,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <MarketIndicesTicker />
       {/* SaaS Upgrade Paywall Modal */}
       <SaaSFeaturePaywall
         isOpen={isPaywallOpen}
@@ -307,6 +314,9 @@ export default function Home() {
               onTogglePrivacy={handleTogglePrivate} 
             />
 
+            {/* Smart Financial Alerts Panel */}
+            <SmartAlertsPanel netWorthMinor={netWorthData?.netWorthMinor ?? 0} />
+
             {/* Personal Wealth Goal & Discipline Checklist */}
             <PersonalWealthTracker currentNetWorthVND={(netWorthData?.netWorthMinor || 0) / 100} />
 
@@ -322,11 +332,25 @@ export default function Home() {
             {/* Historical Net Worth Timeline Chart */}
             <NetWorthHistoryChart />
 
+            {/* Portfolio Allocation Donut Chart */}
+            {netWorthData && (
+              <PortfolioAllocationChart
+                accounts={netWorthData.accounts}
+                totalAssetsMinor={netWorthData.totalAssetsMinor}
+                totalLiabilitiesMinor={netWorthData.totalLiabilitiesMinor}
+                netWorthMinor={netWorthData.netWorthMinor}
+                isPrivate={isPrivate}
+              />
+            )}
+
             {/* Daily Cash Flow / Expense Ledger */}
             <CashFlowLedger 
               accounts={netWorthData?.accounts || []} 
               onTransactionChanged={fetchAccounts} 
             />
+
+            {/* Monthly Budget Limits & Telegram Alerts Manager */}
+            <BudgetManager />
 
             <section className="space-y-4">
               <div className="flex items-center justify-between">
@@ -344,6 +368,8 @@ export default function Home() {
         {/* TAB 2: Financial Scenario Simulation */}
         {activeTab === 'scenario' && (
           <div className="space-y-8 animate-in fade-in duration-300">
+            <FinancialFreedomMilestones currentNetWorthMinor={netWorthData?.netWorthMinor || 0} />
+            <WealthGoalsTracker />
             <ScenarioSimulator currentNetWorthMinor={netWorthData?.netWorthMinor || 0} />
             <DebtStrategyPlanner accounts={netWorthData?.accounts || []} />
           </div>

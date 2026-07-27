@@ -14,9 +14,7 @@ import {
 import { 
   History, 
   Camera, 
-  TrendingUp, 
-  Loader2, 
-  CalendarCheck 
+  Loader2
 } from 'lucide-react';
 import { formatMoney } from '@/domain/money';
 
@@ -28,18 +26,46 @@ interface SnapshotPoint {
   netWorthMajor: number;
 }
 
+interface ChartDataPoint {
+  name: string;
+  'Tài Sản Ròng (Net Worth)'?: number;
+  'Tổng Tài Sản'?: number;
+  'Tổng Nợ'?: number;
+  'Dự Báo (Cơ bản)'?: number;
+  'Kịch Bản Tốt'?: number;
+  'Kịch Bản Xấu'?: number;
+}
+
 export default function NetWorthHistoryChart() {
   const [history, setHistory] = useState<SnapshotPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [capturing, setCapturing] = useState(false);
+  const [savingsRate, setSavingsRate] = useState(10000000); // Default 10M VND
+  const [showForecast, setShowForecast] = useState(true);
 
   const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/v1/snapshots/history');
       const json = await res.json();
+      
+      let monthlySavings = 10000000;
+      try {
+        const goalsRes = await fetch('/api/v1/goals');
+        const goalsJson = await goalsRes.json();
+        if (goalsRes.ok && goalsJson.status === 'success') {
+          const savingsMinor = goalsJson.data.monthlySavingsMinor;
+          if (savingsMinor > 0) {
+            monthlySavings = savingsMinor / 100;
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch savings rate for chart forecast:', err);
+      }
+
       if (res.ok && json.status === 'success') {
         setHistory(json.data);
+        setSavingsRate(monthlySavings);
       }
     } catch (err) {
       console.error('Failed to fetch snapshot history:', err);
@@ -49,6 +75,7 @@ export default function NetWorthHistoryChart() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchHistory();
   }, [fetchHistory]);
 
@@ -66,12 +93,49 @@ export default function NetWorthHistoryChart() {
     }
   };
 
-  const chartData = history.map((h) => ({
+  // Build combined history and forecast chart points
+  const chartData: ChartDataPoint[] = history.map((h) => ({
     name: h.monthLabel,
     'Tài Sản Ròng (Net Worth)': h.netWorthMajor,
     'Tổng Tài Sản': h.totalAssetsMajor,
     'Tổng Nợ': h.totalLiabilitiesMajor,
+    'Dự Báo (Cơ bản)': undefined,
+    'Kịch Bản Tốt': undefined,
+    'Kịch Bản Xấu': undefined,
   }));
+
+  // Append 12-month projections if showForecast is enabled
+  if (showForecast && history.length > 0) {
+    const lastPoint = history[history.length - 1];
+    const lastNetWorth = lastPoint.netWorthMajor;
+    
+    // Connect forecast lines to the last history point (bridge point)
+    if (chartData.length > 0) {
+      chartData[chartData.length - 1]['Dự Báo (Cơ bản)'] = lastNetWorth;
+      chartData[chartData.length - 1]['Kịch Bản Tốt'] = lastNetWorth;
+      chartData[chartData.length - 1]['Kịch Bản Xấu'] = lastNetWorth;
+    }
+
+    const baseDate = lastPoint.date ? new Date(lastPoint.date) : new Date();
+
+    for (let m = 1; m <= 12; m++) {
+      const forecastDate = new Date(baseDate.getFullYear(), baseDate.getMonth() + m, 1);
+      
+      const baseForecast = Math.round(lastNetWorth + m * savingsRate);
+      const bestCase = Math.round(lastNetWorth * Math.pow(1 + 0.10/12, m) + m * savingsRate);
+      const worstCase = Math.round(lastNetWorth * Math.pow(1 - 0.05/12, m) + m * savingsRate);
+
+      chartData.push({
+        name: forecastDate.toLocaleDateString('vi-VN', { month: 'short', year: '2-digit' }) + ' (Dự báo)',
+        'Tài Sản Ròng (Net Worth)': undefined,
+        'Tổng Tài Sản': undefined,
+        'Tổng Nợ': undefined,
+        'Dự Báo (Cơ bản)': baseForecast,
+        'Kịch Bản Tốt': bestCase,
+        'Kịch Bản Xấu': worstCase,
+      });
+    }
+  }
 
   return (
     <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
@@ -86,14 +150,28 @@ export default function NetWorthHistoryChart() {
           </div>
         </div>
 
-        <button
-          onClick={captureSnapshotNow}
-          disabled={capturing}
-          className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow-md shadow-emerald-500/20 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 self-start sm:self-auto"
-        >
-          {capturing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
-          <span>Chụp Snapshot Hôm Nay</span>
-        </button>
+        <div className="flex items-center gap-3 flex-wrap">
+          {/* Toggle Switch */}
+          <label className="inline-flex items-center gap-2 cursor-pointer bg-slate-950/60 hover:bg-slate-950 border border-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 select-none transition-colors">
+            <input 
+              type="checkbox" 
+              checked={showForecast} 
+              onChange={() => setShowForecast(!showForecast)}
+              className="sr-only peer"
+            />
+            <div className="relative w-8 h-4.5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-slate-400 peer-checked:after:bg-indigo-400 after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-indigo-950/80 border peer-checked:border-indigo-500/30"></div>
+            <span>Dự báo 12 tháng 🔮</span>
+          </label>
+
+          <button
+            onClick={captureSnapshotNow}
+            disabled={capturing}
+            className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow-md shadow-emerald-500/20 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+          >
+            {capturing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+            <span>Chụp Snapshot Hôm Nay</span>
+          </button>
+        </div>
       </div>
 
       <div className="h-72 w-full">
@@ -143,6 +221,34 @@ export default function NetWorthHistoryChart() {
                 strokeWidth={2}
                 strokeDasharray="4 4"
               />
+              {showForecast && (
+                <>
+                  <Line
+                    type="monotone"
+                    dataKey="Dự Báo (Cơ bản)"
+                    stroke="#6366f1"
+                    strokeWidth={2.5}
+                    strokeDasharray="5 5"
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="Kịch Bản Tốt"
+                    stroke="#06b6d4"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="Kịch Bản Xấu"
+                    stroke="#f43f5e"
+                    strokeWidth={2}
+                    strokeDasharray="5 5"
+                    dot={false}
+                  />
+                </>
+              )}
             </LineChart>
           </ResponsiveContainer>
         )}

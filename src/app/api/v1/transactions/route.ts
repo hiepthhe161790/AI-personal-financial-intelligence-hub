@@ -4,8 +4,10 @@ import { z } from "zod";
 import { connectToDatabase } from "@/lib/db";
 import TransactionModel from "@/models/Transaction";
 import AccountModel from "@/models/Account";
+import BudgetModel from "@/models/Budget";
 import ValuationSnapshotModel from "@/models/ValuationSnapshot";
 import { majorToMinor } from "@/domain/money";
+import { sendTelegramAlert } from "@/lib/telegram";
 import { authOptions } from "@/lib/auth";
 
 const CreateTransactionSchema = z.object({
@@ -120,6 +122,59 @@ export async function POST(request: Request) {
       valuationDate: occurredOn,
       notes: `Ghi nhận thu chi [${type === "INCOME" ? "Thu nhập" : "Chi phí"}]: ${category} - ${notes || ""}`,
     });
+
+    // 6. Run Budget and Telegram Alert checks on expenses
+    if (type === "EXPENSE") {
+      try {
+        const budget = await BudgetModel.findOne({ userId, category });
+        if (budget) {
+          // Calculate total spending in this category for this month
+          const startOfMonth = new Date(occurredOn.getFullYear(), occurredOn.getMonth(), 1, 0, 0, 0, 0);
+          const endOfMonth = new Date(occurredOn.getFullYear(), occurredOn.getMonth() + 1, 0, 23, 59, 59, 999);
+
+          const spendingAgg = await TransactionModel.aggregate([
+            {
+              $match: {
+                userId,
+                type: 'EXPENSE',
+                category,
+                occurredOn: { $gte: startOfMonth, $lte: endOfMonth },
+              },
+            },
+            {
+              $group: {
+                _id: null,
+                totalSpentMinor: { $sum: '$amountMinor' },
+              },
+            },
+          ]);
+
+          const totalSpentMinor = spendingAgg[0]?.totalSpentMinor || 0;
+          const limitMinor = budget.limitMinor;
+
+          if (limitMinor > 0) {
+            const usedPercent = (totalSpentMinor / limitMinor) * 100;
+            const previousTotalSpentMinor = totalSpentMinor - amountMinor;
+            const previousUsedPercent = (previousTotalSpentMinor / limitMinor) * 100;
+
+            const totalSpentVND = totalSpentMinor / 100;
+            const limitVND = limitMinor / 100;
+
+            if (usedPercent >= 100 && previousUsedPercent < 100) {
+              await sendTelegramAlert(
+                `🚨 *BÁO ĐỘNG VƯỢT NGÂN SÁCH*\n\nBạn đã chi tiêu vượt quá hạn mức của danh mục *${category}*!\n\n• Đã tiêu: *${totalSpentVND.toLocaleString('vi-VN')} đ*\n• Hạn mức: *${limitVND.toLocaleString('vi-VN')} đ*\n• Tỷ lệ: *${usedPercent.toFixed(1)}%*\n\nVui lòng thắt chặt chi tiêu danh mục này.`
+              );
+            } else if (usedPercent >= 80 && previousUsedPercent < 80) {
+              await sendTelegramAlert(
+                `⚠️ *CẢNH BÁO TIỆM CẬN HẠN MỨC*\n\nChi tiêu của bạn cho danh mục *${category}* đã chạm ngưỡng cảnh báo!\n\n• Đã tiêu: *${totalSpentVND.toLocaleString('vi-VN')} đ*\n• Hạn mức: *${limitVND.toLocaleString('vi-VN')} đ*\n• Tỷ lệ: *${usedPercent.toFixed(1)}%*\n\nHãy cân đối các khoản chi tiêu tiếp theo.`
+              );
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Failed to run budget checks & Telegram alert:", err);
+      }
+    }
 
     return NextResponse.json(
       {
