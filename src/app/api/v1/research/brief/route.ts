@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { connectToDatabase } from '@/lib/db';
 import AccountModel from '@/models/Account';
+import TransactionModel from '@/models/Transaction';
 import UserSettingModel from '@/models/UserSetting';
 import { computeNetWorth } from '@/domain/net-worth';
 import { buildEvidencePack } from '@/domain/evidence-pack';
@@ -25,10 +26,26 @@ export async function POST() {
     // 2. Compute Net Worth Overview
     const netWorth = computeNetWorth(accounts);
 
-    // 3. Build Evidence Pack
-    const evidencePack = buildEvidencePack(netWorth);
+    // 3. Fetch recent transactions (spending logs) for personal audit
+    const transactions = await TransactionModel.find({ userId })
+      .sort({ occurredOn: -1 })
+      .limit(50)
+      .lean();
 
-    // 4. Retrieve custom API Key if available
+    // Map transactions to structured evidence items
+    const txEvidenceItems = transactions.map((tx, idx) => ({
+      id: `EVD-TX-${idx + 1}`,
+      category: 'POSITION' as const,
+      title: `Giao dịch vặt: ${tx.category}`,
+      source: 'Cash Flow Ledger Database',
+      summary: `Loại: ${tx.type}. Số tiền: ${tx.type === 'EXPENSE' ? '-' : '+'}${tx.amountMinor}. Ghi chú: ${tx.notes || ''}`,
+      date: new Date(tx.occurredOn).toISOString().split('T')[0],
+    }));
+
+    // 4. Build Evidence Pack incorporating transactions
+    const evidencePack = buildEvidencePack(netWorth, txEvidenceItems);
+
+    // 5. Retrieve custom API Key if available
     const userSettings = await UserSettingModel.findOne({ userId }).lean();
     let userApiKey: string | undefined;
     
@@ -36,7 +53,7 @@ export async function POST() {
       userApiKey = decryptText(userSettings.geminiApiKeyEncrypted);
     }
 
-    // 5. Generate AI Research Brief
+    // 6. Generate AI Research Brief (including spending analysis)
     const brief = await generateResearchBrief(evidencePack, userApiKey);
 
     return NextResponse.json({

@@ -160,6 +160,50 @@ async def get_vcb_exchange_rates():
     }
 
 
+@app.get("/api/v1/market/gold")
+async def get_gold_prices():
+    """
+    Crawls SJC Gold prices (XML feed).
+    """
+    try:
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        async with httpx.AsyncClient(timeout=10.0, verify=False, headers=headers) as client:
+            resp = await client.get("https://sjc.com.vn/xml/tygiavang.xml")
+            if resp.status_code == 200:
+                root = ET.fromstring(resp.content)
+                items = []
+                for city in root.findall(".//city"):
+                    city_name = city.get("name")
+                    for item in city.findall(".//item"):
+                        items.append({
+                            "city": city_name,
+                            "type": item.get("type"),
+                            "buy": item.get("buy"),
+                            "sell": item.get("sell"),
+                        })
+                return {
+                    "status": "success",
+                    "source": "SJC XML Portal",
+                    "updatedAt": datetime.utcnow().isoformat(),
+                    "gold": items
+                }
+    except Exception as e:
+        print(f"SJC Gold Crawl warning: {e}")
+
+    # Fallback gold prices
+    return {
+        "status": "success",
+        "source": "Fallback Market Reference",
+        "updatedAt": datetime.utcnow().isoformat(),
+        "gold": [
+            {"city": "TP.HCM", "type": "Vàng SJC 1L - 10L", "buy": "83,500,000", "sell": "85,500,000"},
+            {"city": "TP.HCM", "type": "Nhẫn SJC 99,99 1 chỉ - 5 chỉ", "buy": "82,000,000", "sell": "83,200,000"},
+            {"city": "Hà Nội", "type": "Vàng SJC", "buy": "83,500,000", "sell": "85,500,000"}
+        ]
+    }
+
+
+
 @app.get("/api/v1/market/news")
 def get_market_news():
     """
@@ -222,13 +266,15 @@ async def get_market_summary():
     fx_data = await get_vcb_exchange_rates()
     news_data = get_market_news()
     crypto_data = await get_crypto_prices()
+    gold_data = await get_gold_prices()
 
     return {
         "status": "success",
         "timestamp": datetime.utcnow().isoformat(),
         "fx": fx_data,
         "news": news_data,
-        "crypto": crypto_data
+        "crypto": crypto_data,
+        "gold": gold_data
     }
 
 

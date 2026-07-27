@@ -38,6 +38,8 @@ import PortfolioRebalanceModal from '@/components/PortfolioRebalanceModal';
 import AffiliateBannerCard from '@/components/AffiliateBannerCard';
 import PersonalWealthTracker from '@/components/PersonalWealthTracker';
 import AssetRiskHeatmap from '@/components/AssetRiskHeatmap';
+import CashFlowLedger from '@/components/CashFlowLedger';
+import DebtStrategyPlanner from '@/components/DebtStrategyPlanner';
 
 type ActiveTab = 'net-worth' | 'scenario' | 'ai-brief' | 'market' | 'ai-academy';
 
@@ -50,6 +52,7 @@ export default function Home() {
   const [isPaywallOpen, setIsPaywallOpen] = useState(false);
   const [isOcrOpen, setIsOcrOpen] = useState(false);
   const [isRebalanceOpen, setIsRebalanceOpen] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
   // Load stealth mode from localStorage on mount
   useEffect(() => {
@@ -63,6 +66,26 @@ export default function Home() {
       localStorage.setItem('stealth_mode', String(next));
       return next;
     });
+  };
+
+  const syncMarketPrices = async () => {
+    setSyncing(true);
+    try {
+      const res = await fetch('/api/v1/market/sync', {
+        method: 'POST',
+      });
+      const json = await res.json();
+      if (res.ok && json.status === 'success') {
+        alert(json.message);
+        fetchAccounts();
+      } else {
+        alert(json.message || 'Lỗi khi đồng bộ giá thị trường');
+      }
+    } catch (err) {
+      alert('Lỗi kết nối tới máy chủ khi đồng bộ giá');
+    } finally {
+      setSyncing(false);
+    }
   };
 
   const fetchAccounts = useCallback(async () => {
@@ -253,6 +276,15 @@ export default function Home() {
               </button>
 
               <button
+                onClick={syncMarketPrices}
+                disabled={syncing}
+                className="px-3.5 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm disabled:opacity-50"
+              >
+                <RefreshCw className={`w-4 h-4 text-indigo-400 ${syncing ? 'animate-spin' : ''}`} />
+                <span>{syncing ? 'Đang đồng bộ...' : 'Đồng Bộ Giá 🔄'}</span>
+              </button>
+
+              <button
                 onClick={() => setIsRebalanceOpen(true)}
                 className="px-3.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
               >
@@ -290,6 +322,12 @@ export default function Home() {
             {/* Historical Net Worth Timeline Chart */}
             <NetWorthHistoryChart />
 
+            {/* Daily Cash Flow / Expense Ledger */}
+            <CashFlowLedger 
+              accounts={netWorthData?.accounts || []} 
+              onTransactionChanged={fetchAccounts} 
+            />
+
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
@@ -305,8 +343,9 @@ export default function Home() {
 
         {/* TAB 2: Financial Scenario Simulation */}
         {activeTab === 'scenario' && (
-          <div className="animate-in fade-in duration-300">
+          <div className="space-y-8 animate-in fade-in duration-300">
             <ScenarioSimulator currentNetWorthMinor={netWorthData?.netWorthMinor || 0} />
+            <DebtStrategyPlanner accounts={netWorthData?.accounts || []} />
           </div>
         )}
 

@@ -14,6 +14,8 @@ const CreateAccountSchema = z.object({
   currency: z.string().default('VND'),
   initialBalanceMajor: z.number().min(0, 'Số dư không được nhỏ hơn 0'),
   notes: z.string().optional(),
+  ticker: z.string().optional(),
+  quantity: z.number().min(0).optional(),
 });
 
 async function getUserId() {
@@ -51,7 +53,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, type, currency, initialBalanceMajor, notes } = parseResult.data;
+    const { name, type, currency, initialBalanceMajor, notes, ticker, quantity } = parseResult.data;
     const amountMinor = majorToMinor(initialBalanceMajor, currency);
     const userId = await getUserId();
 
@@ -65,6 +67,8 @@ export async function POST(request: Request) {
       currency,
       currentBalanceMinor: amountMinor,
       lastValuationAt: new Date(),
+      ticker,
+      quantity,
     });
 
     // 2. Create Initial Append-only Valuation Snapshot

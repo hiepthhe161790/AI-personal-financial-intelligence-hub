@@ -171,6 +171,78 @@ export default function AIResearchBrief() {
             </div>
           </div>
 
+          {/* AI Savings & Compounding Investment Advisor Section */}
+          {data.brief.savingsInvestmentPlan && (
+            <div className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border border-indigo-500/30 p-6 sm:p-8 space-y-6 shadow-2xl">
+              <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-md font-bold text-white">Kế Hoạch Tích Lũy Lãi Kép & Đầu Tư Từ Chi Tiêu Vặt</h4>
+                  <p className="text-xs text-slate-400">AI tối ưu hóa chi phí nhàn rỗi để tạo nguồn vốn đầu tư tăng trưởng</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Savings Potential card */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Hạn mức tiết kiệm gợi ý</div>
+                  <div className="text-2xl font-black text-emerald-400">
+                    +{data.brief.savingsInvestmentPlan.potentialMonthlySavingsMajor.toLocaleString('vi-VN')} đ
+                    <span className="text-xs font-normal text-slate-400">/tháng</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400">
+                    Cắt giảm đề xuất từ: <span className="font-semibold text-slate-300">{data.brief.savingsInvestmentPlan.targetCategories.join(', ')}</span>
+                  </p>
+                </div>
+
+                {/* 5 Years Compounding */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tích lũy lãi kép 5 năm (10%/năm)</div>
+                  <div className="text-2xl font-black text-white">
+                    {data.brief.savingsInvestmentPlan.compounding5YearsMajor.toLocaleString('vi-VN')} đ
+                  </div>
+                  <p className="text-[10px] text-indigo-400 font-semibold">Tự động tăng trưởng từ nguồn vốn nhỏ hàng tháng</p>
+                </div>
+
+                {/* 10 Years Compounding */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tích lũy lãi kép 10 năm (10%/năm)</div>
+                  <div className="text-2xl font-black text-white">
+                    {data.brief.savingsInvestmentPlan.compounding10YearsMajor.toLocaleString('vi-VN')} đ
+                  </div>
+                  <p className="text-[10px] text-indigo-400 font-semibold">Sức mạnh lãi kép phát huy tối đa dài hạn</p>
+                </div>
+              </div>
+
+              {/* Asset Allocation Recommendations */}
+              <div className="space-y-4 pt-2">
+                <h5 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Gợi ý danh mục phân bổ tiền tiết kiệm:</h5>
+                <div className="space-y-3.5">
+                  {data.brief.savingsInvestmentPlan.allocationRecommendation.map((rec, idx) => (
+                    <div key={idx} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-bold text-slate-200">{rec.assetType}</span>
+                        <span className="font-mono font-bold text-indigo-400">{rec.percentage}%</span>
+                      </div>
+                      {/* Percent Bar */}
+                      <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full" 
+                          style={{ width: `${rec.percentage}%` }}
+                        />
+                      </div>
+                      <p className="text-[11px] text-slate-400 italic pl-1 leading-relaxed">
+                        {rec.explanation}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Citation & Evidence Pack Accordion */}
           <div className="rounded-2xl bg-slate-900/40 border border-slate-800 p-4 space-y-3">
             <button

@@ -20,6 +20,8 @@ export interface IAccount extends Document {
   lastValuationAt: Date;
   isArchived: boolean;
   version: number;
+  ticker?: string;      // Ticker for stock (e.g. HPG) or gold type (e.g. SJC)
+  quantity?: number;    // Quantity owned (e.g. 1000 shares, 5.5 taels)
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,6 +41,8 @@ const AccountSchema = new Schema<IAccount>(
     lastValuationAt: { type: Date, required: true, default: Date.now },
     isArchived: { type: Boolean, required: true, default: false },
     version: { type: Number, required: true, default: 1 },
+    ticker: { type: String, trim: true, uppercase: true },
+    quantity: { type: Number, min: 0 },
   },
   { timestamps: true }
 );

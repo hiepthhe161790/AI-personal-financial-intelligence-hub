@@ -30,6 +30,8 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
   const [amountMajor, setAmountMajor] = useState<string>('');
   const [currency, setCurrency] = useState('VND');
   const [notes, setNotes] = useState('');
+  const [ticker, setTicker] = useState('');
+  const [quantity, setQuantity] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +53,8 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
           initialBalanceMajor: parsedAmount,
           currency,
           notes,
+          ticker: (type === 'GOLD' || type === 'STOCK') ? ticker.trim().toUpperCase() : undefined,
+          quantity: (type === 'GOLD' || type === 'STOCK') ? parseFloat(quantity) : undefined,
         }),
       });
 
@@ -63,6 +67,8 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
       setName('');
       setAmountMajor('');
       setNotes('');
+      setTicker('');
+      setQuantity('');
       setIsOpen(false);
       onSuccess();
     } catch (err: unknown) {
@@ -153,15 +159,49 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                 </div>
               </div>
 
+              {/* Conditional inputs for Stock & Gold automated valuation */}
+              {(type === 'GOLD' || type === 'STOCK') && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-l-2 border-emerald-500 pl-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      {type === 'STOCK' ? 'Mã Cổ Phiếu (Ticker)' : 'Mã Hiệu Vàng'} <span className="text-emerald-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder={type === 'STOCK' ? 'VD: HPG, FPT, TCB...' : 'VD: SJC, NHAN...'}
+                      value={ticker}
+                      onChange={(e) => setTicker(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm uppercase"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      {type === 'STOCK' ? 'Số lượng Cổ Phiếu' : 'Số lượng (Chỉ/Lượng)'} <span className="text-emerald-400">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      required
+                      placeholder={type === 'STOCK' ? 'VD: 1000' : 'VD: 5.5'}
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm"
+                    />
+                  </div>
+                </div>
+              )}
+
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Số Tiền Hàng / Giá Trị (Đơn vị chính) <span className="text-emerald-400">*</span>
+                  Số Tiền Hàng / Giá Trị Ban Đầu (Đơn vị chính) <span className="text-emerald-400">*</span>
                 </label>
                 <input
                   type="number"
                   step="any"
                   required
-                  placeholder="VD: 50000000"
+                  placeholder="VD: 50000000 (Nhập 0 nếu muốn tự động đồng bộ theo Ticker & Số lượng)"
                   value={amountMajor}
                   onChange={(e) => setAmountMajor(e.target.value)}
                   className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm"
