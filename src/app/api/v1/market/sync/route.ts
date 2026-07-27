@@ -50,7 +50,7 @@ export async function POST() {
         if (stockRes.ok) {
           const json = await stockRes.json();
           if (json.status === "success" && json.stocks) {
-            json.stocks.forEach((s: any) => {
+            json.stocks.forEach((s: { symbol: string; priceVND: number }) => {
               stockPricesMap[s.symbol.toUpperCase()] = s.priceVND;
             });
           }
@@ -61,7 +61,7 @@ export async function POST() {
     }
 
     // 4. Fetch Gold rates if needed
-    let goldPricesList: any[] = [];
+    let goldPricesList: { type: string; buyPriceVND: number; sellPriceVND: number; buy?: string; sell?: string }[] = [];
     if (goldAccounts.length > 0) {
       try {
         const goldRes = await fetch(`${pythonServiceUrl}/api/v1/market/gold`);

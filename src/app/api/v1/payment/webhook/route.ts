@@ -26,10 +26,11 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ status: 'ignored', message: 'Giao dịch chưa hoàn tất' });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Payment Webhook API error:', err);
+    const message = err instanceof Error ? err.message : 'Lỗi xử lý Webhook thanh toán.';
     return NextResponse.json(
-      { status: 'error', message: err.message || 'Lỗi xử lý Webhook thanh toán.' },
+      { status: 'error', message },
       { status: 500 }
     );
   }

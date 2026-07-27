@@ -1,7 +1,7 @@
 'use client';
 
-import { ExternalLink, Sparkles, Award, ShieldAlert } from 'lucide-react';
-import { AFFILIATE_OFFERS, AffiliateOffer } from '@/domain/affiliate';
+import { ExternalLink, Award } from 'lucide-react';
+import { AFFILIATE_OFFERS } from '@/domain/affiliate';
 
 export default function AffiliateBannerCard() {
   return (

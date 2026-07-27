@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { ShieldAlert, ShieldCheck, Flame, PieChart, Layers } from 'lucide-react';
+import { ShieldAlert, Flame } from 'lucide-react';
 import { NetWorthOverview } from '@/domain/net-worth';
 import { calculateAssetRiskHeatmap } from '@/domain/wealth-goal';
 import { formatMoney } from '@/domain/money';

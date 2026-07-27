@@ -145,10 +145,11 @@ QUY TẮC BẮT BUỘC:
       source: 'Smart Fallback Document Parser',
       data: mockResult,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Statement OCR API Error:', err);
+    const message = err instanceof Error ? err.message : 'Lỗi hệ thống khi phân tích tài liệu sao kê.';
     return NextResponse.json(
-      { status: 'error', message: err.message || 'Lỗi hệ thống khi phân tích tài liệu sao kê.' },
+      { status: 'error', message },
       { status: 500 }
     );
   }

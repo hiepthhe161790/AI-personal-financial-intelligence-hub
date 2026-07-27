@@ -138,7 +138,7 @@ export default function AIAcademyCoach() {
                     onClick={() => handleAskAI(q)}
                     className="text-[11px] px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 transition-all cursor-pointer text-left"
                   >
-                    "{q}"
+                    &ldquo;{q}&rdquo;
                   </button>
                 ))}
               </div>

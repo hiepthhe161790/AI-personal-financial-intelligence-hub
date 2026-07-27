@@ -11,7 +11,6 @@ import {
   Loader2, 
   ChevronDown, 
   ChevronUp, 
-  ExternalLink,
   RefreshCcw
 } from 'lucide-react';
 import { AIResearchBrief as AIResearchBriefType } from '@/lib/ai';

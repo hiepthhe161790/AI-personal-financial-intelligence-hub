@@ -33,10 +33,11 @@ export async function POST(request: Request) {
         planName,
       },
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Payment QR API error:', err);
+    const message = err instanceof Error ? err.message : 'Lỗi khi khởi tạo mã thanh toán VietQR.';
     return NextResponse.json(
-      { status: 'error', message: err.message || 'Lỗi khi khởi tạo mã thanh toán VietQR.' },
+      { status: 'error', message },
       { status: 500 }
     );
   }

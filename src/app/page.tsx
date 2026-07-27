@@ -17,7 +17,8 @@ import {
   GraduationCap,
   Crown,
   Camera,
-  Scale
+  Scale,
+  Settings,
 } from 'lucide-react';
 import { NetWorthOverview } from '@/domain/net-worth';
 import { SubscriptionTier } from '@/domain/subscription-plan';
@@ -46,6 +47,10 @@ import WealthGoalsTracker from '@/components/WealthGoalsTracker';
 import MarketIndicesTicker from '@/components/MarketIndicesTicker';
 import PortfolioAllocationChart from '@/components/PortfolioAllocationChart';
 import SmartAlertsPanel from '@/components/SmartAlertsPanel';
+import DailyCashFlowChart from '@/components/DailyCashFlowChart';
+import OnboardingModal from '@/components/OnboardingModal';
+import ShareNetWorthCard from '@/components/ShareNetWorthCard';
+import KeyboardShortcuts from '@/components/KeyboardShortcuts';
 
 type ActiveTab = 'net-worth' | 'scenario' | 'ai-brief' | 'market' | 'ai-academy';
 
@@ -87,7 +92,7 @@ export default function Home() {
       } else {
         alert(json.message || 'Lỗi khi đồng bộ giá thị trường');
       }
-    } catch (err) {
+    } catch {
       alert('Lỗi kết nối tới máy chủ khi đồng bộ giá');
     } finally {
       setSyncing(false);
@@ -124,6 +129,13 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <MarketIndicesTicker />
+      {/* Onboarding Welcome Flow — shown only once on first visit */}
+      <OnboardingModal onComplete={() => { /* mark done */ }} />
+      {/* Keyboard Shortcuts — global handler + floating button */}
+      <KeyboardShortcuts
+        onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
+        onRefresh={fetchAccounts}
+      />
       {/* SaaS Upgrade Paywall Modal */}
       <SaaSFeaturePaywall
         isOpen={isPaywallOpen}
@@ -194,6 +206,14 @@ export default function Home() {
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-emerald-400' : ''}`} />
             </button>
+            <Link
+              href="/settings"
+              className="text-xs px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition-all flex items-center gap-1.5"
+              title="Cài đặt"
+            >
+              <Settings className="w-3.5 h-3.5 text-violet-400" />
+              <span className="hidden sm:inline">Cài Đặt</span>
+            </Link>
             <Link 
               href="/api/v1/health" 
               target="_blank"
@@ -299,6 +319,8 @@ export default function Home() {
                 <span>Tái Cân Đối Danh Mục ⚖️</span>
               </button>
 
+              <ShareNetWorthCard data={netWorthData} isPrivate={isPrivate} />
+
               <AddAccountModal onSuccess={fetchAccounts} />
             </div>
           )}
@@ -331,6 +353,9 @@ export default function Home() {
 
             {/* Historical Net Worth Timeline Chart */}
             <NetWorthHistoryChart />
+
+            {/* Daily Cash Flow Bar Chart */}
+            <DailyCashFlowChart />
 
             {/* Portfolio Allocation Donut Chart */}
             {netWorthData && (
