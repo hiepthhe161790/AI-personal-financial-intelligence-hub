@@ -51,7 +51,7 @@ export default function VNStockPortfolioCard() {
             <BarChart2 className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Bảng Giá Chứng Khoán Việt Nam (HOSE/HNX)</h3>
+            <h3 className="text-lg font-bold text-slate-100">Bảng Giá Chứng Khoán Việt Nam (HOSE/HNX)</h3>
             <p className="text-xs text-slate-400">Cập nhật realtime từ Python Analytics Engine</p>
           </div>
         </div>
@@ -93,8 +93,8 @@ export default function VNStockPortfolioCard() {
 
               <div className="text-xs text-slate-400 truncate">{st.name}</div>
 
-              <div className="text-lg font-extrabold text-white">
-                {formatMoney(st.priceVND * 100, 'VND')}
+              <div className="text-lg font-extrabold text-slate-100">
+                {formatMoney(st.priceVND, 'VND')}
               </div>
             </div>
           );

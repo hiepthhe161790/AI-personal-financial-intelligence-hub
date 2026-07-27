@@ -68,7 +68,7 @@ export default function KeyboardShortcuts({ onTabChange, onRefresh }: KeyboardSh
       <button
         onClick={() => setVisible((v) => !v)}
         title="Phím tắt (nhấn ?)"
-        className="fixed bottom-5 right-5 z-40 w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-700 transition-all shadow-lg cursor-pointer flex items-center justify-center"
+        className="fixed bottom-5 right-5 z-40 w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-slate-100 hover:bg-slate-700 transition-all shadow-lg cursor-pointer flex items-center justify-center"
       >
         <Keyboard className="w-4 h-4" />
       </button>
@@ -84,11 +84,11 @@ export default function KeyboardShortcuts({ onTabChange, onRefresh }: KeyboardSh
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
                 <Command className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-sm font-bold text-white">Phím Tắt Bàn Phím</h3>
+                <h3 className="text-sm font-bold text-slate-100">Phím Tắt Bàn Phím</h3>
               </div>
               <button
                 onClick={() => setVisible(false)}
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>

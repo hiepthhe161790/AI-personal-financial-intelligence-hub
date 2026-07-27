@@ -92,7 +92,7 @@ export default function SettingsPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700"
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors border border-slate-700"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
@@ -101,7 +101,7 @@ export default function SettingsPage() {
               <Settings className="w-5 h-5 text-violet-400" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">Cài Đặt</h1>
+              <h1 className="text-xl font-bold text-slate-100">Cài Đặt</h1>
               <p className="text-xs text-slate-400">Quản lý cấu hình tài khoản và ứng dụng</p>
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function SettingsPage() {
 
         {/* ── Giao diện ─────────────────────────────────────────────────────── */}
         <section className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
+          <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
             <Moon className="w-4 h-4 text-violet-400" />
             Giao Diện
           </h2>
@@ -121,15 +121,13 @@ export default function SettingsPage() {
             </div>
             <button
               onClick={toggleTheme}
-              className={`relative w-12 h-6 rounded-full border transition-all cursor-pointer ${
-                theme === 'dark'
+              className={`relative w-12 h-6 rounded-full border transition-all cursor-pointer ${theme === 'dark'
                   ? 'bg-violet-600 border-violet-500'
                   : 'bg-slate-300 border-slate-400'
-              }`}
+                }`}
             >
-              <span className={`absolute top-0.5 w-5 h-5 rounded-full shadow-sm transition-transform flex items-center justify-center text-[10px] ${
-                theme === 'dark' ? 'translate-x-6 bg-white' : 'translate-x-0.5 bg-white'
-              }`}>
+              <span className={`absolute top-0.5 w-5 h-5 rounded-full shadow-sm transition-transform flex items-center justify-center text-[10px] ${theme === 'dark' ? 'translate-x-6 bg-white' : 'translate-x-0.5 bg-white'
+                }`}>
                 {theme === 'dark' ? <Moon className="w-3 h-3 text-violet-600" /> : <Sun className="w-3 h-3 text-amber-500" />}
               </span>
             </button>
@@ -138,7 +136,7 @@ export default function SettingsPage() {
 
         {/* ── AI Integration ─────────────────────────────────────────────────── */}
         <section className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
+          <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
             <Key className="w-4 h-4 text-emerald-400" />
             Tích Hợp AI (Gemini)
           </h2>
@@ -151,11 +149,10 @@ export default function SettingsPage() {
           ) : (
             <>
               {/* Status badge */}
-              <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded-xl border ${
-                settings?.hasApiKey
+              <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded-xl border ${settings?.hasApiKey
                   ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                   : 'bg-slate-800/60 text-slate-400 border-slate-700'
-              }`}>
+                }`}>
                 {settings?.hasApiKey
                   ? <><CheckCircle2 className="w-3.5 h-3.5" /> Gemini API Key đã được cấu hình</>
                   : <><Info className="w-3.5 h-3.5" /> Chưa có Gemini API Key. Cần thiết cho tính năng AI Phân Tích.</>}
@@ -172,12 +169,12 @@ export default function SettingsPage() {
                     placeholder="AIza..."
                     value={apiKey}
                     onChange={(e) => setApiKey(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 font-mono"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 pr-10 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 font-mono"
                   />
                   <button
                     type="button"
                     onClick={() => setShowApiKey((p) => !p)}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-white cursor-pointer"
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-100 cursor-pointer"
                   >
                     {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -192,11 +189,10 @@ export default function SettingsPage() {
 
               {/* Save status */}
               {saveStatus !== 'idle' && (
-                <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded-xl border ${
-                  saveStatus === 'success'
+                <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded-xl border ${saveStatus === 'success'
                     ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                     : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                }`}>
+                  }`}>
                   {saveStatus === 'success' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
                   {saveMsg}
                 </div>
@@ -229,7 +225,7 @@ export default function SettingsPage() {
 
         {/* ── Dữ liệu & Quyền riêng tư ────────────────────────────────────── */}
         <section className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5">
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
+          <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
             <Shield className="w-4 h-4 text-blue-400" />
             Dữ Liệu & Bảo Mật
           </h2>

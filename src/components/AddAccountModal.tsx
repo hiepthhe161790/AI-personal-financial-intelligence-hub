@@ -92,13 +92,13 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-6 relative animate-in fade-in zoom-in duration-200">
             <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
                 <Plus className="w-5 h-5 text-emerald-400" />
                 Thêm Tài Sản Mới
               </h3>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+                className="text-slate-400 hover:text-slate-100 p-1 rounded-lg hover:bg-slate-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -121,7 +121,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                   placeholder="VD: Vietcombank Tiết Kiệm, Ví Tiền Mặt..."
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm"
+                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                 />
               </div>
 
@@ -133,7 +133,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value as AccountType)}
-                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm"
+                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                   >
                     {ACCOUNT_TYPES.map((t) => (
                       <option key={t.value} value={t.value}>
@@ -150,7 +150,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                   <select
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm"
+                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                   >
                     <option value="VND">VND (Việt Nam Đồng)</option>
                     <option value="USD">USD (Đô la Mỹ)</option>
@@ -172,7 +172,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                       placeholder={type === 'STOCK' ? 'VD: HPG, FPT, TCB...' : 'VD: SJC, NHAN...'}
                       value={ticker}
                       onChange={(e) => setTicker(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm uppercase"
+                      className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm uppercase"
                     />
                   </div>
 
@@ -187,7 +187,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                       placeholder={type === 'STOCK' ? 'VD: 1000' : 'VD: 5.5'}
                       value={quantity}
                       onChange={(e) => setQuantity(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm"
+                      className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                     />
                   </div>
                 </div>
@@ -204,7 +204,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                   placeholder="VD: 50000000 (Nhập 0 nếu muốn tự động đồng bộ theo Ticker & Số lượng)"
                   value={amountMajor}
                   onChange={(e) => setAmountMajor(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm"
+                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                 />
               </div>
 
@@ -215,7 +215,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                   placeholder="VD: Gửi kỳ hạn 6 tháng tại VCB..."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-emerald-500 text-sm"
+                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                 />
               </div>
 

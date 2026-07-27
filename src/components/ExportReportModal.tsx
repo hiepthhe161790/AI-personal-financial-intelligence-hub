@@ -70,7 +70,7 @@ export default function ExportReportModal({ netWorthData }: ExportReportModalPro
         <>
           <Loader2 className="w-5 h-5 animate-spin" />
           <div>
-            <div className="text-sm font-bold text-white">Đang tạo file...</div>
+            <div className="text-sm font-bold text-slate-100">Đang tạo file...</div>
             <div className="text-[11px] text-slate-400">Vui lòng chờ một vài giây</div>
           </div>
         </>
@@ -127,13 +127,13 @@ export default function ExportReportModal({ netWorthData }: ExportReportModalPro
                   <FileCheck2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Xuất Báo Cáo Tài Chính</h3>
+                  <h3 className="text-lg font-bold text-slate-100">Xuất Báo Cáo Tài Chính</h3>
                   <p className="text-xs text-slate-400">Tải về file chuyên nghiệp đầy đủ dữ liệu</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 text-slate-400 hover:text-white rounded-xl bg-slate-800/50 hover:bg-slate-800 transition-colors cursor-pointer"
+                className="p-2 text-slate-400 hover:text-slate-100 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -175,7 +175,7 @@ export default function ExportReportModal({ netWorthData }: ExportReportModalPro
                   excelStatus,
                   '📊 Tải Xuống Excel',
                   <div>
-                    <div className="text-sm font-bold text-white">Tải File Excel (.xlsx)</div>
+                    <div className="text-sm font-bold text-slate-100">Tải File Excel (.xlsx)</div>
                     <div className="text-[11px] text-slate-400">4 sheet: Tổng quan, Tài khoản, Giao dịch, Mục tiêu</div>
                   </div>
                 )}
@@ -195,7 +195,7 @@ export default function ExportReportModal({ netWorthData }: ExportReportModalPro
                   pdfStatus,
                   '📄 Xuất Báo Cáo HTML',
                   <div>
-                    <div className="text-sm font-bold text-white">Xuất File HTML (.html)</div>
+                    <div className="text-sm font-bold text-slate-100">Xuất File HTML (.html)</div>
                     <div className="text-[11px] text-slate-400">Mở file → In (Ctrl+P) → Lưu PDF</div>
                   </div>
                 )}

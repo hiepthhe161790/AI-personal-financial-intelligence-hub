@@ -67,7 +67,7 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
             <Target className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
               <span>Mục Tiêu Tích Sản Hàng Tháng Của Bạn</span>
               <span className="px-2.5 py-0.5 text-[10px] font-extrabold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 Personal Cockpit
@@ -96,7 +96,7 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
             type="number"
             value={tempTarget}
             onChange={(e) => setTempTarget(e.target.value)}
-            className="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-sm focus:outline-none focus:border-emerald-500"
+            className="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
           />
           <button
             onClick={handleSaveTarget}
@@ -113,15 +113,15 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
           <div className="space-y-0.5">
             <div className="text-xs text-slate-400">Đã tích lũy tháng này:</div>
             <div className="text-xl font-extrabold text-emerald-400">
-              {formatMoney(currentMonthSavings * 100, 'VND')}{' '}
+              {formatMoney(currentMonthSavings, 'VND')}{' '}
               <span className="text-xs font-normal text-slate-400">
-                / {formatMoney(targetMonthlySavings * 100, 'VND')}
+                / {formatMoney(targetMonthlySavings, 'VND')}
               </span>
             </div>
           </div>
 
           <div className="text-right">
-            <span className="text-2xl font-extrabold text-white font-mono">{progressPercent}%</span>
+            <span className="text-2xl font-extrabold text-slate-100 font-mono">{progressPercent}%</span>
             <div className="text-[10px] text-slate-400">Hoàn thành mục tiêu</div>
           </div>
         </div>
@@ -164,7 +164,7 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
                 <Square className="w-5 h-5 text-slate-600 shrink-0 mt-0.5" />
               )}
               <div className="space-y-0.5">
-                <div className={`text-xs font-bold ${item.completed ? 'text-white' : 'text-slate-300'}`}>
+                <div className={`text-xs font-bold ${item.completed ? 'text-slate-100' : 'text-slate-300'}`}>
                   {item.title}
                 </div>
                 <div className="text-[11px] text-slate-400 leading-relaxed">{item.desc}</div>

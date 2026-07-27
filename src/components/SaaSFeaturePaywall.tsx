@@ -63,14 +63,14 @@ export default function SaaSFeaturePaywall({
               <Crown className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg font-extrabold text-white">Nâng Cấp Gói SaaS Pro</h3>
+              <h3 className="text-lg font-extrabold text-slate-100">Nâng Cấp Gói SaaS Pro</h3>
               <p className="text-xs text-amber-400 font-semibold">{featureTitle}</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-slate-100 p-1.5 rounded-xl hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -155,9 +155,9 @@ export default function SaaSFeaturePaywall({
               </div>
 
               <div className="text-xs space-y-1 text-slate-400 font-mono">
-                <div>Ngân hàng: <span className="text-white font-bold">{checkoutData.bankName}</span></div>
+                <div>Ngân hàng: <span className="text-slate-100 font-bold">{checkoutData.bankName}</span></div>
                 <div>Số tài khoản: <span className="text-emerald-400 font-bold">{checkoutData.accountNumber}</span></div>
-                <div>Chủ tài khoản: <span className="text-white font-bold">{checkoutData.accountName}</span></div>
+                <div>Chủ tài khoản: <span className="text-slate-100 font-bold">{checkoutData.accountName}</span></div>
                 <div className="text-sm font-extrabold text-amber-400 pt-1">
                   Số tiền: {checkoutData.amount.toLocaleString('vi-VN')} VNĐ
                 </div>

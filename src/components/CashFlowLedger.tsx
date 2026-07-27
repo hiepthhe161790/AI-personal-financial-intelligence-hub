@@ -227,7 +227,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
       {/* Action Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-extrabold text-white flex items-center gap-2">
+          <h3 className="text-lg font-extrabold text-slate-100 flex items-center gap-2">
             <span>Sổ Nhật Ký Giao Dịch</span>
             <span className="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
@@ -265,22 +265,20 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 <button
                   type="button"
                   onClick={() => handleTypeChange("EXPENSE")}
-                  className={`py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
-                    formData.type === "EXPENSE"
+                  className={`py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${formData.type === "EXPENSE"
                       ? "bg-rose-500/10 text-rose-400 border-rose-500/30"
                       : "bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200"
-                  }`}
+                    }`}
                 >
                   Chi Phí (Expense)
                 </button>
                 <button
                   type="button"
                   onClick={() => handleTypeChange("INCOME")}
-                  className={`py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
-                    formData.type === "INCOME"
+                  className={`py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${formData.type === "INCOME"
                       ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                       : "bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200"
-                  }`}
+                    }`}
                 >
                   Thu Nhập (Income)
                 </button>
@@ -293,7 +291,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
               <select
                 value={formData.accountId}
                 onChange={(e) => setFormData(prev => ({ ...prev, accountId: e.target.value }))}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
               >
                 <option value="" disabled>-- Chọn tài khoản --</option>
                 {accounts.map(acc => (
@@ -314,7 +312,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                   placeholder="Ví dụ: 50000"
                   value={formData.amountMajor}
                   onChange={(e) => setFormData(prev => ({ ...prev, amountMajor: e.target.value }))}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-3 pr-12 py-2 text-xs font-bold text-white focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-3 pr-12 py-2 text-xs font-bold text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 />
                 <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-mono">
                   {accounts.find(a => a._id === formData.accountId)?.currency || "VND"}
@@ -328,7 +326,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
               <select
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
               >
                 {(formData.type === "EXPENSE" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES).map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -343,7 +341,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 type="date"
                 value={formData.occurredOn}
                 onChange={(e) => setFormData(prev => ({ ...prev, occurredOn: e.target.value }))}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
               />
             </div>
 
@@ -355,7 +353,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 placeholder="Ví dụ: Ăn sáng phở bò, Mua quà sinh nhật..."
                 value={formData.notes}
                 onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
               />
             </div>
 
@@ -393,12 +391,12 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 placeholder="Tìm theo danh mục, ghi chú..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-8 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white cursor-pointer"
+                  className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-100 cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -411,15 +409,14 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 <button
                   key={t}
                   onClick={() => setFilterType(t)}
-                  className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                    filterType === t
+                  className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${filterType === t
                       ? t === "ALL"
-                        ? "bg-slate-600 text-white"
+                        ? "bg-slate-600 text-slate-100"
                         : t === "INCOME"
-                        ? "bg-emerald-500 text-white"
-                        : "bg-rose-500 text-white"
-                      : "text-slate-400 hover:text-white"
-                  }`}
+                          ? "bg-emerald-500 text-slate-100"
+                          : "bg-rose-500 text-slate-100"
+                      : "text-slate-400 hover:text-slate-100"
+                    }`}
                 >
                   {t === "ALL" ? "Tất Cả" : t === "INCOME" ? "Thu" : "Chi"}
                 </button>
@@ -429,11 +426,10 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
             {/* Advanced filter toggle */}
             <button
               onClick={() => setShowFilters((p) => !p)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                showFilters || filterCategory !== "ALL" || filterDateFrom || filterDateTo
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${showFilters || filterCategory !== "ALL" || filterDateFrom || filterDateTo
                   ? "bg-violet-500/10 text-violet-400 border-violet-500/30"
-                  : "bg-slate-800 text-slate-400 border-slate-700 hover:text-white"
-              }`}
+                  : "bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-100"
+                }`}
             >
               <Filter className="w-3.5 h-3.5" />
               Bộ lọc
@@ -461,7 +457,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 >
                   <option value="ALL">Tất cả danh mục</option>
                   {ALL_CATEGORIES.map((c) => (
@@ -477,7 +473,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                   type="date"
                   value={filterDateFrom}
                   onChange={(e) => setFilterDateFrom(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 />
               </div>
 
@@ -488,7 +484,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                   type="date"
                   value={filterDateTo}
                   onChange={(e) => setFilterDateTo(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 />
               </div>
             </div>
@@ -545,16 +541,15 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
               return (
                 <div key={tx._id} className="py-3.5 flex items-center justify-between group transition-all">
                   <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${
-                      isExpense
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${isExpense
                         ? "bg-rose-500/10 text-rose-400 border-rose-500/20"
                         : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                    }`}>
+                      }`}>
                       {isExpense ? <ArrowDownRight className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
                     </div>
 
                     <div className="space-y-0.5">
-                      <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
                         <span>{tx.category}</span>
                         {tx.notes && (
                           <span className="text-[10px] font-normal text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">

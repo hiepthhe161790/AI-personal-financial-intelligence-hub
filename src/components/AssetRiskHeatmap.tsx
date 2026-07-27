@@ -26,7 +26,7 @@ export default function AssetRiskHeatmap({ netWorthData }: AssetRiskHeatmapProps
             <Flame className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
               <span>Bản Đồ Phân Tải Rủi Ro 4 Tầng (Asset Risk Heatmap)</span>
             </h3>
             <p className="text-xs text-slate-400">Rà soát mức độ mạo hiểm & độ an toàn của danh mục tài sản cá nhân</p>
@@ -53,7 +53,7 @@ export default function AssetRiskHeatmap({ netWorthData }: AssetRiskHeatmapProps
               <span className={`text-xs font-extrabold px-2.5 py-0.5 rounded-full border ${tier.badgeColor}`}>
                 {tier.tierNameVi}
               </span>
-              <span className="text-lg font-extrabold text-white font-mono">{tier.percentage}%</span>
+              <span className="text-lg font-extrabold text-slate-100 font-mono">{tier.percentage}%</span>
             </div>
 
             <div className="text-base font-extrabold text-slate-100">

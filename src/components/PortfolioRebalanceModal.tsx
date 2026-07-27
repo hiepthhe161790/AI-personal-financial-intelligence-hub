@@ -46,7 +46,7 @@ export default function PortfolioRebalanceModal({
               <Scale className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
                 <span>Động Cơ Tái Cân Đối Danh Mục (Portfolio Rebalancer)</span>
               </h3>
               <p className="text-xs text-slate-400">Tối ưu hóa tỷ trọng quản trị rủi ro & tính toán quy mô dòng tiền</p>
@@ -55,7 +55,7 @@ export default function PortfolioRebalanceModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -148,7 +148,7 @@ export default function PortfolioRebalanceModal({
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-white">{cat.typeNameVi}</span>
+                      <span className="font-bold text-sm text-slate-100">{cat.typeNameVi}</span>
                       <span className="text-xs font-mono text-slate-400">
                         ({cat.currentPercentage}% hiện tại / {cat.targetPercentage}% mục tiêu)
                       </span>

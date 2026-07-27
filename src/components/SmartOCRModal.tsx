@@ -109,7 +109,7 @@ export default function SmartOCRModal({ isOpen, onClose, onSuccess }: SmartOCRMo
               <Camera className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
                 <span>Smart AI Statement OCR</span>
                 <span className="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                   Gemini Vision
@@ -121,7 +121,7 @@ export default function SmartOCRModal({ isOpen, onClose, onSuccess }: SmartOCRMo
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -205,7 +205,7 @@ export default function SmartOCRModal({ isOpen, onClose, onSuccess }: SmartOCRMo
                     className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-3"
                   >
                     <div className="space-y-0.5 truncate">
-                      <div className="font-bold text-sm text-white truncate">{item.accountName}</div>
+                      <div className="font-bold text-sm text-slate-100 truncate">{item.accountName}</div>
                       <div className="text-[11px] text-slate-400 truncate">
                         Loại: <span className="text-teal-400 font-semibold">{item.accountType}</span> • {item.description}
                       </div>

@@ -54,7 +54,7 @@ export default function MarketIndicesTicker() {
           return (
             <div key={`index-${idx}`} className="flex items-center gap-2 text-xs">
               <span className="font-extrabold text-slate-400 tracking-wider">{item.name}</span>
-              <span className="font-mono text-white font-bold">{item.value.toLocaleString('vi-VN')}</span>
+              <span className="font-mono text-slate-100 font-bold">{item.value.toLocaleString('vi-VN')}</span>
               <span className={`flex items-center gap-0.5 font-bold font-mono ${isUp ? 'text-emerald-400' : 'text-rose-450'}`}>
                 {isUp ? <TrendingUp className="w-3 h-3 text-emerald-400 shrink-0" /> : <TrendingDown className="w-3 h-3 text-rose-400 shrink-0" />}
                 {item.change}
@@ -71,7 +71,7 @@ export default function MarketIndicesTicker() {
           return (
             <div key={`extra-${idx}`} className="flex items-center gap-2 text-xs">
               <span className="font-extrabold text-slate-400 tracking-wider">{item.name}</span>
-              <span className="font-mono text-white font-bold">{item.value}</span>
+              <span className="font-mono text-slate-100 font-bold">{item.value}</span>
               <span className={`flex items-center gap-0.5 font-bold font-mono ${colorClass}`}>
                 {isUp && <TrendingUp className="w-3 h-3 text-emerald-400 shrink-0" />}
                 {isDown && <TrendingDown className="w-3 h-3 text-rose-400 shrink-0" />}

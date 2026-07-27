@@ -195,7 +195,7 @@ export default function WealthGoalsTracker() {
           <Target className="w-5 h-5" />
         </div>
         <div>
-          <h4 className="text-md font-bold text-white">Theo Dõi Mục Tiêu Tài Chính (Wealth Goals)</h4>
+          <h4 className="text-md font-bold text-slate-100">Theo Dõi Mục Tiêu Tài Chính (Wealth Goals)</h4>
           <p className="text-xs text-slate-400">Đặt kế hoạch mua nhà, mua xe và dự tính thời gian hoàn thành tự động</p>
         </div>
       </div>
@@ -204,11 +204,11 @@ export default function WealthGoalsTracker() {
       <div className="p-4 rounded-2xl bg-slate-950 border border-slate-850/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
         <div className="space-y-0.5">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tốc độ tiết kiệm tháng này:</span>
-          <div className="text-lg font-black text-white">
+          <div className="text-lg font-black text-slate-100">
             {isSavingsNegative ? (
               <span className="text-rose-400">Âm {(Math.abs(monthlySavingsMinor) / 100).toLocaleString('vi-VN')} đ</span>
             ) : (
-              <span className="text-emerald-400">+{ (monthlySavingsMinor / 100).toLocaleString('vi-VN') } đ/tháng</span>
+              <span className="text-emerald-400">+{(monthlySavingsMinor / 100).toLocaleString('vi-VN')} đ/tháng</span>
             )}
           </div>
         </div>
@@ -290,8 +290,8 @@ export default function WealthGoalsTracker() {
                     {/* Progress Bar */}
                     <div className="space-y-1">
                       <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-emerald-500 to-indigo-500 rounded-full transition-all duration-550" 
+                        <div
+                          className="h-full bg-gradient-to-r from-emerald-500 to-indigo-500 rounded-full transition-all duration-550"
                           style={{ width: `${Math.min(percent, 100)}%` }}
                         />
                       </div>
@@ -325,7 +325,7 @@ export default function WealthGoalsTracker() {
                             placeholder="Số tiền (VND)"
                             value={adjustAmountMajor}
                             onChange={(e) => setAdjustAmountMajor(e.target.value)}
-                            className="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-indigo-500"
+                            className="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500"
                           />
                           <button
                             onClick={() => handleAdjustSaved(g._id, g.currentAmountMinor, 'DEPOSIT')}
@@ -335,7 +335,7 @@ export default function WealthGoalsTracker() {
                           </button>
                           <button
                             onClick={() => handleAdjustSaved(g._id, g.currentAmountMinor, 'WITHDRAW')}
-                            className="px-3 py-1.5 bg-rose-500 text-white rounded-lg text-xs font-bold hover:bg-rose-400 cursor-pointer"
+                            className="px-3 py-1.5 bg-rose-500 text-slate-100 rounded-lg text-xs font-bold hover:bg-rose-400 cursor-pointer"
                           >
                             - Rút bớt
                           </button>
@@ -368,7 +368,7 @@ export default function WealthGoalsTracker() {
                 placeholder="VD: Mua căn hộ Vinhomes 🏢"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-indigo-500 text-xs"
+                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               />
             </div>
 
@@ -377,7 +377,7 @@ export default function WealthGoalsTracker() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as 'HOUSE' | 'CAR' | 'RETIREMENT' | 'TRAVEL' | 'OTHER')}
-                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-indigo-500 text-xs"
+                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               >
                 {CATEGORY_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -396,7 +396,7 @@ export default function WealthGoalsTracker() {
                   placeholder="VD: 2000000000"
                   value={targetAmountMajor}
                   onChange={(e) => setTargetAmountMajor(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-indigo-500 text-xs"
+                  className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
                 />
               </div>
 
@@ -407,7 +407,7 @@ export default function WealthGoalsTracker() {
                   placeholder="VD: 500000000"
                   value={currentAmountMajor}
                   onChange={(e) => setCurrentAmountMajor(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-indigo-500 text-xs"
+                  className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
                 />
               </div>
             </div>
@@ -418,7 +418,7 @@ export default function WealthGoalsTracker() {
                 type="date"
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-indigo-500 text-xs"
+                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               />
             </div>
 

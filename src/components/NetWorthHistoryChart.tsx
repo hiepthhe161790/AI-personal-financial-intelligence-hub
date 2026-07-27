@@ -1,19 +1,19 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  Legend 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend
 } from 'recharts';
-import { 
-  History, 
-  Camera, 
+import {
+  History,
+  Camera,
   Loader2
 } from 'lucide-react';
 import { formatMoney } from '@/domain/money';
@@ -48,7 +48,7 @@ export default function NetWorthHistoryChart() {
     try {
       const res = await fetch('/api/v1/snapshots/history');
       const json = await res.json();
-      
+
       let monthlySavings = 10000000;
       try {
         const goalsRes = await fetch('/api/v1/goals');
@@ -108,7 +108,7 @@ export default function NetWorthHistoryChart() {
   if (showForecast && history.length > 0) {
     const lastPoint = history[history.length - 1];
     const lastNetWorth = lastPoint.netWorthMajor;
-    
+
     // Connect forecast lines to the last history point (bridge point)
     if (chartData.length > 0) {
       chartData[chartData.length - 1]['Dự Báo (Cơ bản)'] = lastNetWorth;
@@ -120,10 +120,10 @@ export default function NetWorthHistoryChart() {
 
     for (let m = 1; m <= 12; m++) {
       const forecastDate = new Date(baseDate.getFullYear(), baseDate.getMonth() + m, 1);
-      
+
       const baseForecast = Math.round(lastNetWorth + m * savingsRate);
-      const bestCase = Math.round(lastNetWorth * Math.pow(1 + 0.10/12, m) + m * savingsRate);
-      const worstCase = Math.round(lastNetWorth * Math.pow(1 - 0.05/12, m) + m * savingsRate);
+      const bestCase = Math.round(lastNetWorth * Math.pow(1 + 0.10 / 12, m) + m * savingsRate);
+      const worstCase = Math.round(lastNetWorth * Math.pow(1 - 0.05 / 12, m) + m * savingsRate);
 
       chartData.push({
         name: forecastDate.toLocaleDateString('vi-VN', { month: 'short', year: '2-digit' }) + ' (Dự báo)',
@@ -145,7 +145,7 @@ export default function NetWorthHistoryChart() {
             <History className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Lịch Sử Biến Động Tài Sản Ròng (Net Worth History)</h3>
+            <h3 className="text-lg font-bold text-slate-100">Lịch Sử Biến Động Tài Sản Ròng (Net Worth History)</h3>
             <p className="text-xs text-slate-400">Ghi nhận Snapshots theo thời gian (Append-only snapshots)</p>
           </div>
         </div>
@@ -153,9 +153,9 @@ export default function NetWorthHistoryChart() {
         <div className="flex items-center gap-3 flex-wrap">
           {/* Toggle Switch */}
           <label className="inline-flex items-center gap-2 cursor-pointer bg-slate-950/60 hover:bg-slate-950 border border-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 select-none transition-colors">
-            <input 
-              type="checkbox" 
-              checked={showForecast} 
+            <input
+              type="checkbox"
+              checked={showForecast}
               onChange={() => setShowForecast(!showForecast)}
               className="sr-only peer"
             />

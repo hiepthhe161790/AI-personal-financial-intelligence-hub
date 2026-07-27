@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Globe, 
-  Newspaper, 
-  RefreshCw, 
-  ExternalLink, 
-  TrendingUp, 
-  DollarSign, 
-  AlertCircle 
+import {
+  Globe,
+  Newspaper,
+  RefreshCw,
+  ExternalLink,
+  TrendingUp,
+  DollarSign,
+  AlertCircle
 } from 'lucide-react';
 import VNStockPortfolioCard from '@/components/VNStockPortfolioCard';
 
@@ -75,7 +75,7 @@ export default function MarketDataCards() {
                 <DollarSign className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Tỷ Giá Ngoại Tệ (VCB)</h3>
+                <h3 className="text-base font-bold text-slate-100">Tỷ Giá Ngoại Tệ (VCB)</h3>
                 <p className="text-[11px] text-slate-400">{sourceInfo || 'Nguồn XML Vietcombank'}</p>
               </div>
             </div>
@@ -104,7 +104,7 @@ export default function MarketDataCards() {
                       <span>{r.currencyCode}</span>
                     </td>
                     <td className="py-3 text-right text-slate-200">{r.transfer}</td>
-                    <td className="py-3 text-right font-semibold text-white">{r.sell}</td>
+                    <td className="py-3 text-right font-semibold text-slate-100">{r.sell}</td>
                   </tr>
                 ))}
               </tbody>
@@ -120,7 +120,7 @@ export default function MarketDataCards() {
                 <Newspaper className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Tin Tức Thị Trường & Kinh Doanh</h3>
+                <h3 className="text-base font-bold text-slate-100">Tin Tức Thị Trường & Kinh Doanh</h3>
                 <p className="text-[11px] text-slate-400">RSS Feeds tự động từ VnExpress & CafeF</p>
               </div>
             </div>

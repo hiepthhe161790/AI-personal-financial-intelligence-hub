@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { 
-  BrainCircuit, 
-  Sparkles, 
-  AlertTriangle, 
-  CheckCircle, 
-  FileText, 
-  ShieldAlert, 
-  Loader2, 
-  ChevronDown, 
-  ChevronUp, 
+import {
+  BrainCircuit,
+  Sparkles,
+  AlertTriangle,
+  CheckCircle,
+  FileText,
+  ShieldAlert,
+  Loader2,
+  ChevronDown,
+  ChevronUp,
   RefreshCcw
 } from 'lucide-react';
 import { AIResearchBrief as AIResearchBriefType } from '@/lib/ai';
@@ -58,7 +58,7 @@ export default function AIResearchBrief() {
             <BrainCircuit className="w-8 h-8 animate-pulse" />
           </div>
           <div className="space-y-1 max-w-xl mx-auto">
-            <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+            <h3 className="text-xl sm:text-2xl font-extrabold text-slate-100">
               Phân Tích Danh Mục & Đánh Giá Rủi Ro Bằng AI
             </h3>
             <p className="text-slate-400 text-sm">
@@ -68,7 +68,7 @@ export default function AIResearchBrief() {
 
           <button
             onClick={fetchBrief}
-            className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 text-white font-bold text-sm shadow-xl shadow-indigo-500/25 transition-all flex items-center gap-2 mx-auto cursor-pointer"
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 text-slate-100 font-bold text-sm shadow-xl shadow-indigo-500/25 transition-all flex items-center gap-2 mx-auto cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
             <span>Tạo Báo Cáo Phân Tích AI Gemini</span>
@@ -102,7 +102,7 @@ export default function AIResearchBrief() {
                   <BrainCircuit className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">{data.brief.headline}</h3>
+                  <h3 className="text-lg font-bold text-slate-100">{data.brief.headline}</h3>
                   <p className="text-xs text-slate-400">Được khởi tạo từ Evidence Pack ngày {new Date().toLocaleDateString('vi-VN')}</p>
                 </div>
               </div>
@@ -124,7 +124,7 @@ export default function AIResearchBrief() {
 
           {/* Key Observations */}
           <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 space-y-3">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-100 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-emerald-400" />
               Ghi Nhận Cốt Lõi Tình Hình Tài Sản
             </h4>
@@ -140,7 +140,7 @@ export default function AIResearchBrief() {
 
           {/* Risk Assessments Grid */}
           <div className="space-y-3">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-100 flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-rose-400" />
               Đánh Giá Rủi Ro & Khuyến Nghị Quản Trị
             </h4>
@@ -157,7 +157,7 @@ export default function AIResearchBrief() {
                         MỨC RỦI RO: {item.riskLevel}
                       </span>
                     </div>
-                    <h5 className="text-sm font-bold text-white">{item.title}</h5>
+                    <h5 className="text-sm font-bold text-slate-100">{item.title}</h5>
                     <p className="text-xs text-slate-400 leading-relaxed">{item.explanation}</p>
                   </div>
 
@@ -178,7 +178,7 @@ export default function AIResearchBrief() {
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-md font-bold text-white">Kế Hoạch Tích Lũy Lãi Kép & Đầu Tư Từ Chi Tiêu Vặt</h4>
+                  <h4 className="text-md font-bold text-slate-100">Kế Hoạch Tích Lũy Lãi Kép & Đầu Tư Từ Chi Tiêu Vặt</h4>
                   <p className="text-xs text-slate-400">AI tối ưu hóa chi phí nhàn rỗi để tạo nguồn vốn đầu tư tăng trưởng</p>
                 </div>
               </div>
@@ -199,7 +199,7 @@ export default function AIResearchBrief() {
                 {/* 5 Years Compounding */}
                 <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tích lũy lãi kép 5 năm (10%/năm)</div>
-                  <div className="text-2xl font-black text-white">
+                  <div className="text-2xl font-black text-slate-100">
                     {data.brief.savingsInvestmentPlan.compounding5YearsMajor.toLocaleString('vi-VN')} đ
                   </div>
                   <p className="text-[10px] text-indigo-400 font-semibold">Tự động tăng trưởng từ nguồn vốn nhỏ hàng tháng</p>
@@ -208,7 +208,7 @@ export default function AIResearchBrief() {
                 {/* 10 Years Compounding */}
                 <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tích lũy lãi kép 10 năm (10%/năm)</div>
-                  <div className="text-2xl font-black text-white">
+                  <div className="text-2xl font-black text-slate-100">
                     {data.brief.savingsInvestmentPlan.compounding10YearsMajor.toLocaleString('vi-VN')} đ
                   </div>
                   <p className="text-[10px] text-indigo-400 font-semibold">Sức mạnh lãi kép phát huy tối đa dài hạn</p>
@@ -227,8 +227,8 @@ export default function AIResearchBrief() {
                       </div>
                       {/* Percent Bar */}
                       <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full" 
+                        <div
+                          className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 rounded-full"
                           style={{ width: `${rec.percentage}%` }}
                         />
                       </div>
@@ -246,7 +246,7 @@ export default function AIResearchBrief() {
           <div className="rounded-2xl bg-slate-900/40 border border-slate-800 p-4 space-y-3">
             <button
               onClick={() => setShowEvidence(!showEvidence)}
-              className="w-full flex items-center justify-between text-xs font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between text-xs font-semibold text-slate-300 hover:text-slate-100 transition-colors cursor-pointer"
             >
               <span className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-indigo-400" />

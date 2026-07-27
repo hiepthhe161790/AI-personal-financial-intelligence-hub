@@ -84,7 +84,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Toolti
   if (!d) return null;
   return (
     <div className="bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 shadow-xl text-sm">
-      <div className="font-bold text-white mb-1 flex items-center gap-2">
+      <div className="font-bold text-slate-100 mb-1 flex items-center gap-2">
         <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: d.color }} />
         {d.label}
       </div>
@@ -165,7 +165,7 @@ export default function PortfolioAllocationChart({
             <PieIcon className="w-4.5 h-4.5 text-violet-400" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white">Phân Bổ Danh Mục Tài Sản</h3>
+            <h3 className="text-base font-bold text-slate-100">Phân Bổ Danh Mục Tài Sản</h3>
             <p className="text-[11px] text-slate-400">Cơ cấu tài sản theo từng loại hình đầu tư</p>
           </div>
         </div>

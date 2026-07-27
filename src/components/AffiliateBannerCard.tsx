@@ -12,7 +12,7 @@ export default function AffiliateBannerCard() {
             <Award className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
               <span>Đối Tác Tài Chính Khuyên Dùng</span>
               <span className="px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
                 Ưu Đãi Độc Quyền

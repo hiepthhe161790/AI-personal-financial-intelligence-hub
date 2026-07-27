@@ -9,7 +9,7 @@ interface FinancialFreedomMilestonesProps {
 
 export default function FinancialFreedomMilestones({ currentNetWorthMinor }: FinancialFreedomMilestonesProps) {
   const [monthlyExpensesMajor, setMonthlyExpensesMajor] = useState(15000000); // Default 15 million VND
-  
+
   const netWorthMajor = Math.max(0, currentNetWorthMinor / 100);
 
   // Define Milestone Levels
@@ -51,7 +51,7 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
           <Sparkles className="w-5 h-5 animate-pulse" />
         </div>
         <div>
-          <h4 className="text-md font-bold text-white">Bậc Thang Cột Mốc Tự Do Tài Chính</h4>
+          <h4 className="text-md font-bold text-slate-100">Bậc Thang Cột Mốc Tự Do Tài Chính</h4>
           <p className="text-xs text-slate-400">Định vị vị thế tài sản ròng hiện tại của bạn trên hành trình tự chủ tài chính</p>
         </div>
       </div>
@@ -64,7 +64,7 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
             {monthlyExpensesMajor.toLocaleString('vi-VN')} đ <span className="text-[10px] text-slate-400 font-normal">/tháng</span>
           </span>
         </div>
-        
+
         <input
           type="range"
           min={5000000}
@@ -74,7 +74,7 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
           onChange={(e) => setMonthlyExpensesMajor(parseInt(e.target.value))}
           className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
         />
-        
+
         <p className="text-[10px] text-slate-500 leading-normal">
           💡 Kéo thanh trượt để thay đổi mức chi tiêu dự trù. Hệ thống sẽ tính toán lại mục tiêu của các cột mốc tương ứng thời gian thực.
         </p>
@@ -87,8 +87,8 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
           const isAchieved = netWorthMajor >= level.target;
 
           return (
-            <div 
-              key={level.id} 
+            <div
+              key={level.id}
               className={`rounded-2xl bg-gradient-to-r border p-5 space-y-4 shadow-sm transition-all duration-300 ${level.color}`}
             >
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -97,14 +97,14 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
                     {level.icon}
                   </div>
                   <div className="space-y-1">
-                    <h5 className="text-sm font-extrabold text-white">{level.title}</h5>
+                    <h5 className="text-sm font-extrabold text-slate-100">{level.title}</h5>
                     <p className="text-xs text-slate-400 leading-relaxed max-w-lg">{level.description}</p>
                   </div>
                 </div>
 
                 <div className="text-left sm:text-right shrink-0">
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mục tiêu tài sản</div>
-                  <div className="text-md font-black text-white">{level.target.toLocaleString('vi-VN')} đ</div>
+                  <div className="text-md font-black text-slate-100">{level.target.toLocaleString('vi-VN')} đ</div>
                   {isAchieved ? (
                     <span className="text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full inline-block mt-1">
                       ĐÃ ĐẠT ĐƯỢC 🎉
@@ -124,8 +124,8 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
                   <span className="font-bold text-slate-200">{percent.toFixed(1)}%</span>
                 </div>
                 <div className="w-full h-2 bg-slate-950/60 rounded-full overflow-hidden border border-white/5">
-                  <div 
-                    className={`h-full rounded-full transition-all duration-550 ${level.progressColor}`} 
+                  <div
+                    className={`h-full rounded-full transition-all duration-550 ${level.progressColor}`}
                     style={{ width: `${Math.min(percent, 100)}%` }}
                   />
                 </div>
@@ -139,7 +139,7 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
       <div className="rounded-xl bg-slate-950 border border-slate-850 p-4 flex items-start gap-3 text-slate-400 text-xs">
         <ShieldAlert className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5 animate-pulse" />
         <p className="leading-relaxed">
-          Tài sản ròng hiện tại của bạn: <span className="font-extrabold text-slate-200">{netWorthMajor.toLocaleString('vi-VN')} đ</span>. 
+          Tài sản ròng hiện tại của bạn: <span className="font-extrabold text-slate-200">{netWorthMajor.toLocaleString('vi-VN')} đ</span>.
           Các phép tính trên được xây dựng trên phương pháp lập kế hoạch tài chính cá nhân chuẩn quốc tế. Cố gắng tích lũy nâng cao thu nhập & đầu tư lãi kép để sớm đạt được Độc lập Tài chính!
         </p>
       </div>

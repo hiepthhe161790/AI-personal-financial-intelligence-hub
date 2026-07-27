@@ -55,13 +55,13 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
           <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-6 animate-in slide-in-from-bottom-4 duration-200">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-100-100 flex items-center gap-2">
                 <Share2 className="w-4 h-4 text-indigo-400" />
                 Chia Sẻ Snapshot Tài Chính
               </h3>
               <button
                 onClick={() => setOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-100-100 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -81,21 +81,20 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
                   <div className="w-6 h-6 rounded-lg bg-emerald-500 flex items-center justify-center">
                     <span className="text-[10px] font-black text-slate-950">AI</span>
                   </div>
-                  <span className="text-xs font-bold text-slate-300">AI Financial Hub</span>
-                  <span className="ml-auto text-[10px] text-slate-500">{today}</span>
+                  <span className="text-xs font-bold" style={{ color: '#cbd5e1' }}>AI Financial Hub</span>
+                  <span className="ml-auto text-[10px]" style={{ color: '#64748b' }}>{today}</span>
                 </div>
-                <p className="text-[11px] text-slate-500">Personal Net Worth Snapshot</p>
+                <p className="text-[11px]" style={{ color: '#64748b' }}>Personal Net Worth Snapshot</p>
               </div>
 
               {/* Net worth main number */}
               <div className="px-6 py-5 text-center space-y-1">
-                <p className="text-[11px] text-slate-400 uppercase tracking-widest">Tài Sản Ròng</p>
+                <p className="text-[11px] uppercase tracking-widest" style={{ color: '#94a3b8' }}>Tài Sản Ròng</p>
                 <p className={`text-3xl font-black font-mono ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
                   {isPrivate ? '••••••••' : fmt(netWorth)}
                 </p>
-                <div className={`inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full font-bold ${
-                  isPositive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'
-                }`}>
+                <div className={`inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full font-bold ${isPositive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'
+                  }`}>
                   {isPositive ? '📈 Tài sản dương' : '⚠️ Cần cải thiện'}
                 </div>
               </div>
@@ -103,13 +102,13 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
               {/* Breakdown */}
               <div className="grid grid-cols-2 gap-px bg-slate-700/30 border-t border-slate-700/50">
                 <div className="bg-slate-900/80 px-4 py-3 text-center">
-                  <p className="text-[10px] text-slate-500 mb-0.5">Tổng Tài Sản</p>
+                  <p className="text-[10px] mb-0.5" style={{ color: '#64748b' }}>Tổng Tài Sản</p>
                   <p className="text-sm font-bold font-mono text-blue-400">
                     {isPrivate ? '•••' : fmt(assets)}
                   </p>
                 </div>
                 <div className="bg-slate-900/80 px-4 py-3 text-center">
-                  <p className="text-[10px] text-slate-500 mb-0.5">Tổng Nợ</p>
+                  <p className="text-[10px] mb-0.5" style={{ color: '#64748b' }}>Tổng Nợ</p>
                   <p className="text-sm font-bold font-mono text-rose-400">
                     {isPrivate ? '•••' : fmt(liabilities)}
                   </p>
@@ -118,7 +117,7 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
 
               {/* Account count */}
               <div className="px-6 py-3 text-center border-t border-slate-700/50">
-                <p className="text-[10px] text-slate-500">
+                <p className="text-[10px]" style={{ color: '#64748b' }}>
                   {data.accounts.length} tài khoản • Cập nhật {today}
                 </p>
               </div>
@@ -128,11 +127,10 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
             <div className="flex gap-3">
               <button
                 onClick={handleCopyText}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                  copied
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${copied
                     ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-white'
-                }`}
+                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-slate-100-100'
+                  }`}
               >
                 {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 {copied ? 'Đã sao chép!' : 'Sao chép văn bản'}

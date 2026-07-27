@@ -35,7 +35,7 @@ export default function FinancialHealthCard({ data }: FinancialHealthCardProps) 
             <Activity className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">Chỉ Số Sức Khỏe Tài Chính (Health Score)</h3>
+            <h3 className="text-lg font-bold text-slate-100">Chỉ Số Sức Khỏe Tài Chính (Health Score)</h3>
             <p className="text-xs text-slate-400">Đánh giá sức chịu đựng rủi ro & tỷ lệ phân bổ tài sản</p>
           </div>
         </div>

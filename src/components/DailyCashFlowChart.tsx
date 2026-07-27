@@ -148,7 +148,7 @@ export default function DailyCashFlowChart() {
             <ArrowUpDown className="w-4 h-4 text-blue-400" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white">Dòng Tiền Thu / Chi Hàng Ngày</h3>
+            <h3 className="text-base font-bold text-slate-100">Dòng Tiền Thu / Chi Hàng Ngày</h3>
             <p className="text-[11px] text-slate-400">{days} ngày gần nhất</p>
           </div>
         </div>
@@ -159,11 +159,10 @@ export default function DailyCashFlowChart() {
             <button
               key={d}
               onClick={() => setDays(d)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                days === d
-                  ? 'bg-blue-500 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white'
-              }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${days === d
+                  ? 'bg-blue-500 text-slate-100 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-100'
+                }`}
             >
               {d}N
             </button>

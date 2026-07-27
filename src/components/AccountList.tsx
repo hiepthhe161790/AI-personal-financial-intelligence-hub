@@ -2,15 +2,15 @@
 
 import { AccountSummary } from '@/domain/net-worth';
 import { formatMoney } from '@/domain/money';
-import { 
-  Building2, 
-  Wallet, 
-  PiggyBank, 
-  Coins, 
-  LineChart, 
-  PieChart, 
-  Bitcoin, 
-  Package, 
+import {
+  Building2,
+  Wallet,
+  PiggyBank,
+  Coins,
+  LineChart,
+  PieChart,
+  Bitcoin,
+  Package,
   CreditCard,
   Clock,
   AlertTriangle
@@ -50,7 +50,7 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
         <div className="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
           <Wallet className="w-6 h-6" />
         </div>
-        <h4 className="text-base font-bold text-white">Chưa Có Danh Mục Tài Sản Nào</h4>
+        <h4 className="text-base font-bold text-slate-100">Chưa Có Danh Mục Tài Sản Nào</h4>
         <p className="text-slate-400 text-sm max-w-sm mx-auto">
           Hãy bấm nút &quot;Thêm Tài Sản / Khoản Nợ&quot; phía trên để bắt đầu theo dõi tổng tài sản ròng của bạn.
         </p>
@@ -68,9 +68,8 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
         return (
           <div
             key={acc._id}
-            className={`group rounded-2xl bg-slate-900/60 border ${
-              acc.isStale ? 'border-amber-500/40 bg-amber-950/10' : 'border-slate-800/80 hover:border-slate-700'
-            } p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 shadow-md`}
+            className={`group rounded-2xl bg-slate-900/60 border ${acc.isStale ? 'border-amber-500/40 bg-amber-950/10' : 'border-slate-800/80 hover:border-slate-700'
+              } p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 shadow-md`}
           >
             <div className="flex items-center gap-3.5 min-w-0">
               <div
@@ -81,7 +80,7 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
 
               <div className="min-w-0 space-y-1">
                 <div className="flex items-center gap-2">
-                  <h4 className="text-base font-bold text-white truncate">{acc.name}</h4>
+                  <h4 className="text-base font-bold text-slate-100 truncate">{acc.name}</h4>
                   <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
                     {typeInfo.label}
                   </span>
@@ -105,9 +104,8 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
 
             <div className="text-right shrink-0">
               <div
-                className={`text-lg sm:text-xl font-bold font-mono tracking-tight ${
-                  isLiability ? 'text-rose-400' : 'text-emerald-400'
-                }`}
+                className={`text-lg sm:text-xl font-bold font-mono tracking-tight ${isLiability ? 'text-rose-400' : 'text-emerald-400'
+                  }`}
               >
                 {isLiability ? '-' : ''}
                 {formatMoney(acc.currentBalanceMinor, acc.currency)}

@@ -80,7 +80,7 @@ export default function NetWorthCard({ data, loading, isPrivate = false, onToggl
         </div>
 
         <div>
-          <div className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+          <div className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-100">
             {displayAmount(netWorthMinor)}
           </div>
           <p className="text-xs text-slate-400 mt-2">

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { 
-  Scale, ArrowRight, Zap, Target, TrendingUp, Info, HelpCircle, 
-  AlertTriangle, ShieldCheck, DollarSign, Calendar, RefreshCw 
+import {
+  Scale, ArrowRight, Zap, Target, TrendingUp, Info, HelpCircle,
+  AlertTriangle, ShieldCheck, DollarSign, Calendar, RefreshCw
 } from "lucide-react";
 import { formatMoney } from "@/domain/money";
 
@@ -116,7 +116,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
           const extraApplied = Math.min(d.currentBalance, availableExtra);
           d.currentBalance -= extraApplied;
           availableExtra -= extraApplied;
-          
+
           if (availableExtra <= 0) break; // Extra money fully used
         }
       }
@@ -148,7 +148,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
         <div className="w-12 h-12 rounded-2xl bg-slate-800/80 flex items-center justify-center text-slate-500 mx-auto">
           <Scale className="w-6 h-6" />
         </div>
-        <h3 className="text-sm font-bold text-white">Không Phát Hiện Khoản Nợ Nào</h3>
+        <h3 className="text-sm font-bold text-slate-100">Không Phát Hiện Khoản Nợ Nào</h3>
         <p className="text-xs text-slate-400 max-w-sm mx-auto">
           Ứng dụng không tìm thấy tài khoản nợ (Liability) nào đang có số dư dương. Chiến lược trả nợ chỉ khả dụng khi bạn có các khoản nợ cần thanh toán.
         </p>
@@ -160,7 +160,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h3 className="text-lg font-extrabold text-white flex items-center gap-2">
+        <h3 className="text-lg font-extrabold text-slate-100 flex items-center gap-2">
           <span>Công Cụ Lập Kế Hoạch Trả Nợ</span>
           <span className="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1">
             <Zap className="w-3 h-3" />
@@ -172,7 +172,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
 
       {/* Simulator Inputs & Customization */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+
         {/* Left Side: Debt inputs list */}
         <div className="lg:col-span-2 space-y-4 rounded-3xl bg-slate-900/60 border border-slate-800 p-6">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -189,7 +189,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
             {debts.map((debt, index) => (
               <div key={debt._id} className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
                 <div className="space-y-0.5">
-                  <div className="text-xs font-bold text-white">{debt.name}</div>
+                  <div className="text-xs font-bold text-slate-100">{debt.name}</div>
                   <div className="text-[10px] font-mono text-amber-500">
                     Số dư nợ: {formatMoney(Math.round(debt.balance * 100), debt.currency)}
                   </div>
@@ -204,7 +204,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
                     max="100"
                     value={debt.interestRate}
                     onChange={(e) => handleDebtChange(index, "interestRate", parseFloat(e.target.value) || 0)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500/50 font-mono"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500/50 font-mono"
                   />
                 </div>
 
@@ -215,7 +215,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
                     type="number"
                     value={debt.minPayment}
                     onChange={(e) => handleDebtChange(index, "minPayment", parseInt(e.target.value, 10) || 0)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500/50 font-mono"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500/50 font-mono"
                   />
                 </div>
               </div>
@@ -261,7 +261,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
                   <Zap className="w-3.5 h-3.5 text-indigo-400" />
                   Phương Án Avalanche (Tối Ưu Toán Học)
                 </div>
-                <div className="text-2xl font-black text-white mt-1">
+                <div className="text-2xl font-black text-slate-100 mt-1">
                   {avalancheResult.totalMonths} <span className="text-xs font-normal text-slate-400">tháng</span>
                 </div>
                 <div className="text-[10px] text-slate-400 font-mono">
@@ -275,7 +275,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
                   <Target className="w-3.5 h-3.5 text-slate-500" />
                   Phương Án Snowball (Động Lực Tâm Lý)
                 </div>
-                <div className="text-2xl font-black text-white mt-1">
+                <div className="text-2xl font-black text-slate-100 mt-1">
                   {snowballResult.totalMonths} <span className="text-xs font-normal text-slate-400">tháng</span>
                 </div>
                 <div className="text-[10px] text-slate-400 font-mono">

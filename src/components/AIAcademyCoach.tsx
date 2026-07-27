@@ -49,7 +49,7 @@ export default function AIAcademyCoach() {
               Gói SaaS Pro Feature
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100">
             AI Financial Academy & Mentorship Coach
           </h2>
           <p className="text-slate-400 text-xs sm:text-sm max-w-2xl leading-relaxed">
@@ -78,11 +78,10 @@ export default function AIAcademyCoach() {
                 <button
                   key={lesson.id}
                   onClick={() => setSelectedLesson(lesson)}
-                  className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer space-y-2 ${
-                    isSelected
+                  className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer space-y-2 ${isSelected
                       ? 'bg-indigo-950/60 border-indigo-500/50 shadow-lg shadow-indigo-500/10'
                       : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-indigo-400">
@@ -91,7 +90,7 @@ export default function AIAcademyCoach() {
                     <span className="text-[10px] text-slate-500 font-mono">{lesson.readTimeMinutes} phút đọc</span>
                   </div>
 
-                  <h4 className="text-sm font-bold text-white leading-snug">{lesson.title}</h4>
+                  <h4 className="text-sm font-bold text-slate-100 leading-snug">{lesson.title}</h4>
                   <p className="text-xs text-slate-400 line-clamp-2">{lesson.subtitle}</p>
                 </button>
               );
@@ -105,7 +104,7 @@ export default function AIAcademyCoach() {
           <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
             <div className="border-b border-slate-800 pb-4 space-y-2">
               <span className="text-xs text-indigo-400 font-semibold uppercase">{selectedLesson.category}</span>
-              <h3 className="text-xl font-extrabold text-white">{selectedLesson.title}</h3>
+              <h3 className="text-xl font-extrabold text-slate-100">{selectedLesson.title}</h3>
               <p className="text-xs text-slate-400">{selectedLesson.subtitle}</p>
             </div>
 
@@ -147,7 +146,7 @@ export default function AIAcademyCoach() {
 
           {/* AI Mentorship Coach Chat Window */}
           <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 space-y-4 shadow-xl">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+            <h4 className="text-sm font-bold text-slate-100 flex items-center gap-2 border-b border-slate-800 pb-3">
               <Sparkles className="w-4 h-4 text-indigo-400" />
               Hỏi Đáp Trực Tiếp Với AI Coach:
             </h4>
@@ -156,11 +155,10 @@ export default function AIAcademyCoach() {
               {chatHistory.map((msg, idx) => (
                 <div
                   key={idx}
-                  className={`p-3.5 rounded-2xl text-xs leading-relaxed max-w-xl ${
-                    msg.sender === 'user'
-                      ? 'ml-auto bg-indigo-600 text-white font-medium'
+                  className={`p-3.5 rounded-2xl text-xs leading-relaxed max-w-xl ${msg.sender === 'user'
+                      ? 'ml-auto bg-indigo-600 text-slate-100 font-medium'
                       : 'bg-slate-950 border border-slate-800 text-slate-300'
-                  }`}
+                    }`}
                 >
                   {msg.text}
                 </div>
@@ -179,12 +177,12 @@ export default function AIAcademyCoach() {
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAskAI()}
-                className="flex-1 px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-indigo-500"
+                className="flex-1 px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-xs focus:outline-none focus:border-indigo-500"
               />
               <button
                 onClick={() => handleAskAI()}
                 disabled={asking || !question.trim()}
-                className="px-4 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs shadow-lg shadow-indigo-500/20 transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-slate-100 font-bold text-xs shadow-lg shadow-indigo-500/20 transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Gửi</span>
