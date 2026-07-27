@@ -9,8 +9,11 @@ Nhật ký ghi lại toàn bộ thay đổi do AI (Antigravity) thực hiện tr
 
 ## [2026-07-28 — Session 3]
 ### Fixed: Tab Navigation Layout & Gray Background
-- **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**: Đổi layout tab bar từ `flex-row justify-between` (gây tabs bị cắt) sang **2 hàng dọc** — hàng 1 tabs full width có scroll ngang, hàng 2 action buttons có flex-wrap. Loại bỏ xung đột `min-w-0 shrink-0` trên cùng 1 container.
-- **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**: Fix màu xám của tab container — đổi `bg-slate-200/50` → `bg-slate-200/60` và đảm bảo `dark:bg-slate-900/80` hoạt động đúng sau khi thêm `@variant dark` vào globals.css.
+- **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**: Nâng cấp phân cấp thị giác (visual hierarchy) và bố cục:
+  - Tách nút chính **`+ Thêm Tài Sản / Khoản Nợ`** sang phía bên phải của hàng Tabs chính (giống chuẩn thiết kế SaaS hiện đại của Stripe/Vercel).
+  - Gom nhóm các công cụ phụ trợ (AI OCR, Đồng bộ giá, Tái cân đối, Chia sẻ) vào một thanh toolbar riêng biệt có tiêu đề rõ ràng **"Công cụ phân tích & quản trị:"** với nền nhạt bo góc thời thượng.
+  - Loại bỏ xung đột `min-w-0 shrink-0` trên cùng 1 container giúp giao diện responsive hoàn hảo trên mọi thiết bị.
+  - Fix triệt để màu xám của tab container — đổi `bg-slate-200/50` → `bg-slate-200/60` và đảm bảo `dark:bg-slate-900/80` hoạt động đúng sau khi cấu hình thành công `@variant dark` vào globals.css.
 
 ## [2026-07-28 — Session 2]
 ### Fixed: Light Mode Text Contrast & Dark Mode Variant
