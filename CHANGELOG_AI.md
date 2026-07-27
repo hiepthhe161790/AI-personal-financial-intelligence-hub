@@ -7,6 +7,23 @@ Nhật ký ghi lại toàn bộ thay đổi do AI (Antigravity) thực hiện tr
 - Khởi tạo file `CHANGELOG_AI.md` để theo dõi các chỉnh sửa tiếp theo.
 - Cấu hình file `AGENTS.md` yêu cầu AI ghi nhận log mỗi lần thay đổi mã nguồn.
 
+## [2026-07-28 — Session 3]
+### Fixed: Tab Navigation Layout & Gray Background
+- **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**: Đổi layout tab bar từ `flex-row justify-between` (gây tabs bị cắt) sang **2 hàng dọc** — hàng 1 tabs full width có scroll ngang, hàng 2 action buttons có flex-wrap. Loại bỏ xung đột `min-w-0 shrink-0` trên cùng 1 container.
+- **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**: Fix màu xám của tab container — đổi `bg-slate-200/50` → `bg-slate-200/60` và đảm bảo `dark:bg-slate-900/80` hoạt động đúng sau khi thêm `@variant dark` vào globals.css.
+
+## [2026-07-28 — Session 2]
+### Fixed: Light Mode Text Contrast & Dark Mode Variant
+- **[globals.css](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/globals.css)**: Thêm `@variant dark (&:where(.dark, .dark *))` — bắt buộc cho Tailwind v4 để `dark:` prefix hoạt động theo class `.dark` trên `<html>` thay vì `@media prefers-color-scheme`.
+- **[NetWorthCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/NetWorthCard.tsx)**: Đổi `text-white` → `text-slate-100` trên số tài sản ròng chính.
+- **[AssetRiskHeatmap.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AssetRiskHeatmap.tsx)**: Đổi `text-white` → `text-slate-100` trên tiêu đề card và phần trăm tier.
+- **[WealthGoalsTracker.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/WealthGoalsTracker.tsx)**: Đổi `text-white` → `text-slate-100` trên tiêu đề, savings rate, và tất cả input fields form.
+- **[VNStockPortfolioCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/VNStockPortfolioCard.tsx)**: Đổi `text-white` → `text-slate-100`, xóa nhân `* 100` sai cho VND.
+- **[PortfolioAllocationChart.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/PortfolioAllocationChart.tsx)**: Đổi `text-white` → `text-slate-100` trong tooltip và tiêu đề.
+- **[SmartAlertsPanel.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/SmartAlertsPanel.tsx)**: Đổi `text-white` → `text-slate-100` trên tiêu đề, alert title và hover states.
+- **[ShareNetWorthCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ShareNetWorthCard.tsx)**: Đổi `text-white` → `text-slate-100`; dùng `style={{ color: '#...' }}` cho nội dung preview card (luôn dark bất kể theme).
+- **[ScenarioSimulator.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ScenarioSimulator.tsx)**: Đổi `text-white` → `text-slate-100` trên tiêu đề, tất cả input fields và output số liệu.
+
 ## [2026-07-28]
 ### Added
 - Thêm file cấu hình PWA: [manifest.json](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/public/manifest.json), Service Worker [sw.js](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/public/sw.js) và component đăng ký [PWARegister.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/PWARegister.tsx).

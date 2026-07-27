@@ -228,8 +228,9 @@ export default function Home() {
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Top Navigation Tabs */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4 flex-wrap">
-          <div className="flex items-center gap-2 bg-slate-200/50 dark:bg-slate-900/80 p-1.5 rounded-2xl border border-slate-300/60 dark:border-slate-800 overflow-x-auto scrollbar-none min-w-0 shrink-0">
+        <div className="flex flex-col gap-3 border-b border-slate-300/60 dark:border-slate-800 pb-4">
+          {/* Row 1: Tab buttons - always full width, scrollable on small screens */}
+          <div className="flex items-center gap-2 bg-slate-200/60 dark:bg-slate-900/80 p-1.5 rounded-2xl border border-slate-300/60 dark:border-slate-800 overflow-x-auto scrollbar-none w-full">
             <button
               onClick={() => handleTabClick('net-worth')}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${activeTab === 'net-worth'
@@ -286,8 +287,9 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Row 2: Action buttons — only shown on net-worth tab */}
           {activeTab === 'net-worth' && (
-            <div className="shrink-0 flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => setIsOcrOpen(true)}
                 className="px-3.5 py-2 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"

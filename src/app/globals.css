@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode for Tailwind v4 — dark: prefix works when html.dark */
+@variant dark (&:where(.dark, .dark *));
+
 /* -------------------------------------------------------------------------
    Global Semantic Theme Variables (Light Mode by default)
    ------------------------------------------------------------------------- */
