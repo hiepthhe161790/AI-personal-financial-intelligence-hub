@@ -91,7 +91,7 @@ export default function UserAuthHeader() {
       {/* Theme Toggle Button */}
       <button
         onClick={toggleTheme}
-        className="p-2 rounded-xl bg-slate-800/80 dark:bg-slate-800/80 light:bg-slate-200 hover:bg-slate-800 dark:hover:bg-slate-700 light:hover:bg-slate-300 text-slate-300 dark:text-slate-300 light:text-slate-700 border border-slate-700/50 dark:border-slate-700/50 light:border-slate-300 transition-all cursor-pointer"
+        className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-slate-700/50 dark:bg-slate-800/80 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700/50 transition-all cursor-pointer"
         title={theme === "dark" ? "Chuyển sang chế độ sáng" : "Chuyển sang chế độ tối"}
       >
         {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-600" />}

@@ -89,7 +89,7 @@ export default function SmartAlertsPanel({ netWorthMinor = 0 }: SmartAlertsPanel
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-slate-100">Thông Báo Tài Chính Thông Minh</h3>
               {!loading && visibleAlerts.length > 0 && (
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full text-slate-100 ${urgentCount > 0 ? 'bg-rose-500' : 'bg-emerald-600'
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full text-white ${urgentCount > 0 ? 'bg-rose-500' : 'bg-emerald-600'
                   }`}>
                   {visibleAlerts.length}
                 </span>

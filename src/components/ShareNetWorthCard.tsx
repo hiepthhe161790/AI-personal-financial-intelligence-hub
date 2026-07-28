@@ -55,13 +55,13 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
           <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-6 animate-in slide-in-from-bottom-4 duration-200">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-100-100 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
                 <Share2 className="w-4 h-4 text-indigo-400" />
                 Chia Sẻ Snapshot Tài Chính
               </h3>
               <button
                 onClick={() => setOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-slate-100-100 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -129,7 +129,7 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
                 onClick={handleCopyText}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${copied
                     ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-slate-100-100'
+                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-500 hover:text-slate-100'
                   }`}
               >
                 {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}

@@ -57,7 +57,7 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
       </div>
 
       {/* Expense Slider Config Card */}
-      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-850/80 space-y-3 shadow-inner">
+      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-3 shadow-inner">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
           <span className="font-bold text-slate-300">Chi tiêu sinh hoạt ước tính hàng tháng:</span>
           <span className="font-black text-indigo-400 text-sm">
@@ -136,7 +136,7 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
       </div>
 
       {/* Warning message */}
-      <div className="rounded-xl bg-slate-950 border border-slate-850 p-4 flex items-start gap-3 text-slate-400 text-xs">
+      <div className="rounded-xl bg-slate-950 border border-slate-800 p-4 flex items-start gap-3 text-slate-400 text-xs">
         <ShieldAlert className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5 animate-pulse" />
         <p className="leading-relaxed">
           Tài sản ròng hiện tại của bạn: <span className="font-extrabold text-slate-200">{netWorthMajor.toLocaleString('vi-VN')} đ</span>.

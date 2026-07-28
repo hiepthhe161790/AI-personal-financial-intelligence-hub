@@ -201,7 +201,7 @@ export default function WealthGoalsTracker() {
       </div>
 
       {/* Savings Info Banner */}
-      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-850/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
+      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
         <div className="space-y-0.5">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tốc độ tiết kiệm tháng này:</span>
           <div className="text-lg font-black text-slate-100">
@@ -257,7 +257,7 @@ export default function WealthGoalsTracker() {
                 const isAchieved = currentVND >= targetVND;
 
                 return (
-                  <div key={g._id} className="p-5 rounded-2xl bg-slate-950 border border-slate-850/80 space-y-4 shadow-sm relative overflow-hidden group">
+                  <div key={g._id} className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-4 shadow-sm relative overflow-hidden group">
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                       <div className="flex items-start gap-3">
                         <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0">
@@ -280,7 +280,7 @@ export default function WealthGoalsTracker() {
                         </button>
                         <button
                           onClick={() => handleDeleteGoal(g._id)}
-                          className="p-1.5 rounded-lg bg-slate-900 hover:bg-rose-500/10 text-slate-500 hover:text-rose-400 border border-slate-850 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg bg-slate-900 hover:bg-rose-500/10 text-slate-500 hover:text-rose-400 border border-slate-800 transition-colors cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -307,7 +307,7 @@ export default function WealthGoalsTracker() {
 
                     {/* Prediction banner */}
                     {!isAchieved && (
-                      <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-850 text-[11px] text-slate-300 flex items-center justify-between">
+                      <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-[11px] text-slate-300 flex items-center justify-between">
                         <span>Dự kiến hoàn thành:</span>
                         <span className="font-extrabold text-emerald-400">
                           {new Date(g.estimatedDate).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' })} (còn {Math.ceil(g.remainingMonths)} tháng)
@@ -350,7 +350,7 @@ export default function WealthGoalsTracker() {
         </div>
 
         {/* Create Goal Form */}
-        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-850/80 shadow-md space-y-4 self-start">
+        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 shadow-md space-y-4 self-start">
           <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Thêm mục tiêu mới</h5>
 
           {error && (

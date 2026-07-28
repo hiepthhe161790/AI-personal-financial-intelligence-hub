@@ -168,7 +168,7 @@ export default function Home() {
               <BrainCircuit className="w-6 h-6 text-slate-950" />
             </div>
             <div>
-              <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">
+              <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-slate-100 via-slate-300 to-emerald-600 dark:from-white dark:via-slate-200 dark:to-emerald-400 bg-clip-text text-transparent">
                 AI Financial Hub
               </span>
               <button
@@ -230,12 +230,12 @@ export default function Home() {
         {/* Top Navigation Tabs & Primary Action */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-300/60 dark:border-slate-800 pb-4">
           {/* Row 1: Tab buttons - scrollable on small screens */}
-          <div className="flex items-center gap-2 bg-slate-200/60 dark:bg-slate-900/80 p-1.5 rounded-2xl border border-slate-300/60 dark:border-slate-800 overflow-x-auto scrollbar-none w-full lg:w-auto lg:max-w-max">
+          <div className="flex items-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 overflow-x-auto scrollbar-none w-full lg:w-auto lg:max-w-max">
             <button
               onClick={() => handleTabClick('net-worth')}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${activeTab === 'net-worth'
                   ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-300/40 dark:hover:bg-slate-800'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50'
                 }`}
             >
               <Wallet className="w-4 h-4" />
@@ -246,7 +246,7 @@ export default function Home() {
               onClick={() => handleTabClick('scenario')}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${activeTab === 'scenario'
                   ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-300/40 dark:hover:bg-slate-800'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50'
                 }`}
             >
               <Sparkles className="w-4 h-4" />
@@ -256,8 +256,8 @@ export default function Home() {
             <button
               onClick={() => handleTabClick('ai-brief')}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${activeTab === 'ai-brief'
-                  ? 'bg-indigo-500 text-slate-100 shadow-md shadow-indigo-500/20'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-300/40 dark:hover:bg-slate-800'
+                  ? 'bg-indigo-500 text-slate-950 shadow-md shadow-indigo-500/20'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50'
                 }`}
             >
               <BrainCircuit className="w-4 h-4" />
@@ -268,7 +268,7 @@ export default function Home() {
               onClick={() => handleTabClick('market')}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${activeTab === 'market'
                   ? 'bg-teal-500 text-slate-950 shadow-md shadow-teal-500/20'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-300/40 dark:hover:bg-slate-800'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50'
                 }`}
             >
               <Globe2 className="w-4 h-4" />
@@ -279,7 +279,7 @@ export default function Home() {
               onClick={() => handleTabClick('ai-academy')}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 shrink-0 cursor-pointer ${activeTab === 'ai-academy'
                   ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-300/40 dark:hover:bg-slate-800'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/50'
                 }`}
             >
               <GraduationCap className="w-4 h-4" />
@@ -297,7 +297,7 @@ export default function Home() {
 
         {/* Row 2: Secondary Quick Tools toolbar — only shown on net-worth tab */}
         {activeTab === 'net-worth' && (
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-200/20 dark:bg-slate-900/30 p-3 rounded-2xl border border-slate-300/30 dark:border-slate-800/40 animate-in slide-in-from-top-1 duration-200">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-900/30 p-3 rounded-2xl border border-slate-800/40 animate-in slide-in-from-top-1 duration-200">
             <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5 shrink-0 select-none">
               <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
               Công cụ phân tích & quản trị:

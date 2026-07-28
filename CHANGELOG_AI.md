@@ -2,6 +2,16 @@
 
 Nhật ký ghi lại toàn bộ thay đổi do AI (Antigravity) thực hiện trên dự án này.
 
+## [2026-07-29]
+### Fixed: Light Mode Visual Contrast & Typography Contrast Typo
+- **[globals.css](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/globals.css)**: Định nghĩa & ánh xạ các biến màu sắc mở rộng (`emerald`, `indigo`, `teal`, `rose`, `amber`, `purple`, `violet`) trong `@theme` để tự động nâng độ tương phản (contrast) trong Light Mode (chuyển các mã màu nhạt thành tone đậm/đậm đà hơn khi ở chế độ sáng), đồng thời làm dịu các gradient nền tối thành tone màu pastel nhã nhặn phù hợp.
+- **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**:
+  - Khắc phục lỗi gradient logo "AI Financial Hub" bị mờ tịt do bắt đầu bằng `from-white` trên nền sáng.
+  - Sửa lỗi tương phản văn bản cho tab active "AI Phân Tích & Rủi Ro" bằng cách đổi sang `text-slate-950` đồng bộ với các tab còn lại.
+- **[UserAuthHeader.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/UserAuthHeader.tsx)**: Loại bỏ các tiền tố không hợp lệ `light:` không được Tailwind CSS v4 hỗ trợ, phục hồi hiển thị nút đổi theme chuẩn.
+- **[ScenarioSimulator.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ScenarioSimulator.tsx)**: Sửa tất cả các lỗi chính tả class `text-slate-100-100` thành `text-slate-100`.
+- **[ShareNetWorthCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ShareNetWorthCard.tsx)**: Sửa lỗi chính tả class `text-slate-100-100` thành `text-slate-100`.
+
 ## [2026-07-27]
 ### Added
 - Khởi tạo file `CHANGELOG_AI.md` để theo dõi các chỉnh sửa tiếp theo.

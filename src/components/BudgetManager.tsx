@@ -154,7 +154,7 @@ export default function BudgetManager() {
                 const percent = limitVND > 0 ? (spentVND / limitVND) * 100 : 0;
 
                 return (
-                  <div key={b._id} className="p-4 rounded-2xl bg-slate-950 border border-slate-850/80 space-y-2.5 flex flex-col justify-between shadow-sm">
+                  <div key={b._id} className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-2.5 flex flex-col justify-between shadow-sm">
                     <div className="space-y-1">
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-200 text-sm">{b.category}</span>
@@ -201,7 +201,7 @@ export default function BudgetManager() {
         </div>
 
         {/* Set/Update Budget Form */}
-        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-850/80 shadow-md space-y-4 self-start">
+        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 shadow-md space-y-4 self-start">
           <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Thiết lập ngân sách</h5>
 
           {error && (

@@ -102,7 +102,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-slate-100-100">Mô Phỏng Tích Lũy & Tự Do Tài Chính</h3>
+              <h3 className="text-xl font-bold text-slate-100">Mô Phỏng Tích Lũy & Tự Do Tài Chính</h3>
               <p className="text-xs text-slate-400">Động cơ tính toán lãi kép và sức mạnh lạm phát (Pure Math Engine)</p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               step="any"
               value={initialNetWorthMajor}
               onChange={(e) => setInitialNetWorthMajor(parseFloat(e.target.value) || 0)}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
               {formatMoney(initialNetWorthMajor, 'VND')}
@@ -144,7 +144,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               step="any"
               value={monthlyContributionMajor}
               onChange={(e) => setMonthlyContributionMajor(parseFloat(e.target.value) || 0)}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
               {formatMoney(monthlyContributionMajor, 'VND')}/tháng
@@ -185,7 +185,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
             <select
               value={horizonYears}
               onChange={(e) => setHorizonYears(parseInt(e.target.value))}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100-100 text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-emerald-500"
             >
               <option value={3}>3 Năm (Ngắn hạn)</option>
               <option value={5}>5 Năm (Trung hạn)</option>
@@ -207,7 +207,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               step="any"
               value={targetGoalMajor}
               onChange={(e) => setTargetGoalMajor(parseFloat(e.target.value) || 0)}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
               {formatMoney(targetGoalMajor, 'VND')}
@@ -238,7 +238,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="rounded-2xl bg-gradient-to-r from-emerald-950/60 to-slate-900 border border-emerald-500/40 p-5 space-y-1">
             <div className="text-xs font-semibold text-emerald-400 uppercase">Tổng Tài Sản Cuối Kỳ ({horizonYears} Năm)</div>
-            <div className="text-2xl font-extrabold text-slate-100-100">
+            <div className="text-2xl font-extrabold text-slate-100">
               {formatMoney(simulationData.finalAssetsMinor, 'VND')}
             </div>
             <div className="text-[11px] text-slate-400">
@@ -278,7 +278,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
       {/* Projection Chart Card */}
       <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
         <div className="flex items-center justify-between">
-          <h4 className="text-base font-bold text-slate-100-100 flex items-center gap-2">
+          <h4 className="text-base font-bold text-slate-100 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-emerald-400" />
             Đồ Thị Dự Báo Tăng Trưởng Tài Sản Khai Thác Lãi Kép
           </h4>

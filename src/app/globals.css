@@ -22,6 +22,36 @@
   --slate-800: #f1f5f9;  /* Light borders / borders between sections */
   --slate-900: #f8fafc;  /* Light card background */
   --slate-950: #ffffff;  /* Pure white app background */
+
+  /* Enhance light mode contrast for primary/accent colors */
+  --emerald-400: #059669; /* emerald-600 */
+  --emerald-500: #047857; /* emerald-700 */
+  --emerald-950: #ecfdf5; /* emerald-50 */
+
+  --indigo-300: #4f46e5;  /* indigo-600 */
+  --indigo-400: #4338ca;  /* indigo-700 */
+  --indigo-500: #3730a3;  /* indigo-800 */
+  --indigo-950: #e0e7ff;  /* indigo-50 */
+
+  --purple-400: #7c3aed;  /* purple-600 */
+  --purple-500: #6d28d9;  /* purple-700 */
+  --purple-950: #f3e8ff;  /* purple-50 */
+
+  --teal-300: #0d9488;    /* teal-600 */
+  --teal-400: #0f766e;    /* teal-700 */
+  --teal-500: #115e59;    /* teal-800 */
+  --teal-950: #e0f2fe;    /* teal-50 */
+
+  --rose-400: #e11d48;    /* rose-600 */
+  --rose-500: #be123c;    /* rose-700 */
+  --rose-950: #ffe4e6;    /* rose-50 */
+
+  --amber-300: #d97706;   /* amber-600 */
+  --amber-400: #b45309;   /* amber-700 */
+  --amber-500: #92400e;   /* amber-800 */
+  --amber-950: #fef3c7;   /* amber-50 */
+
+  --violet-400: #6d28d9;  /* violet-700 */
 }
 
 /* -------------------------------------------------------------------------
@@ -43,6 +73,36 @@ html.dark {
   --slate-800: #1e293b;
   --slate-900: #0f172a;
   --slate-950: #020617;
+
+  /* Dark mode standard colors */
+  --emerald-400: #34d399;
+  --emerald-500: #10b981;
+  --emerald-950: #022c22;
+
+  --indigo-300: #c7d2fe;
+  --indigo-400: #818cf8;
+  --indigo-500: #6366f1;
+  --indigo-950: #1e1b4b;
+
+  --purple-400: #c084fc;
+  --purple-500: #a855f7;
+  --purple-950: #3b0764;
+
+  --teal-300: #5eead4;
+  --teal-400: #2dd4bf;
+  --teal-500: #14b8a6;
+  --teal-950: #134e4a;
+
+  --rose-400: #fb7185;
+  --rose-500: #f43f5e;
+  --rose-950: #4c0519;
+
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+  --amber-950: #451a03;
+
+  --violet-400: #a78bfa;
 }
 
 /* -------------------------------------------------------------------------
@@ -64,6 +124,36 @@ html.dark {
   --color-slate-800: var(--slate-800);
   --color-slate-900: var(--slate-900);
   --color-slate-950: var(--slate-950);
+
+  /* Map the accent colors to our semantic CSS variables */
+  --color-emerald-400: var(--emerald-400);
+  --color-emerald-500: var(--emerald-500);
+  --color-emerald-950: var(--emerald-950);
+
+  --color-indigo-300: var(--indigo-300);
+  --color-indigo-400: var(--indigo-400);
+  --color-indigo-500: var(--indigo-500);
+  --color-indigo-950: var(--indigo-950);
+
+  --color-purple-400: var(--purple-400);
+  --color-purple-500: var(--purple-500);
+  --color-purple-950: var(--purple-950);
+
+  --color-teal-300: var(--teal-300);
+  --color-teal-400: var(--teal-400);
+  --color-teal-500: var(--teal-500);
+  --color-teal-950: var(--teal-950);
+
+  --color-rose-400: var(--rose-400);
+  --color-rose-500: var(--rose-500);
+  --color-rose-950: var(--rose-950);
+
+  --color-amber-300: var(--amber-300);
+  --color-amber-400: var(--amber-400);
+  --color-amber-500: var(--amber-500);
+  --color-amber-950: var(--amber-950);
+
+  --color-violet-400: var(--violet-400);
 }
 
 body {
