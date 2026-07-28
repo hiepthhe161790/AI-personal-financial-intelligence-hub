@@ -13,7 +13,9 @@ import {
   Package,
   CreditCard,
   Clock,
-  AlertTriangle
+  AlertTriangle,
+  TrendingUp,
+  TrendingDown
 } from 'lucide-react';
 
 interface AccountListProps {
@@ -106,12 +108,34 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
 
             <div className="text-right shrink-0">
               <div
-                className={`text-lg sm:text-xl font-bold font-mono tracking-tight ${isLiability ? 'text-rose-400' : 'text-emerald-400'
-                  }`}
+                className={`text-lg sm:text-xl font-bold font-mono tracking-tight ${
+                  isLiability ? 'text-rose-400' : 'text-emerald-400'
+                }`}
               >
                 {isLiability ? '-' : ''}
                 {formatMoney(acc.currentBalanceMinor, acc.currency)}
               </div>
+              {/* P&L for investment accounts */}
+              {!isLiability && acc.costBasisMinor && acc.costBasisMinor > 0 && (() => {
+                const pnl = acc.currentBalanceMinor - acc.costBasisMinor;
+                const pnlPct = ((pnl / acc.costBasisMinor) * 100).toFixed(1);
+                const isProfit = pnl >= 0;
+                return (
+                  <div className={`flex items-center justify-end gap-1 mt-0.5 text-xs font-semibold ${
+                    isProfit ? 'text-emerald-400' : 'text-rose-400'
+                  }`}>
+                    {isProfit
+                      ? <TrendingUp className="w-3 h-3" />
+                      : <TrendingDown className="w-3 h-3" />}
+                    <span>{isProfit ? '+' : ''}{formatMoney(Math.abs(pnl), acc.currency)}</span>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                      isProfit ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+                    }`}>
+                      {isProfit ? '+' : ''}{pnlPct}%
+                    </span>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         );

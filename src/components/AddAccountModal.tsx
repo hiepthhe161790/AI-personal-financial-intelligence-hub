@@ -32,6 +32,9 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
   const [notes, setNotes] = useState('');
   const [ticker, setTicker] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [costBasisMajor, setCostBasisMajor] = useState('');
+
+  const INVESTMENT_TYPES: AccountType[] = ['STOCK', 'CRYPTO', 'FUND', 'GOLD'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +58,9 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
           notes,
           ticker: (type === 'GOLD' || type === 'STOCK') ? ticker.trim().toUpperCase() : undefined,
           quantity: (type === 'GOLD' || type === 'STOCK') ? parseFloat(quantity) : undefined,
+          costBasisMajor: INVESTMENT_TYPES.includes(type) && costBasisMajor
+            ? parseFloat(costBasisMajor)
+            : undefined,
         }),
       });
 
@@ -69,6 +75,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
       setNotes('');
       setTicker('');
       setQuantity('');
+      setCostBasisMajor('');
       setIsOpen(false);
       onSuccess();
     } catch (err: unknown) {
@@ -195,7 +202,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Số Tiền Hàng / Giá Trị Ban Đầu (Đơn vị chính) <span className="text-emerald-400">*</span>
+                  Số Tiền Hàng / Giá Trị Hiện Tại (Đơn vị chính) <span className="text-emerald-400">*</span>
                 </label>
                 <input
                   type="number"
@@ -207,6 +214,24 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                   className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                 />
               </div>
+
+              {/* Cost Basis for investment accounts — enables P&L tracking */}
+              {INVESTMENT_TYPES.includes(type) && (
+                <div className="p-3 rounded-xl bg-indigo-500/5 border border-indigo-500/20">
+                  <label className="block text-xs font-semibold text-indigo-300 mb-1">
+                    💰 Tổng Vốn Đã Bỏ Ra / Giá Vốn (để tính Lãi/Lỗ)
+                  </label>
+                  <input
+                    type="number"
+                    step="any"
+                    placeholder="VD: 40000000 (để trống nếu không cần theo dõi P&L)"
+                    value={costBasisMajor}
+                    onChange={(e) => setCostBasisMajor(e.target.value)}
+                    className="w-full px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-sm"
+                  />
+                  <p className="text-[10px] text-slate-500 mt-1">Nhập tổng số tiền thực đã bỏ ra mua tài sản này. Hệ thống sẽ tự tính % lãi/lỗ so với giá trị hiện tại.</p>
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Ghi Chú Ban Đầu</label>

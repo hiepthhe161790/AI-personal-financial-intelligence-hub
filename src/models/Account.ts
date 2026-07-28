@@ -20,8 +20,10 @@ export interface IAccount extends Document {
   lastValuationAt: Date;
   isArchived: boolean;
   version: number;
-  ticker?: string;      // Ticker for stock (e.g. HPG) or gold type (e.g. SJC)
-  quantity?: number;    // Quantity owned (e.g. 1000 shares, 5.5 taels)
+  ticker?: string;       // Ticker for stock (e.g. HPG) or gold type (e.g. SJC)
+  quantity?: number;     // Quantity owned (e.g. 1000 shares, 5.5 taels)
+  costBasisMinor?: number;  // Total capital invested (giá vốn bỏ vào) - for P&L calculation
+  purchaseDate?: Date;      // Date of first/main purchase
   createdAt: Date;
   updatedAt: Date;
 }
@@ -43,6 +45,8 @@ const AccountSchema = new Schema<IAccount>(
     version: { type: Number, required: true, default: 1 },
     ticker: { type: String, trim: true, uppercase: true },
     quantity: { type: Number, min: 0 },
+    costBasisMinor: { type: Number, min: 0 },        // Tổng giá vốn (VND)
+    purchaseDate: { type: Date },                    // Ngày mua tài sản
   },
   { timestamps: true }
 );

@@ -1,0 +1,34 @@
+⚠️ Luồng còn thiếu trong core (Critical Gaps)
+1. Giao dịch định kỳ tự động (Recurring Transactions)
+
+Lương nhận hàng tháng, tiền thuê nhà, trả góp vay bank... hiện tại bạn phải nhập tay mỗi tháng. Thực tế 80% người dùng có các khoản thu chi cố định hàng tháng.
+
+Cần thêm: Tạo template giao dịch định kỳ, hệ thống tự ghi nhận vào Ledger đúng ngày.
+2. Theo dõi hiệu suất đầu tư (Investment P&L)
+
+Hiện tại tài khoản chứng khoán/crypto chỉ lưu số dư hiện tại. Không biết mua vào giá bao nhiêu, lãi/lỗ bao nhiêu %, ROI thực tế là gì.
+
+Cần thêm: Trường costBasisMinor (giá vốn), tính unrealized P&L, hiển thị % gain/loss theo từng tài sản.
+3. Nhắc nhở thanh toán định kỳ (Bill Reminders)
+
+Không có lịch nhắc: ngày trả thẻ tín dụng, ngày đóng bảo hiểm, ngày trả góp vay...
+
+Cần thêm: Module Bill Calendar với Telegram reminder.
+🟡 Luồng đang là Sandbox cần nâng cấp
+4. AI Academy Chatbot → AI thật
+
+Hiện đang dùng keyword filter tĩnh. Cần kết nối Gemini API để người dùng hỏi bất kỳ câu hỏi tài chính nào.
+
+5. PayOS → Webhook thật
+
+Cần đăng ký PayOS production để người dùng có thể nâng cấp VIP thật sự.
+
+📊 Tóm tắt mức độ ưu tiên
+Ưu tiên cao (ảnh hưởng trực tiếp hằng ngày):
+  ① Giao dịch định kỳ tự động
+  ② Theo dõi lãi/lỗ đầu tư (P&L)
+Ưu tiên trung (UX tốt hơn):
+  ③ Bill Reminders / Nhắc nhở thanh toán
+Ưu tiên thấp (nice-to-have):
+  ④ AI Chatbot thật
+  ⑤ PayOS production

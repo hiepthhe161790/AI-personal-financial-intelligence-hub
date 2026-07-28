@@ -52,6 +52,8 @@ import DailyCashFlowChart from '@/components/DailyCashFlowChart';
 import OnboardingModal from '@/components/OnboardingModal';
 import ShareNetWorthCard from '@/components/ShareNetWorthCard';
 import KeyboardShortcuts from '@/components/KeyboardShortcuts';
+import BillReminderManager from '@/components/BillReminderManager';
+import RecurringTransactionManager from '@/components/RecurringTransactionManager';
 
 type ActiveTab = 'net-worth' | 'scenario' | 'ai-brief' | 'market' | 'ai-academy';
 
@@ -392,6 +394,12 @@ export default function Home() {
 
             {/* Monthly Budget Limits & Telegram Alerts Manager */}
             <BudgetManager />
+
+            {/* Recurring Transactions Auto-Scheduler */}
+            <RecurringTransactionManager />
+
+            {/* Bill Payment Reminders & Telegram Alerts */}
+            <BillReminderManager />
 
             <section className="space-y-4">
               <div className="flex items-center justify-between">

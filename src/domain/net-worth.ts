@@ -9,6 +9,8 @@ export interface AccountSummary {
   lastValuationAt: Date;
   isStale: boolean;
   daysSinceLastValuation: number;
+  costBasisMinor?: number;   // Tổng giá vốn đầu tư (chỉ STOCK/CRYPTO/FUND/GOLD)
+  purchaseDate?: Date;       // Ngày mua tài sản
 }
 
 export interface NetWorthOverview {
@@ -50,6 +52,8 @@ export function computeNetWorth(rawAccounts: Array<{
   currency: string;
   currentBalanceMinor: number;
   lastValuationAt: Date | string;
+  costBasisMinor?: number;
+  purchaseDate?: Date | string;
 }>): NetWorthOverview {
   let totalAssetsMinor = 0;
   let totalLiabilitiesMinor = 0;
@@ -81,6 +85,8 @@ export function computeNetWorth(rawAccounts: Array<{
       lastValuationAt: valuationDate,
       isStale,
       daysSinceLastValuation: daysSince,
+      costBasisMinor: acc.costBasisMinor,
+      purchaseDate: acc.purchaseDate ? new Date(acc.purchaseDate) : undefined,
     };
   });
 

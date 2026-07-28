@@ -2,6 +2,32 @@
 
 Nhật ký ghi lại toàn bộ thay đổi do AI (Antigravity) thực hiện trên dự án này.
 
+## [2026-07-29] — 4 Core Missing Features Implementation
+### Added: Giao Dịch Định Kỳ Tự Động + P&L + Bill Reminders + AI Academy Gemini
+
+**New Models:**
+- **[RecurringTransaction.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/models/RecurringTransaction.ts)**: Schema mới cho template giao dịch định kỳ (lương, thuê nhà, trả góp). Lưu `dayOfMonth` + `lastExecutedMonth` để tránh ghi trùng.
+- **[BillReminder.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/models/BillReminder.ts)**: Schema nhắc nhở thanh toán định kỳ với `dueDayOfMonth`, `reminderDaysBefore`, `lastNotifiedMonth`.
+- **[Account.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/models/Account.ts)**: Thêm `costBasisMinor` và `purchaseDate` để theo dõi P&L cho tài khoản đầu tư.
+
+**New API Routes:**
+- `GET/POST /api/v1/recurring` — Quản lý template giao dịch định kỳ
+- `DELETE /api/v1/recurring/[id]` — Xóa template
+- `POST /api/v1/recurring/execute` — Tự động tạo Transaction thật từ templates (idempotent theo tháng)
+- `GET/POST /api/v1/bills` — Quản lý lịch nhắc nhở thanh toán
+- `DELETE /api/v1/bills/[id]` — Xóa bill reminder
+- `POST /api/v1/bills/notify` — Gửi Telegram notification cho bills sắp đến hạn
+- `POST /api/v1/academy/chat` — AI Academy chatbot thật dùng Gemini 2.0 Flash với multi-turn history
+
+**New/Updated Components:**
+- **[RecurringTransactionManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/RecurringTransactionManager.tsx)**: UI quản lý template + nút "Chạy Tháng Này" trigger execute API
+- **[BillReminderManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/BillReminderManager.tsx)**: UI lịch nhắc với color-coding urgency (đỏ ≤3 ngày, cam ≤7 ngày, xanh >7 ngày) + Telegram trigger
+- **[AIAcademyCoach.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AIAcademyCoach.tsx)**: Đổi từ keyword mock → real Gemini API call. Multi-turn conversation, auto-scroll, lesson context, reset khi đổi bài học
+- **[AccountList.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AccountList.tsx)**: Hiển thị P&L (lãi/lỗ) và % ROI dưới balance cho tài khoản STOCK/CRYPTO/FUND/GOLD có costBasis
+- **[AddAccountModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AddAccountModal.tsx)**: Thêm field "Giá Vốn Đã Bỏ Ra" cho tài khoản đầu tư
+- **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**: Tích hợp RecurringTransactionManager + BillReminderManager vào dashboard tab Net Worth
+- **[domain/net-worth.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/domain/net-worth.ts)**: Thêm `costBasisMinor` + `purchaseDate` vào AccountSummary type và computeNetWorth
+
 ## [2026-07-29] — AI Budget Intelligence Enhancement
 ### Added: AI Research Brief tích hợp phân tích hạn mức ngân sách thực tế
 - **[api/v1/research/brief/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/research/brief/route.ts)**: Tích hợp truy vấn dữ liệu hạn mức ngân sách (BudgetModel) và số tiền đã tiêu thực tế (MongoDB aggregate) vào Evidence Pack gửi sang Gemini. Mỗi danh mục được tạo thành một evidence item riêng biệt (EVD-BG-1, EVD-BG-2...) chứa thông tin: tên danh mục, hạn mức tối đa, đã tiêu thực tế tháng hiện tại.
