@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Target, AlertCircle, HelpCircle, Plus, Loader2 } from 'lucide-react';
+import { minorToMajor } from '@/domain/money';
 
 interface Budget {
   _id: string;
@@ -93,7 +95,7 @@ export default function BudgetManager() {
   };
 
   return (
-    <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-2xl">
+    <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl dark:shadow-2xl">
       {/* Title */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
         <div className="flex items-center gap-3">
@@ -101,7 +103,12 @@ export default function BudgetManager() {
             <Target className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-md font-bold text-slate-100">Quản Lý Hạn Mức Chi Tiêu (Budget)</h4>
+            <h4 className="text-md font-bold text-slate-100 flex items-center gap-1.5">
+              <span>Quản Lý Hạn Mức Chi Tiêu (Budget)</span>
+              <Link href="/guide?tab=budget" title="Xem hướng dẫn sử dụng luồng hạn mức">
+                <HelpCircle className="w-4 h-4 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer" />
+              </Link>
+            </h4>
             <p className="text-xs text-slate-400">Thiết lập giới hạn chi tiêu từng danh mục & tự động cảnh báo Telegram</p>
           </div>
         </div>
@@ -141,7 +148,7 @@ export default function BudgetManager() {
           )}
 
           {!loading && budgets.length === 0 && (
-            <div className="rounded-2xl bg-slate-950/40 border border-slate-800/80 p-8 text-center text-slate-500 text-xs">
+            <div className="rounded-2xl bg-slate-900/40 dark:bg-slate-950/40 border border-slate-800 p-8 text-center text-slate-500 text-xs">
               Chưa có hạn mức chi tiêu nào được thiết lập. Hãy thêm hạn mức đầu tiên bên phải!
             </div>
           )}
@@ -149,12 +156,12 @@ export default function BudgetManager() {
           {!loading && budgets.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {budgets.map((b) => {
-                const limitVND = b.limitMinor / 100;
-                const spentVND = b.spentMinor / 100;
+                const limitVND = minorToMajor(b.limitMinor, b.currency);
+                const spentVND = minorToMajor(b.spentMinor, b.currency);
                 const percent = limitVND > 0 ? (spentVND / limitVND) * 100 : 0;
 
                 return (
-                  <div key={b._id} className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-2.5 flex flex-col justify-between shadow-sm">
+                  <div key={b._id} className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-2.5 flex flex-col justify-between shadow-sm">
                     <div className="space-y-1">
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-200 text-sm">{b.category}</span>
@@ -201,7 +208,7 @@ export default function BudgetManager() {
         </div>
 
         {/* Set/Update Budget Form */}
-        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 shadow-md space-y-4 self-start">
+        <div className="p-5 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 shadow-md space-y-4 self-start">
           <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Thiết lập ngân sách</h5>
 
           {error && (
@@ -216,7 +223,7 @@ export default function BudgetManager() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
+                className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               >
                 {CATEGORY_OPTIONS.map((cat) => (
                   <option key={cat} value={cat}>
@@ -234,7 +241,7 @@ export default function BudgetManager() {
                 placeholder="VD: 3000000"
                 value={limitMajor}
                 onChange={(e) => setLimitMajor(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
+                className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               />
             </div>
 

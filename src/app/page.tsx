@@ -19,6 +19,7 @@ import {
   Camera,
   Scale,
   Settings,
+  HelpCircle,
 } from 'lucide-react';
 import { NetWorthOverview } from '@/domain/net-worth';
 import { SubscriptionTier } from '@/domain/subscription-plan';
@@ -127,7 +128,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       <MarketIndicesTicker />
       {/* Onboarding Welcome Flow — shown only once on first visit */}
       <OnboardingModal onComplete={() => { /* mark done */ }} />
@@ -205,6 +206,14 @@ export default function Home() {
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-emerald-400' : ''}`} />
             </button>
+            <Link
+              href="/guide"
+              className="text-xs px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition-all flex items-center gap-1.5"
+              title="Hướng dẫn sử dụng"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Hướng Dẫn</span>
+            </Link>
             <Link
               href="/settings"
               className="text-xs px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 border border-slate-700/50 transition-all flex items-center gap-1.5"
@@ -388,7 +397,10 @@ export default function Home() {
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
                   <Layers className="w-5 h-5 text-emerald-400" />
-                  Danh Mục Tài Sản & Khoản Nợ ({netWorthData?.accounts.length || 0})
+                  <span>Danh Mục Tài Sản & Khoản Nợ ({netWorthData?.accounts.length || 0})</span>
+                  <Link href="/guide?tab=ocr" title="Xem hướng dẫn quản lý tài sản & AI OCR">
+                    <HelpCircle className="w-4 h-4 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer" />
+                  </Link>
                 </h2>
               </div>
 

@@ -245,7 +245,7 @@ export default function SettingsPage() {
         </section>
 
         {/* ── Phiên bản ────────────────────────────────────────────────────── */}
-        <section className="text-center text-[11px] text-slate-600 space-y-1 pb-6">
+        <section className="text-center text-[11px] text-slate-500 space-y-1 pb-6">
           <p>AI Personal Financial Intelligence Hub</p>
           <p>Sprint 31 · Phiên bản 1.31.0</p>
           <Link href="/" className="text-emerald-500/70 hover:text-emerald-400 transition-colors">

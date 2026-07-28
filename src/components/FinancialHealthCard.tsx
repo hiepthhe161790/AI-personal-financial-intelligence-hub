@@ -28,7 +28,7 @@ export default function FinancialHealthCard({ data }: FinancialHealthCardProps) 
   };
 
   return (
-    <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
+    <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
@@ -46,7 +46,7 @@ export default function FinancialHealthCard({ data }: FinancialHealthCardProps) 
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1">
+        <div className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-1">
           <div className="text-xs text-slate-400">Quỹ Dự Phòng Khẩn Cấp</div>
           <div className="text-xl font-extrabold text-emerald-400">
             {health.emergencyFundMonths} <span className="text-xs font-normal text-slate-300">tháng</span>
@@ -54,7 +54,7 @@ export default function FinancialHealthCard({ data }: FinancialHealthCardProps) 
           <p className="text-[10px] text-slate-500">Tiền mặt/Tiết kiệm duy trì chi tiêu sinh hoạt</p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1">
+        <div className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-1">
           <div className="text-xs text-slate-400">Tỷ Lệ Nợ / Tài Sản</div>
           <div className="text-xl font-extrabold text-amber-400">
             {health.debtToAssetRatioPercent}%
@@ -62,7 +62,7 @@ export default function FinancialHealthCard({ data }: FinancialHealthCardProps) 
           <p className="text-[10px] text-slate-500">Mức an toàn khuyến nghị dưới 30%</p>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1">
+        <div className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-1">
           <div className="text-xs text-slate-400">Tỷ Lệ Tài Sản Thanh Khoản</div>
           <div className="text-xl font-extrabold text-teal-400">
             {health.liquidityRatioPercent}%
@@ -71,7 +71,7 @@ export default function FinancialHealthCard({ data }: FinancialHealthCardProps) 
         </div>
       </div>
 
-      <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-2">
+      <div className="p-4 rounded-2xl bg-slate-900/30 dark:bg-slate-950/60 border border-slate-800 space-y-2">
         <h4 className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
           <Lightbulb className="w-4 h-4 text-amber-400" />
           Gợi Ý Tối Ưu Cấu Trúc Danh Mục Tài Sản:

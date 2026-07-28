@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { connectToDatabase } from '@/lib/db';
 import AccountModel from '@/models/Account';
 import TransactionModel from '@/models/Transaction';
+import BudgetModel from '@/models/Budget';
 import UserSettingModel from '@/models/UserSetting';
 import { computeNetWorth } from '@/domain/net-worth';
 import { buildEvidencePack } from '@/domain/evidence-pack';
@@ -42,8 +43,47 @@ export async function POST() {
       date: new Date(tx.occurredOn).toISOString().split('T')[0],
     }));
 
-    // 4. Build Evidence Pack incorporating transactions
-    const evidencePack = buildEvidencePack(netWorth, txEvidenceItems);
+    // 3b. Fetch budgets and aggregate spending by category for the current month
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+    const spendingAgg = await TransactionModel.aggregate([
+      {
+        $match: {
+          userId,
+          type: 'EXPENSE',
+          occurredOn: { $gte: startOfMonth, $lte: endOfMonth },
+        },
+      },
+      {
+        $group: {
+          _id: '$category',
+          totalSpentMinor: { $sum: '$amountMinor' },
+        },
+      },
+    ]);
+
+    const spendingMap = new Map<string, number>();
+    spendingAgg.forEach((item) => {
+      spendingMap.set(item._id, item.totalSpentMinor);
+    });
+
+    const budgets = await BudgetModel.find({ userId }).lean();
+    const budgetEvidenceItems = budgets.map((b, idx) => {
+      const spentMinor = spendingMap.get(b.category) || 0;
+      return {
+        id: `EVD-BG-${idx + 1}`,
+        category: 'POSITION' as const,
+        title: `Ngân sách hạn mức: ${b.category}`,
+        source: 'Budget Limits Database',
+        summary: `Hạn mức tối đa tháng: ${b.limitMinor} đ. Đã tiêu thực tế: ${spentMinor} đ. Đơn vị tiền tệ: ${b.currency}`,
+        date: new Date().toISOString().split('T')[0],
+      };
+    });
+
+    // 4. Build Evidence Pack incorporating transactions and budgets
+    const evidencePack = buildEvidencePack(netWorth, [...txEvidenceItems, ...budgetEvidenceItems]);
 
     // 5. Retrieve custom API Key if available
     const userSettings = await UserSettingModel.findOne({ userId }).lean();

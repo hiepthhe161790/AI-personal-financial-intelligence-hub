@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Target, CheckSquare, Square, TrendingUp, Sparkles, Award } from 'lucide-react';
+import Link from 'next/link';
+import { Target, CheckSquare, Square, TrendingUp, Sparkles, Award, HelpCircle } from 'lucide-react';
 import { formatMoney } from '@/domain/money';
 
 interface PersonalWealthTrackerProps {
@@ -69,6 +70,9 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
           <div>
             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
               <span>Mục Tiêu Tích Sản Hàng Tháng Của Bạn</span>
+              <Link href="/guide?tab=cockpit" title="Xem hướng dẫn sử dụng Cockpit & Checklist">
+                <HelpCircle className="w-4 h-4 text-slate-400 hover:text-emerald-450 transition-colors cursor-pointer" />
+              </Link>
               <span className="px-2.5 py-0.5 text-[10px] font-extrabold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 Personal Cockpit
               </span>

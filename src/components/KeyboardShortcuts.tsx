@@ -113,7 +113,7 @@ export default function KeyboardShortcuts({ onTabChange, onRefresh }: KeyboardSh
               ))}
             </div>
 
-            <p className="text-center text-[10px] text-slate-600 mt-4">
+            <p className="text-center text-[10px] text-slate-400 mt-4">
               Nhấn <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-600 rounded">?</kbd> hoặc{' '}
               <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-600 rounded">Esc</kbd> để đóng
             </p>

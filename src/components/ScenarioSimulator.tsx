@@ -95,7 +95,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
   return (
     <div className="space-y-8">
       {/* Input Controls Card */}
-      <div className="rounded-3xl bg-slate-900/80 border border-emerald-500/30 p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+      <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/80 border border-slate-800 dark:border-emerald-500/30 p-6 sm:p-8 space-y-6 shadow-xl dark:shadow-2xl relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
@@ -126,7 +126,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               step="any"
               value={initialNetWorthMajor}
               onChange={(e) => setInitialNetWorthMajor(parseFloat(e.target.value) || 0)}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 bg-slate-900 dark:bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
               {formatMoney(initialNetWorthMajor, 'VND')}
@@ -144,7 +144,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               step="any"
               value={monthlyContributionMajor}
               onChange={(e) => setMonthlyContributionMajor(parseFloat(e.target.value) || 0)}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 bg-slate-900 dark:bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
               {formatMoney(monthlyContributionMajor, 'VND')}/tháng
@@ -185,7 +185,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
             <select
               value={horizonYears}
               onChange={(e) => setHorizonYears(parseInt(e.target.value))}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 bg-slate-900 dark:bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-emerald-500"
             >
               <option value={3}>3 Năm (Ngắn hạn)</option>
               <option value={5}>5 Năm (Trung hạn)</option>
@@ -207,7 +207,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               step="any"
               value={targetGoalMajor}
               onChange={(e) => setTargetGoalMajor(parseFloat(e.target.value) || 0)}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 bg-slate-900 dark:bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
               {formatMoney(targetGoalMajor, 'VND')}
@@ -276,7 +276,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
       )}
 
       {/* Projection Chart Card */}
-      <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
+      <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
         <div className="flex items-center justify-between">
           <h4 className="text-base font-bold text-slate-100 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-emerald-400" />

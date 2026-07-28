@@ -49,7 +49,7 @@ export default function NetWorthCard({ data, loading, isPrivate = false, onToggl
       )}
 
       {/* Main Net Worth Glassmorphism Card */}
-      <div className="relative rounded-3xl bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-emerald-950/40 border border-emerald-500/30 p-8 space-y-6 shadow-2xl overflow-hidden">
+      <div className="relative rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 dark:border-emerald-500/30 p-8 space-y-6 shadow-xl dark:shadow-2xl overflow-hidden">
         <div className="absolute -right-16 -top-16 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex items-center justify-between">
@@ -89,7 +89,7 @@ export default function NetWorthCard({ data, loading, isPrivate = false, onToggl
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-800/80">
-          <div className="rounded-2xl bg-slate-950/60 border border-slate-800 p-4 flex items-center gap-3">
+          <div className="rounded-2xl bg-slate-900/40 dark:bg-slate-950/60 border border-slate-800 p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
               <TrendingUp className="w-5 h-5" />
             </div>
@@ -101,7 +101,7 @@ export default function NetWorthCard({ data, loading, isPrivate = false, onToggl
             </div>
           </div>
 
-          <div className="rounded-2xl bg-slate-950/60 border border-slate-800 p-4 flex items-center gap-3">
+          <div className="rounded-2xl bg-slate-900/40 dark:bg-slate-950/60 border border-slate-800 p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
               <TrendingDown className="w-5 h-5" />
             </div>

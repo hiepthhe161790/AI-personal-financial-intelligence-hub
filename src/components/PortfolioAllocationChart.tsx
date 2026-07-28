@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import Link from 'next/link';
 import {
   PieChart,
   Pie,
@@ -12,7 +13,7 @@ import {
 import { AccountSummary } from '@/domain/net-worth';
 import { AccountType } from '@/models/Account';
 import { formatMoney, minorToMajor } from '@/domain/money';
-import { PieChart as PieIcon } from 'lucide-react';
+import { PieChart as PieIcon, HelpCircle } from 'lucide-react';
 
 /* ─── Colour palette per account type ─────────────────────────────────────── */
 const TYPE_CONFIG: Record<
@@ -83,7 +84,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Toolti
   const d = payload[0].payload;
   if (!d) return null;
   return (
-    <div className="bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 shadow-xl text-sm">
+    <div className="bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-2xl px-4 py-3 shadow-xl text-sm">
       <div className="font-bold text-slate-100 mb-1 flex items-center gap-2">
         <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: d.color }} />
         {d.label}
@@ -149,7 +150,7 @@ export default function PortfolioAllocationChart({
 
   if (!hasData) {
     return (
-      <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center min-h-[240px] gap-3">
+      <div className="bg-slate-950 dark:bg-slate-900/60 border border-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center min-h-[240px] gap-3 shadow-xl">
         <PieIcon className="w-10 h-10 text-slate-600" />
         <p className="text-slate-400 text-sm">Chưa có tài sản nào để phân tích.</p>
       </div>
@@ -157,7 +158,7 @@ export default function PortfolioAllocationChart({
   }
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5">
+    <div className="bg-slate-950 dark:bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5 shadow-xl">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -165,7 +166,12 @@ export default function PortfolioAllocationChart({
             <PieIcon className="w-4.5 h-4.5 text-violet-400" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-100">Phân Bổ Danh Mục Tài Sản</h3>
+            <h3 className="text-base font-bold text-slate-100 flex items-center gap-1.5">
+              <span>Phân Bổ Danh Mục Tài Sản</span>
+              <Link href="/guide?tab=rebalance" title="Xem hướng dẫn tái cân đối danh mục">
+                <HelpCircle className="w-4 h-4 text-slate-400 hover:text-violet-400 transition-colors cursor-pointer" />
+              </Link>
+            </h3>
             <p className="text-[11px] text-slate-400">Cơ cấu tài sản theo từng loại hình đầu tư</p>
           </div>
         </div>
@@ -212,7 +218,7 @@ export default function PortfolioAllocationChart({
                 y="45%"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill="#94a3b8"
+                className="fill-slate-400"
                 fontSize={9}
                 fontFamily="sans-serif"
               >
@@ -223,9 +229,8 @@ export default function PortfolioAllocationChart({
                 y="56%"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill="#10b981"
+                className="fill-emerald-500 font-bold"
                 fontSize={11}
-                fontWeight="bold"
                 fontFamily="sans-serif"
               >
                 {isPrivate ? '••••••' : formatMoney(netWorthMinor, 'VND')}
@@ -296,7 +301,7 @@ export default function PortfolioAllocationChart({
           { label: 'Tổng Nợ', value: liabilityMinor, color: 'text-rose-400' },
           { label: 'Tài Sản Ròng', value: netWorthMinor, color: netWorthMinor >= 0 ? 'text-emerald-400' : 'text-rose-400' },
         ].map(({ label, value, color }) => (
-          <div key={label} className="bg-slate-950/60 rounded-2xl p-3 text-center border border-slate-800/60">
+          <div key={label} className="bg-slate-900/40 dark:bg-slate-950/60 rounded-2xl p-3 text-center border border-slate-800/60">
             <div className="text-[10px] text-slate-500 mb-1">{label}</div>
             <div className={`text-sm font-bold font-mono ${color}`}>
               {isPrivate ? '•••' : formatMoney(value, 'VND')}

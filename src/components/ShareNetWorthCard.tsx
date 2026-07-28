@@ -148,7 +148,7 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
               </button>
             </div>
 
-            <p className="text-center text-[10px] text-slate-600">
+            <p className="text-center text-[10px] text-slate-400">
               💡 Chụp màn hình thẻ trên để chia sẻ lên mạng xã hội
             </p>
           </div>

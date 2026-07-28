@@ -2,15 +2,59 @@
 
 Nhật ký ghi lại toàn bộ thay đổi do AI (Antigravity) thực hiện trên dự án này.
 
+## [2026-07-29] — AI Budget Intelligence Enhancement
+### Added: AI Research Brief tích hợp phân tích hạn mức ngân sách thực tế
+- **[api/v1/research/brief/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/research/brief/route.ts)**: Tích hợp truy vấn dữ liệu hạn mức ngân sách (BudgetModel) và số tiền đã tiêu thực tế (MongoDB aggregate) vào Evidence Pack gửi sang Gemini. Mỗi danh mục được tạo thành một evidence item riêng biệt (EVD-BG-1, EVD-BG-2...) chứa thông tin: tên danh mục, hạn mức tối đa, đã tiêu thực tế tháng hiện tại.
+- **[lib/ai.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/lib/ai.ts)**:
+  - Cập nhật `SYSTEM_PROMPT` để Gemini biết cách phân tích EVD-BG evidence: so sánh hạn mức vs chi thực tế, tính tỷ lệ %, đề xuất hành động cắt giảm cụ thể theo danh mục (tự nấu cơm, hạn chế cà phê, combo tiết kiệm...).
+  - Cập nhật hàm `generateLocalFallbackBrief()` để cũng xử lý EVD-BG items: phát hiện danh mục vượt/gần 80% hạn mức và tính toán tiết kiệm tiềm năng dựa trên 20% số tiền đã tiêu ở các danh mục nguy hiểm đó.
+  - Sửa lỗi VNĐ minor-to-major conversion trong fallback (VNĐ có hệ số = 1, không cần chia 100).
+
 ## [2026-07-29]
 ### Fixed: Light Mode Visual Contrast & Typography Contrast Typo
 - **[globals.css](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/globals.css)**: Định nghĩa & ánh xạ các biến màu sắc mở rộng (`emerald`, `indigo`, `teal`, `rose`, `amber`, `purple`, `violet`) trong `@theme` để tự động nâng độ tương phản (contrast) trong Light Mode (chuyển các mã màu nhạt thành tone đậm/đậm đà hơn khi ở chế độ sáng), đồng thời làm dịu các gradient nền tối thành tone màu pastel nhã nhặn phù hợp.
+- **[guide/page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/guide/page.tsx) [NEW]**: Khởi tạo trang Hướng Dẫn Sử Dụng và Kiểm Toán Hệ Thống chi tiết, giao diện thích ứng đa chủ đề (Light/Dark Mode). Bao gồm các mục: bắt đầu nhanh với Gemini API, cấu hình tự động cảnh báo qua Telegram Bot, cơ chế toán học lãi kép, và bảng kiểm toán dữ liệu đầu vào. Đồng thời, cấu hình tính năng tự động chuyển Tab phù hợp theo tham số URL query (`?tab=...`) được bao bọc trong Next.js `<Suspense>` an toàn khi build.
 - **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**:
+  - Cập nhật màu nền tổng thể của ứng dụng (`bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900` ở Light Mode) để tạo độ tương phản hoàn hảo với các card màu trắng tinh.
+  - Tối ưu hóa thanh Tab điều hướng chính (sử dụng container `bg-slate-900/80 border-slate-800`) và dọn sạch các override `dark:` không cần thiết để các tab chưa chọn tự động có chữ màu xám tối và hover mượt mà.
   - Khắc phục lỗi gradient logo "AI Financial Hub" bị mờ tịt do bắt đầu bằng `from-white` trên nền sáng.
   - Sửa lỗi tương phản văn bản cho tab active "AI Phân Tích & Rủi Ro" bằng cách đổi sang `text-slate-950` đồng bộ với các tab còn lại.
+  - Tích hợp liên kết **Hướng Dẫn** có icon `HelpCircle` màu hổ phách lên thanh Header chính.
+  - Thêm icon `?` (`HelpCircle`) cạnh tiêu đề **Danh Mục Tài Sản & Khoản Nợ** để mở trực tiếp tab OCR/tài sản.
+- **[BudgetManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/BudgetManager.tsx) & [WealthGoalsTracker.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/WealthGoalsTracker.tsx) & [PersonalWealthTracker.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/PersonalWealthTracker.tsx) & [PortfolioAllocationChart.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/PortfolioAllocationChart.tsx) & [DebtStrategyPlanner.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/DebtStrategyPlanner.tsx) & [FinancialFreedomMilestones.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/FinancialFreedomMilestones.tsx) & [NetWorthHistoryChart.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/NetWorthHistoryChart.tsx)**:
+  - Đồng bộ hóa quy chuẩn hiển thị tiền tệ, thay thế việc chia cứng cho `100` bằng hàm chuẩn `minorToMajor(amountMinor, currency)` có nhận diện loại tiền tệ thực tế để sửa dứt điểm lỗi hiển thị thiếu số 0 (lỗi chia nhỏ 100 lần đối với đồng VNĐ có hệ số quy đổi là 1).
+  - Tích hợp các nút icon hỏi chấm `?` (`HelpCircle`) nhỏ, tinh tế ngay cạnh tiêu đề của từng thẻ thành phần (Budget, Goals, Cockpit, Rebalancer, Debt Planner) liên kết trực tiếp sang trang hướng dẫn `/guide?tab=...` đúng với ngữ cảnh chức năng tương ứng để tối ưu hóa trải nghiệm người dùng (UX).
 - **[UserAuthHeader.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/UserAuthHeader.tsx)**: Loại bỏ các tiền tố không hợp lệ `light:` không được Tailwind CSS v4 hỗ trợ, phục hồi hiển thị nút đổi theme chuẩn.
-- **[ScenarioSimulator.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ScenarioSimulator.tsx)**: Sửa tất cả các lỗi chính tả class `text-slate-100-100` thành `text-slate-100`.
+- **[ScenarioSimulator.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ScenarioSimulator.tsx)**:
+  - Cấu hình lại card chính màu trắng (`bg-slate-950`) có đổ bóng sâu (`shadow-xl`) ở Light Mode và giữ nguyên giao diện high-tech ở Dark Mode.
+  - Nâng cấp các ô nhập liệu (inputs) thành nền xám nhạt (`bg-slate-900`) để nổi bật sắc nét trên nền card trắng.
+  - Sửa lỗi chính tả class `text-slate-100-100` thành `text-slate-100`.
 - **[ShareNetWorthCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ShareNetWorthCard.tsx)**: Sửa lỗi chính tả class `text-slate-100-100` thành `text-slate-100`.
+- **[NetWorthCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/NetWorthCard.tsx)**: Thiết lập card tổng tài sản ròng thành nền trắng tinh (`bg-slate-950`) có shadow lớn, các sub-card nội bộ màu xám nhạt (`bg-slate-900/40`) tạo phân cấp thị giác rõ ràng.
+- **[BudgetManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/BudgetManager.tsx)**: Tối ưu tương tự (card chính màu trắng, các ô thiết lập và danh sách chi tiêu dạng khối xám nhạt nổi bật, inputs màu trắng tương phản).
+- **[FinancialHealthCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/FinancialHealthCard.tsx)**: Đưa các khối chỉ số metrics về dạng khối xám nhạt trên nền card trắng để tạo sự nổi bật rõ nét.
+- **[SmartAlertsPanel.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/SmartAlertsPanel.tsx)**: Chuyển màu chữ lượng alert thành `text-white` cố định trên nền badge đỏ/xanh lá cây. Đưa container chính về dạng card trắng bóng bẩy.
+- **[AccountList.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AccountList.tsx)**: Thiết lập card các tài khoản thành nền trắng tinh (`bg-slate-950`), chỉnh sửa background trạng thái trễ hạn (stale) và thêm đổ bóng `shadow-md` ở Light Mode để tách biệt hẳn khỏi nền trang.
+- **[PortfolioAllocationChart.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/PortfolioAllocationChart.tsx)**:
+  - Cấu hình lại card nền trắng tinh (`bg-slate-950`) có shadow lớn.
+  - Sử dụng class điền màu thích ứng (`fill-slate-400` và `fill-emerald-500`) thay cho mã màu hex cố định cho text SVG ở tâm vòng tròn để tự động nâng độ tương phản.
+  - Đưa tooltip của Recharts về dạng thích ứng theme (`bg-slate-950 dark:bg-slate-900 border-slate-800`).
+  - Sửa lỗi chính tả class `bg-slate-905` thành `bg-slate-900/40`.
+- **[CashFlowLedger.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/CashFlowLedger.tsx)**:
+  - Đưa danh sách lịch sử giao dịch chính về dạng card trắng (`bg-slate-950`) có đổ bóng sâu.
+  - Form thêm giao dịch mới đổi thành dạng panel màu xám nhạt (`bg-slate-900/50`) với các input nền trắng tương phản.
+  - Chuyển màu chữ của các tab lọc Thu/Chi hoạt động sang `text-slate-950` để đảm bảo độ tương phản cao trên nền xanh/đỏ.
+  - Khắc phục lỗi chính tả class `text-slate-955` thành `text-slate-950`.
+- **[NetWorthHistoryChart.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/NetWorthHistoryChart.tsx)**:
+  - Nâng cấp card chính lên nền trắng tinh.
+  - Sử dụng CSS variable (`stroke="var(--slate-800)"`) cho lưới tọa độ CartesianGrid giúp hiển thị đường lưới màu xám nhạt trong Light Mode.
+  - Thiết lập tooltip hiển thị đa theme bằng CSS variables.
+- **[DailyCashFlowChart.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/DailyCashFlowChart.tsx)**:
+  - Nâng cấp card chính lên nền trắng tinh có shadow.
+  - Đồng bộ đường lưới CartesianGrid dùng CSS variables và nâng cấp độ tương phản của nút chọn khoảng thời gian.
+  - Đưa tooltip và panel tóm tắt về cấu trúc phân cấp màu sắc chuẩn.
+- **[AffiliateBannerCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AffiliateBannerCard.tsx)**: Thiết kế lại toàn bộ cấu trúc màu sắc sử dụng biến slate ngữ nghĩa (semantic slate variables) thay cho mã màu tuyệt đối (`slate-900`, `slate-600`), khắc phục triệt để tình trạng chữ trắng trên nền trắng (white-on-white) và chữ xám nhạt khó đọc ở Light Mode.
+- **[ShareNetWorthCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ShareNetWorthCard.tsx) & [KeyboardShortcuts.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/KeyboardShortcuts.tsx) & [settings/page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/settings/page.tsx)**: Chuyển các đoạn text chú thích phụ từ `text-slate-600` sang `text-slate-400` hoặc `text-slate-500` để đảm bảo độ tương phản cao, dễ đọc trên nền sáng.
 
 ## [2026-07-27]
 ### Added

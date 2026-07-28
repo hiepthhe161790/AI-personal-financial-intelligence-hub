@@ -72,7 +72,7 @@ export default function SmartAlertsPanel({ netWorthMinor = 0 }: SmartAlertsPanel
   const urgentCount = dangerCount + warningCount;
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-3xl overflow-hidden">
+    <div className="bg-slate-950 dark:bg-slate-900/60 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
       {/* Header bar */}
       <button
         onClick={() => setCollapsed((p) => !p)}

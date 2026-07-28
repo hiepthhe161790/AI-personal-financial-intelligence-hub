@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Award, Compass, Heart, ShieldAlert, Sparkles } from 'lucide-react';
+import { minorToMajor } from '@/domain/money';
 
 interface FinancialFreedomMilestonesProps {
   currentNetWorthMinor: number;
@@ -10,7 +11,7 @@ interface FinancialFreedomMilestonesProps {
 export default function FinancialFreedomMilestones({ currentNetWorthMinor }: FinancialFreedomMilestonesProps) {
   const [monthlyExpensesMajor, setMonthlyExpensesMajor] = useState(15000000); // Default 15 million VND
 
-  const netWorthMajor = Math.max(0, currentNetWorthMinor / 100);
+  const netWorthMajor = Math.max(0, minorToMajor(currentNetWorthMinor, 'VND'));
 
   // Define Milestone Levels
   const levels = [

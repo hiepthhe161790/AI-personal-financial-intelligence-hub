@@ -34,17 +34,22 @@ export const AIResearchBriefSchema = z.object({
 export type AIResearchBrief = z.infer<typeof AIResearchBriefSchema>;
 
 const SYSTEM_PROMPT = `Bạn là Chuyên viên Phân Tích Dữ Liệu Tài Chính Cá Nhân cao cấp (AI Financial Intelligence Advisor).
-Nhiệm vụ của bạn là đọc "Evidence Pack" được cung cấp để đưa ra bản tóm tắt tình hình tài sản ròng, đánh giá rủi ro phân bổ danh mục, phân tích hành vi chi tiêu vặt (từ các giao dịch EVD-TX) và đề xuất kế hoạch tiết kiệm tích lũy đầu tư dài hạn.
+Nhiệm vụ của bạn là đọc "Evidence Pack" được cung cấp gồm: tài sản ròng cá nhân, dữ liệu chi tiêu thực tế (EVD-TX), và bộ hạn mức ngân sách đặt sẵn (EVD-BG) — để đưa ra bản phân tích sâu sắc về tình hình tài chính, đánh giá rủi ro danh mục, và một **kế hoạch cắt giảm chi tiêu thông minh, cá nhân hóa**.
 
 QUY TẮC BẮT BUỘC:
 1. TUYỆT ĐỐI KHÔNG BỊA ĐẶT SỐ LIỆU (Zero Hallucination). Chỉ được dùng đúng các con số có trong Evidence Pack.
-2. Mỗi nhận định hoặc đánh giá rủi ro PHẢI được trích dẫn bằng mã Evidence ID tương ứng (VD: EVD-POS-1, EVD-MKT-GOLD, EVD-TX-1) vào mảng citationIds.
-3. Phân tích chi tiêu từ các giao dịch chi phí trong Evidence Pack (nếu có), ước tính số tiền lãng phí có thể cắt giảm hàng tháng làm số tiền tiết kiệm tiềm năng (potentialMonthlySavingsMajor).
-4. Tính toán số tiền tích lũy tăng trưởng (giả định lãi suất kép 10%/năm, ghép lãi hàng tháng) sau 5 năm (compounding5YearsMajor) và 10 năm (compounding10YearsMajor) nếu đầu tư đều đặn số tiền tiết kiệm tiềm năng này.
+2. Mỗi nhận định hoặc đánh giá rủi ro PHẢI được trích dẫn bằng mã Evidence ID tương ứng (VD: EVD-POS-1, EVD-MKT-GOLD, EVD-TX-1, EVD-BG-1) vào mảng citationIds.
+3. PHÂN TÍCH NGÂN SÁCH (EVD-BG): Với mỗi danh mục ngân sách trong Evidence Pack có mã bắt đầu bằng "EVD-BG-", hãy:
+   a. So sánh số tiền "Đã tiêu thực tế" với "Hạn mức tối đa tháng".
+   b. Nhận xét tỷ lệ tiêu so với hạn mức (ví dụ: đã tiêu 80% ngân sách ăn uống).
+   c. Đề xuất hành động cụ thể để cắt giảm: ví dụ tự nấu cơm thay đặt đồ ăn sẵn, hạn chế đi cà phê ngoài, đặt ăn trưa theo combo tiết kiệm...
+   d. Ưu tiên chỉ ra những danh mục đã vượt quá hoặc gần chạm hạn mức để người dùng cắt giảm ngay.
+4. PHÂN TÍCH GIAO DỊCH (EVD-TX): Đọc từng giao dịch chi phí, tổng hợp các chi tiêu nhỏ lẻ lặp đi lặp lại và ước tính số tiền lãng phí tiềm năng có thể tiết kiệm hàng tháng (potentialMonthlySavingsMajor). Danh sách "Cắt giảm đề xuất từ" (targetCategories) phải chứa tên các danh mục chi tiêu thực tế từ dữ liệu, không được bịa.
+5. Tính toán số tiền tích lũy tăng trưởng (giả định lãi suất kép 10%/năm, ghép lãi hàng tháng) sau 5 năm (compounding5YearsMajor) và 10 năm (compounding10YearsMajor) nếu đầu tư đều đặn số tiền tiết kiệm tiềm năng này.
    Công thức tích lũy định kỳ (Future Value of Ordinary Annuity): FV = P * [((1 + r/n)^(nt) - 1) / (r/n)], trong đó P là tiền tiết kiệm hàng tháng, r = 0.10, n = 12, t là số năm (5 hoặc 10).
-5. Đề xuất danh mục phân bổ đầu tư hợp lý (allocationRecommendation) gồm phần trăm và giải thích ngắn gọn dựa trên khẩu vị tài chính.
-6. KHÔNG ĐƯỢC TƯ VẤN MUA/BÁN TRÁI PHÉP các mã cổ phiếu cụ thể. Chỉ phân tích ở cấp độ quản trị rủi ro danh mục tài sản cá nhân.
-7. Trả về đúng định dạng JSON tuân thủ Schema.`;
+6. Đề xuất danh mục phân bổ đầu tư hợp lý (allocationRecommendation) gồm phần trăm và giải thích ngắn gọn dựa trên khẩu vị tài chính thực tế của người dùng.
+7. KHÔNG ĐƯỢC TƯ VẤN MUA/BÁN TRÁI PHÉP các mã cổ phiếu cụ thể. Chỉ phân tích ở cấp độ quản trị rủi ro danh mục tài sản cá nhân.
+8. Trả về đúng định dạng JSON tuân thủ Schema.`;
 
 export async function generateResearchBrief(
   evidencePack: EvidencePack,
@@ -118,13 +123,12 @@ function generateLocalFallbackBrief(pack: EvidencePack): AIResearchBrief {
   const categoriesToCut: string[] = [];
 
   txEvidences.forEach((e) => {
-    // If the evidence summary is an expense, extract the major unit number
     if (e.summary.includes("EXPENSE") || e.summary.includes("Chi phí") || e.summary.includes("-")) {
       const match = e.summary.replace(/,/g, "").match(/\d+/);
       if (match) {
-        // Convert minor unit back to major units
         const amountMinor = parseInt(match[0], 10);
-        totalExpenseMajor += amountMinor / 100;
+        // VND factor is 1 — values are already in major units when stored as display minor
+        totalExpenseMajor += amountMinor;
       }
 
       const catName = e.title.replace("Giao dịch vặt: ", "");
@@ -134,9 +138,39 @@ function generateLocalFallbackBrief(pack: EvidencePack): AIResearchBrief {
     }
   });
 
-  // Calculate potential savings: 25% of logged expenses, minimum 500k VND, default 1.5M VND
+  // --- Process budget evidence items (EVD-BG) for Local Fallback ---
+  const bgEvidences = pack.evidenceItems.filter((e) => e.id.startsWith("EVD-BG-"));
+  let budgetSavingsPotential = 0;
+
+  bgEvidences.forEach((e) => {
+    // Extract "Hạn mức tối đa tháng: X đ. Đã tiêu thực tế: Y đ."
+    const limitMatch = e.summary.match(/Hạn mức tối đa tháng:\s*([\d]+)/);
+    const spentMatch = e.summary.match(/Đã tiêu thực tế:\s*([\d]+)/);
+    if (limitMatch && spentMatch) {
+      const limitMinor = parseInt(limitMatch[1], 10);
+      const spentMinor = parseInt(spentMatch[1], 10);
+      const pct = limitMinor > 0 ? Math.round((spentMinor / limitMinor) * 100) : 0;
+
+      const catName = e.title.replace("Ngân sách hạn mức: ", "");
+
+      // Over budget or > 80%: flag for cutting + add observation
+      if (pct >= 80) {
+        if (!categoriesToCut.includes(catName)) categoriesToCut.push(catName);
+        // Saving potential = 20% of what's been spent in that category
+        const savingFromCat = Math.round(spentMinor * 0.2);
+        budgetSavingsPotential += savingFromCat;
+        observations.push(
+          `Danh mục "${catName}" đã tiêu ${pct}% hạn mức tháng (${spentMinor.toLocaleString('vi-VN')} / ${limitMinor.toLocaleString('vi-VN')} đ). Cần cắt giảm ngay để không vượt ngân sách.`
+        );
+      }
+    }
+  });
+
+  // Calculate potential savings: use budget analysis first, fall back to 25% of logged expenses
   let potentialMonthlySavings = 1500000;
-  if (totalExpenseMajor > 0) {
+  if (budgetSavingsPotential > 0) {
+    potentialMonthlySavings = Math.max(500000, budgetSavingsPotential);
+  } else if (totalExpenseMajor > 0) {
     potentialMonthlySavings = Math.max(500000, Math.round(totalExpenseMajor * 0.25));
   }
 

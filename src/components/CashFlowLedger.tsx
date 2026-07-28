@@ -255,7 +255,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
 
       {/* Transaction Entry Form */}
       {showAddForm && (
-        <form onSubmit={handleSubmit} className="p-6 rounded-3xl bg-slate-950/60 border border-slate-800/80 space-y-4 animate-in fade-in duration-200">
+        <form onSubmit={handleSubmit} className="p-6 rounded-3xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-4 animate-in fade-in duration-200 shadow-inner">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 
             {/* Type selector */}
@@ -291,7 +291,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
               <select
                 value={formData.accountId}
                 onChange={(e) => setFormData(prev => ({ ...prev, accountId: e.target.value }))}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
               >
                 <option value="" disabled>-- Chọn tài khoản --</option>
                 {accounts.map(acc => (
@@ -312,7 +312,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                   placeholder="Ví dụ: 50000"
                   value={formData.amountMajor}
                   onChange={(e) => setFormData(prev => ({ ...prev, amountMajor: e.target.value }))}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-3 pr-12 py-2 text-xs font-bold text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl pl-3 pr-12 py-2 text-xs font-bold text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 />
                 <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-mono">
                   {accounts.find(a => a._id === formData.accountId)?.currency || "VND"}
@@ -326,7 +326,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
               <select
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
               >
                 {(formData.type === "EXPENSE" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES).map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -341,7 +341,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 type="date"
                 value={formData.occurredOn}
                 onChange={(e) => setFormData(prev => ({ ...prev, occurredOn: e.target.value }))}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
               />
             </div>
 
@@ -353,7 +353,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 placeholder="Ví dụ: Ăn sáng phở bò, Mua quà sinh nhật..."
                 value={formData.notes}
                 onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
               />
             </div>
 
@@ -379,7 +379,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
       )}
 
       {/* Transaction History List */}
-      <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 space-y-4">
+      <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-6 space-y-4 shadow-xl">
         {/* ── Search & Filter Bar ─────────────────────────────────────────── */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 flex-wrap">
@@ -413,8 +413,8 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                       ? t === "ALL"
                         ? "bg-slate-600 text-slate-100"
                         : t === "INCOME"
-                          ? "bg-emerald-500 text-slate-100"
-                          : "bg-rose-500 text-slate-100"
+                          ? "bg-emerald-500 text-slate-950"
+                          : "bg-rose-500 text-slate-950"
                       : "text-slate-400 hover:text-slate-100"
                     }`}
                 >
@@ -457,7 +457,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 >
                   <option value="ALL">Tất cả danh mục</option>
                   {ALL_CATEGORIES.map((c) => (
@@ -473,7 +473,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                   type="date"
                   value={filterDateFrom}
                   onChange={(e) => setFilterDateFrom(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 />
               </div>
 
@@ -484,7 +484,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
                   type="date"
                   value={filterDateTo}
                   onChange={(e) => setFilterDateTo(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
+                  className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 />
               </div>
             </div>

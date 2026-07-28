@@ -149,7 +149,7 @@ export default function AIResearchBrief() {
               {data.brief.riskAssessment.map((item, idx) => (
                 <div
                   key={idx}
-                  className="rounded-2xl bg-slate-900/60 border border-slate-800 p-5 space-y-3 flex flex-col justify-between"
+                  className="rounded-2xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-5 space-y-3 flex flex-col justify-between shadow-md"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -161,7 +161,7 @@ export default function AIResearchBrief() {
                     <p className="text-xs text-slate-400 leading-relaxed">{item.explanation}</p>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 text-xs text-emerald-300 font-medium bg-emerald-950/20 p-3 rounded-xl border border-emerald-500/20">
+                  <div className="pt-3 border-t border-slate-800/80 text-xs text-emerald-500 font-medium bg-emerald-950/20 p-3 rounded-xl border border-emerald-500/20">
                     <span className="font-bold text-emerald-400">Khuyến nghị: </span>
                     {item.recommendation}
                   </div>
@@ -172,7 +172,7 @@ export default function AIResearchBrief() {
 
           {/* AI Savings & Compounding Investment Advisor Section */}
           {data.brief.savingsInvestmentPlan && (
-            <div className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border border-indigo-500/30 p-6 sm:p-8 space-y-6 shadow-2xl">
+            <div className="rounded-3xl bg-slate-950 dark:bg-slate-900 border border-slate-800 dark:border-indigo-500/30 p-6 sm:p-8 space-y-6 shadow-xl">
               <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
                   <Sparkles className="w-5 h-5" />
@@ -185,7 +185,7 @@ export default function AIResearchBrief() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Savings Potential card */}
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+                <div className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-1.5">
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Hạn mức tiết kiệm gợi ý</div>
                   <div className="text-2xl font-black text-emerald-400">
                     +{data.brief.savingsInvestmentPlan.potentialMonthlySavingsMajor.toLocaleString('vi-VN')} đ
@@ -197,7 +197,7 @@ export default function AIResearchBrief() {
                 </div>
 
                 {/* 5 Years Compounding */}
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+                <div className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-1.5">
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tích lũy lãi kép 5 năm (10%/năm)</div>
                   <div className="text-2xl font-black text-slate-100">
                     {data.brief.savingsInvestmentPlan.compounding5YearsMajor.toLocaleString('vi-VN')} đ
@@ -206,7 +206,7 @@ export default function AIResearchBrief() {
                 </div>
 
                 {/* 10 Years Compounding */}
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5">
+                <div className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-1.5">
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tích lũy lãi kép 10 năm (10%/năm)</div>
                   <div className="text-2xl font-black text-slate-100">
                     {data.brief.savingsInvestmentPlan.compounding10YearsMajor.toLocaleString('vi-VN')} đ
@@ -243,7 +243,7 @@ export default function AIResearchBrief() {
           )}
 
           {/* Citation & Evidence Pack Accordion */}
-          <div className="rounded-2xl bg-slate-900/40 border border-slate-800 p-4 space-y-3">
+          <div className="rounded-2xl bg-slate-950 dark:bg-slate-900/40 border border-slate-800 p-4 space-y-3 shadow-md">
             <button
               onClick={() => setShowEvidence(!showEvidence)}
               className="w-full flex items-center justify-between text-xs font-semibold text-slate-300 hover:text-slate-100 transition-colors cursor-pointer"

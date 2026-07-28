@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Target, Home, Car, Calendar, Compass, Plus, Trash2, Loader2, Sparkles, AlertCircle } from 'lucide-react';
+import Link from 'next/link';
+import { Target, Home, Car, Calendar, Compass, Plus, Trash2, Loader2, Sparkles, AlertCircle, HelpCircle } from 'lucide-react';
+import { minorToMajor } from '@/domain/money';
 
 interface WealthGoal {
   _id: string;
@@ -137,7 +139,7 @@ export default function WealthGoalsTracker() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          currentAmountMajor: newSavedMinor / 100,
+          currentAmountMajor: minorToMajor(newSavedMinor, 'VND'),
         }),
       });
 
@@ -188,40 +190,45 @@ export default function WealthGoalsTracker() {
   };
 
   return (
-    <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-2xl">
+    <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl dark:shadow-2xl">
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-slate-800/80 pb-4">
         <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
           <Target className="w-5 h-5" />
         </div>
         <div>
-          <h4 className="text-md font-bold text-slate-100">Theo Dõi Mục Tiêu Tài Chính (Wealth Goals)</h4>
+          <h4 className="text-md font-bold text-slate-100 flex items-center gap-1.5">
+            <span>Theo Dõi Mục Tiêu Tài Chính (Wealth Goals)</span>
+            <Link href="/guide?tab=goals" title="Xem hướng dẫn sử dụng luồng mục tiêu tích sản">
+              <HelpCircle className="w-4 h-4 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer" />
+            </Link>
+          </h4>
           <p className="text-xs text-slate-400">Đặt kế hoạch mua nhà, mua xe và dự tính thời gian hoàn thành tự động</p>
         </div>
       </div>
 
       {/* Savings Info Banner */}
-      <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
+      <div className="p-4 rounded-2xl bg-slate-900 dark:bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
         <div className="space-y-0.5">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tốc độ tiết kiệm tháng này:</span>
           <div className="text-lg font-black text-slate-100">
             {isSavingsNegative ? (
-              <span className="text-rose-400">Âm {(Math.abs(monthlySavingsMinor) / 100).toLocaleString('vi-VN')} đ</span>
+              <span className="text-rose-400">Âm {minorToMajor(Math.abs(monthlySavingsMinor), 'VND').toLocaleString('vi-VN')} đ</span>
             ) : (
-              <span className="text-emerald-400">+{(monthlySavingsMinor / 100).toLocaleString('vi-VN')} đ/tháng</span>
+              <span className="text-emerald-400">+{minorToMajor(monthlySavingsMinor, 'VND').toLocaleString('vi-VN')} đ/tháng</span>
             )}
           </div>
         </div>
 
         {isSavingsNegative ? (
-          <div className="flex items-start gap-2 bg-rose-500/10 border border-rose-500/20 p-2.5 rounded-xl max-w-md text-[10px] text-rose-300">
+          <div className="flex items-start gap-2 bg-rose-500/10 border border-rose-500/20 p-2.5 rounded-xl max-w-md text-[10px] text-rose-500">
             <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
             <span>
               Chi tiêu tháng này lớn hơn thu nhập. Hệ thống đang lấy hạn mức mặc định <b>10.000.000 đ/tháng</b> để tính toán ngày đạt mục tiêu.
             </span>
           </div>
         ) : (
-          <div className="flex items-start gap-2 bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded-xl max-w-md text-[10px] text-emerald-300">
+          <div className="flex items-start gap-2 bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded-xl max-w-md text-[10px] text-emerald-500">
             <Sparkles className="w-4 h-4 shrink-0 text-emerald-400" />
             <span>
               Tuyệt vời! Thời gian hoàn thành mục tiêu đang được tính toán theo dòng tiền thực tế của bạn.
@@ -243,7 +250,7 @@ export default function WealthGoalsTracker() {
           )}
 
           {!loading && goals.length === 0 && (
-            <div className="rounded-2xl bg-slate-950/40 border border-slate-800/80 p-8 text-center text-slate-500 text-xs">
+            <div className="rounded-2xl bg-slate-900/40 dark:bg-slate-950/40 border border-slate-800 p-8 text-center text-slate-500 text-xs shadow-inner">
               Chưa có mục tiêu tài chính nào được tạo. Hãy thiết lập mục tiêu mua nhà/xe bên phải!
             </div>
           )}
@@ -251,13 +258,13 @@ export default function WealthGoalsTracker() {
           {!loading && goals.length > 0 && (
             <div className="space-y-4">
               {goals.map((g) => {
-                const targetVND = g.targetAmountMinor / 100;
-                const currentVND = g.currentAmountMinor / 100;
+                const targetVND = minorToMajor(g.targetAmountMinor, 'VND');
+                const currentVND = minorToMajor(g.currentAmountMinor, 'VND');
                 const percent = targetVND > 0 ? (currentVND / targetVND) * 100 : 0;
                 const isAchieved = currentVND >= targetVND;
 
                 return (
-                  <div key={g._id} className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-4 shadow-sm relative overflow-hidden group">
+                  <div key={g._id} className="p-5 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-4 shadow-sm relative overflow-hidden group">
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                       <div className="flex items-start gap-3">
                         <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0">
@@ -350,7 +357,7 @@ export default function WealthGoalsTracker() {
         </div>
 
         {/* Create Goal Form */}
-        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800/80 shadow-md space-y-4 self-start">
+        <div className="p-5 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 shadow-md space-y-4 self-start">
           <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Thêm mục tiêu mới</h5>
 
           {error && (
@@ -368,7 +375,7 @@ export default function WealthGoalsTracker() {
                 placeholder="VD: Mua căn hộ Vinhomes 🏢"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
+                className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               />
             </div>
 
@@ -377,7 +384,7 @@ export default function WealthGoalsTracker() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as 'HOUSE' | 'CAR' | 'RETIREMENT' | 'TRAVEL' | 'OTHER')}
-                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
+                className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               >
                 {CATEGORY_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -396,7 +403,7 @@ export default function WealthGoalsTracker() {
                   placeholder="VD: 2000000000"
                   value={targetAmountMajor}
                   onChange={(e) => setTargetAmountMajor(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
+                  className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
                 />
               </div>
 
@@ -407,7 +414,7 @@ export default function WealthGoalsTracker() {
                   placeholder="VD: 500000000"
                   value={currentAmountMajor}
                   onChange={(e) => setCurrentAmountMajor(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
+                  className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
                 />
               </div>
             </div>
@@ -418,7 +425,7 @@ export default function WealthGoalsTracker() {
                 type="date"
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
+                className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               />
             </div>
 

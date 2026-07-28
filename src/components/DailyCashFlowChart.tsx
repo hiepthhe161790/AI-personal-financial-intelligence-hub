@@ -50,7 +50,7 @@ function CustomTooltip({ active, payload }: TooltipProps) {
     .slice(0, 3);
 
   return (
-    <div className="bg-slate-900 border border-slate-700 rounded-2xl p-3.5 shadow-2xl min-w-[200px] text-xs">
+    <div className="bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-2xl p-3.5 shadow-2xl min-w-[200px] text-xs">
       <p className="font-bold text-slate-300 mb-2">{d.date}</p>
 
       {d.totalIncomeMinor > 0 && (
@@ -99,7 +99,7 @@ function StatBadge({
   color: string;
 }) {
   return (
-    <div className="bg-slate-950/60 border border-slate-800/60 rounded-2xl p-3 flex-1 min-w-0 text-center">
+    <div className="bg-slate-900/40 dark:bg-slate-950/60 border border-slate-800 rounded-2xl p-3 flex-1 min-w-0 text-center">
       <div className="text-[10px] text-slate-500 mb-1 flex items-center justify-center gap-1">
         {icon}
         {label}
@@ -140,7 +140,7 @@ export default function DailyCashFlowChart() {
   };
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5">
+    <div className="bg-slate-950 dark:bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-5 shadow-xl">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
@@ -160,7 +160,7 @@ export default function DailyCashFlowChart() {
               key={d}
               onClick={() => setDays(d)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${days === d
-                  ? 'bg-blue-500 text-slate-100 shadow-sm'
+                  ? 'bg-blue-500 text-slate-950 shadow-sm'
                   : 'text-slate-400 hover:text-slate-100'
                 }`}
             >
@@ -184,7 +184,7 @@ export default function DailyCashFlowChart() {
               margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
               barCategoryGap="20%"
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--slate-800)" vertical={false} />
               <XAxis
                 dataKey="date"
                 tickFormatter={tickFormatter}

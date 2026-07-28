@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
 import {
   Scale, ArrowRight, Zap, Target, TrendingUp, Info, HelpCircle,
   AlertTriangle, ShieldCheck, DollarSign, Calendar, RefreshCw
 } from "lucide-react";
-import { formatMoney } from "@/domain/money";
+import { formatMoney, minorToMajor } from "@/domain/money";
 
 interface Account {
   _id: string;
@@ -35,7 +36,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
   // Initialize inputs when liability accounts change
   useEffect(() => {
     const initialDebts: DebtInput[] = liabilityAccounts.map(acc => {
-      const balanceMajor = acc.currentBalanceMinor / 100;
+      const balanceMajor = minorToMajor(acc.currentBalanceMinor, acc.currency);
       return {
         _id: acc._id,
         name: acc.name,
@@ -144,7 +145,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
 
   if (debts.length === 0) {
     return (
-      <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-8 text-center space-y-3">
+      <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-8 text-center space-y-3 shadow-xl">
         <div className="w-12 h-12 rounded-2xl bg-slate-800/80 flex items-center justify-center text-slate-500 mx-auto">
           <Scale className="w-6 h-6" />
         </div>
@@ -160,8 +161,11 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h3 className="text-lg font-extrabold text-slate-100 flex items-center gap-2">
+        <h3 className="text-lg font-extrabold text-slate-100 flex items-center gap-1.5">
           <span>Công Cụ Lập Kế Hoạch Trả Nợ</span>
+          <Link href="/guide?tab=rebalance" title="Xem hướng dẫn lập chiến lược trả nợ">
+            <HelpCircle className="w-4 h-4 text-slate-400 hover:text-indigo-400 transition-colors cursor-pointer" />
+          </Link>
           <span className="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-semibold flex items-center gap-1">
             <Zap className="w-3 h-3" />
             Giả lập Snowball vs Avalanche
@@ -174,7 +178,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Left Side: Debt inputs list */}
-        <div className="lg:col-span-2 space-y-4 rounded-3xl bg-slate-900/60 border border-slate-800 p-6">
+        <div className="lg:col-span-2 space-y-4 rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-6 shadow-xl">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
               Danh sách các khoản nợ ({debts.length})
@@ -187,7 +191,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
 
           <div className="space-y-4">
             {debts.map((debt, index) => (
-              <div key={debt._id} className="p-4 rounded-2xl bg-slate-950 border border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+              <div key={debt._id} className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
                 <div className="space-y-0.5">
                   <div className="text-xs font-bold text-slate-100">{debt.name}</div>
                   <div className="text-[10px] font-mono text-amber-500">
@@ -204,7 +208,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
                     max="100"
                     value={debt.interestRate}
                     onChange={(e) => handleDebtChange(index, "interestRate", parseFloat(e.target.value) || 0)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500/50 font-mono"
+                    className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500/50 font-mono"
                   />
                 </div>
 
@@ -215,7 +219,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
                     type="number"
                     value={debt.minPayment}
                     onChange={(e) => handleDebtChange(index, "minPayment", parseInt(e.target.value, 10) || 0)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500/50 font-mono"
+                    className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500/50 font-mono"
                   />
                 </div>
               </div>
@@ -248,7 +252,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
         {/* Right Side: Side-by-side simulation comparison */}
         <div className="space-y-6">
           {/* Comparison Card */}
-          <div className="rounded-3xl bg-gradient-to-br from-slate-900 to-indigo-950/40 border border-indigo-500/20 p-6 space-y-6 shadow-2xl">
+          <div className="rounded-3xl bg-slate-950 dark:bg-slate-900 border border-slate-800 dark:border-indigo-500/20 p-6 space-y-6 shadow-xl">
             <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
               Kết Quả Giả Lập So Sánh
             </h4>
@@ -256,7 +260,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
             {/* Metrics column */}
             <div className="space-y-4">
               {/* Avalanche Box */}
-              <div className="p-4 rounded-2xl bg-slate-950/80 border border-indigo-500/30 space-y-1">
+              <div className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950/80 border border-indigo-500/30 space-y-1">
                 <div className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-indigo-400" />
                   Phương Án Avalanche (Tối Ưu Toán Học)
@@ -270,7 +274,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
               </div>
 
               {/* Snowball Box */}
-              <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-1">
+              <div className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950/80 border border-slate-800 space-y-1">
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Target className="w-3.5 h-3.5 text-slate-500" />
                   Phương Án Snowball (Động Lực Tâm Lý)
@@ -299,7 +303,7 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
                 </p>
               </div>
             ) : (
-              <div className="p-4 rounded-2xl bg-slate-950/40 border border-slate-800 text-slate-400 text-xs">
+              <div className="p-4 rounded-2xl bg-slate-900/40 dark:bg-slate-950/40 border border-slate-800 text-slate-400 text-xs">
                 Cả 2 chiến lược trả nợ mang lại kết quả tiền lãi tương đương nhau đối với cơ cấu nợ hiện tại của bạn.
               </div>
             )}

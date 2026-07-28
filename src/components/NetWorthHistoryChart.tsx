@@ -16,7 +16,7 @@ import {
   Camera,
   Loader2
 } from 'lucide-react';
-import { formatMoney } from '@/domain/money';
+import { formatMoney, minorToMajor } from '@/domain/money';
 
 interface SnapshotPoint {
   date: string;
@@ -56,7 +56,7 @@ export default function NetWorthHistoryChart() {
         if (goalsRes.ok && goalsJson.status === 'success') {
           const savingsMinor = goalsJson.data.monthlySavingsMinor;
           if (savingsMinor > 0) {
-            monthlySavings = savingsMinor / 100;
+            monthlySavings = minorToMajor(savingsMinor, 'VND');
           }
         }
       } catch (err) {
@@ -138,7 +138,7 @@ export default function NetWorthHistoryChart() {
   }
 
   return (
-    <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
+    <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
@@ -152,7 +152,7 @@ export default function NetWorthHistoryChart() {
 
         <div className="flex items-center gap-3 flex-wrap">
           {/* Toggle Switch */}
-          <label className="inline-flex items-center gap-2 cursor-pointer bg-slate-950/60 hover:bg-slate-950 border border-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 select-none transition-colors">
+          <label className="inline-flex items-center gap-2 cursor-pointer bg-slate-900/40 hover:bg-slate-900 dark:bg-slate-950/60 dark:hover:bg-slate-950 border border-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 select-none transition-colors">
             <input
               type="checkbox"
               checked={showForecast}
@@ -182,7 +182,7 @@ export default function NetWorthHistoryChart() {
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--slate-800)" />
               <XAxis dataKey="name" stroke="#64748b" tick={{ fontSize: 12 }} />
               <YAxis
                 stroke="#64748b"
@@ -191,10 +191,10 @@ export default function NetWorthHistoryChart() {
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#0f172a',
-                  borderColor: '#334155',
+                  backgroundColor: 'var(--slate-950)',
+                  borderColor: 'var(--slate-800)',
                   borderRadius: '12px',
-                  color: '#fff',
+                  color: 'var(--slate-100)',
                 }}
                 formatter={(val: unknown) => [formatMoney(Number(val) || 0, 'VND'), '']}
               />

@@ -38,7 +38,7 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
     return (
       <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-20 bg-slate-900/60 border border-slate-800 rounded-2xl animate-pulse" />
+          <div key={i} className="h-20 bg-slate-950 dark:bg-slate-900/60 border border-slate-800 rounded-2xl animate-pulse" />
         ))}
       </div>
     );
@@ -46,7 +46,7 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
 
   if (accounts.length === 0) {
     return (
-      <div className="rounded-3xl bg-slate-900/40 border border-slate-800 p-8 text-center space-y-3">
+      <div className="rounded-3xl bg-slate-950 dark:bg-slate-900/40 border border-slate-800 p-8 text-center space-y-3 shadow-xl">
         <div className="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
           <Wallet className="w-6 h-6" />
         </div>
@@ -68,7 +68,9 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
         return (
           <div
             key={acc._id}
-            className={`group rounded-2xl bg-slate-900/60 border ${acc.isStale ? 'border-amber-500/40 bg-amber-950/10' : 'border-slate-800/80 hover:border-slate-700'
+            className={`group rounded-2xl bg-slate-950 dark:bg-slate-900/60 border ${acc.isStale
+                ? 'border-amber-500/40 bg-amber-950/10 dark:bg-amber-950/10'
+                : 'border-slate-800/80 hover:border-slate-700'
               } p-4 sm:p-5 flex items-center justify-between gap-4 transition-all duration-200 shadow-md`}
           >
             <div className="flex items-center gap-3.5 min-w-0">
