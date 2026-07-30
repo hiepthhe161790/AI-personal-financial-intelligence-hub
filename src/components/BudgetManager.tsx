@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Target, AlertCircle, HelpCircle, Plus, Loader2 } from 'lucide-react';
+import { Target, AlertCircle, HelpCircle, Plus, Loader2, Trash2, Edit } from 'lucide-react';
 import { minorToMajor } from '@/domain/money';
 
 interface Budget {
@@ -35,6 +35,31 @@ export default function BudgetManager() {
   const [category, setCategory] = useState(CATEGORY_OPTIONS[0]);
   const [limitMajor, setLimitMajor] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  const handleQuickEdit = (cat: string, limitVnd: number) => {
+    setCategory(cat);
+    setLimitMajor(String(limitVnd));
+    const input = document.getElementById('budget-limit-input');
+    if (input) {
+      input.focus();
+    }
+  };
+
+  const handleDeleteBudget = async (id: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa hạn mức chi tiêu này không?')) return;
+    try {
+      const res = await fetch(`/api/v1/budgets/${id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (!res.ok || data.status === 'error') {
+        throw new Error(data.message || 'Lỗi khi xóa hạn mức');
+      }
+      fetchBudgets();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi khi xóa');
+    }
+  };
 
   const fetchBudgets = async () => {
     try {
@@ -165,9 +190,25 @@ export default function BudgetManager() {
                     <div className="space-y-1">
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-200 text-sm">{b.category}</span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold bg-slate-900 border border-slate-800 text-slate-400">
-                          {percent.toFixed(0)}% đã tiêu
-                        </span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleQuickEdit(b.category, limitVND)}
+                            className="p-1 rounded text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all cursor-pointer"
+                            title="Sửa hạn mức"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteBudget(b._id)}
+                            className="p-1 rounded text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer"
+                            title="Xóa hạn mức"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold bg-slate-900 border border-slate-800 text-slate-400">
+                            {percent.toFixed(0)}% đã tiêu
+                          </span>
+                        </div>
                       </div>
 
                       {/* Budget Limit figures */}
@@ -236,6 +277,7 @@ export default function BudgetManager() {
             <div>
               <label className="block text-[11px] font-semibold text-slate-400 mb-1">Hạn mức chi tiêu tháng (VND)</label>
               <input
+                id="budget-limit-input"
                 type="number"
                 required
                 placeholder="VD: 3000000"

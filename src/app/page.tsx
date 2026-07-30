@@ -119,6 +119,13 @@ export default function Home() {
 
   useEffect(() => {
     fetchAccounts();
+    // Silent background execution for recurring templates and bill notifications
+    fetch('/api/v1/recurring/execute', { method: 'POST' }).catch((err) =>
+      console.error('Background auto-execution of recurring transactions failed:', err)
+    );
+    fetch('/api/v1/bills/notify', { method: 'POST' }).catch((err) =>
+      console.error('Background auto-execution of bill notifications failed:', err)
+    );
   }, [fetchAccounts]);
 
   const handleTabClick = (tab: ActiveTab) => {
@@ -412,7 +419,11 @@ export default function Home() {
                 </h2>
               </div>
 
-              <AccountList accounts={netWorthData?.accounts || []} loading={loading} />
+              <AccountList
+                accounts={netWorthData?.accounts || []}
+                loading={loading}
+                onSuccess={fetchAccounts}
+              />
             </section>
           </div>
         )}

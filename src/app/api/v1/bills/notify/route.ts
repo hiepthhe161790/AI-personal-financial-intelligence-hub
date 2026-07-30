@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { BillReminderModel } from "@/models/BillReminder";
-
-const USER_ID = "owner";
+import { getUserIdFromSession } from "@/lib/auth";
 
 async function sendTelegramMessage(text: string): Promise<boolean> {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -35,12 +34,13 @@ function formatVND(minor: number): string {
  */
 export async function POST() {
   await connectToDatabase();
+  const userId = await getUserIdFromSession();
 
   const now = new Date();
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   const currentDay = now.getDate();
 
-  const bills = await BillReminderModel.find({ userId: USER_ID, isActive: true }).lean();
+  const bills = await BillReminderModel.find({ userId, isActive: true }).lean();
 
   const notified: string[] = [];
 

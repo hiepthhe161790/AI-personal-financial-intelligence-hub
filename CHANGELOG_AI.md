@@ -2,6 +2,38 @@
 
 Nhật ký ghi lại toàn bộ thay đổi do AI (Antigravity) thực hiện trên dự án này.
 
+## [2026-07-31] — Budgets & Accounts CRUD & Dynamic User ID Refactoring
+### Added:
+- **[accounts/[id]/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/accounts/[id]/route.ts)**: [NEW] Route API hỗ trợ `PUT` để sửa thông tin/số dư tài sản (tự động tạo `ValuationSnapshot` khi thay đổi số dư) và `DELETE` để soft-delete tài sản (`isArchived: true`).
+- **[budgets/[id]/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/budgets/[id]/route.ts)**: [NEW] Route API hỗ trợ `DELETE` để xóa hạn mức ngân sách theo ID và userId.
+- **[EditAccountModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/EditAccountModal.tsx)**: [NEW] Modal giao diện chỉnh sửa thông tin tài sản/khoản nợ.
+
+### Modified:
+- **[auth.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/lib/auth.ts)**: Thêm helper `getUserIdFromSession()` để lấy userId động từ JWT token, mặc định fallback về `'owner'`.
+- **[academy/chat/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/academy/chat/route.ts)**: Nâng cấp để ưu tiên giải mã và sử dụng API Key cá nhân của người dùng được cấu hình trong Cài đặt, thay vì chỉ đọc cứng biến môi trường.
+- **[market/sync/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/market/sync/route.ts)**: Sửa triệt để lỗi logic nhân chia cứng cho `100` khi đồng bộ giá thị trường (stock/gold VND) bằng cách sử dụng các hàm chuẩn `majorToMinor`/`minorToMajor` theo đơn vị tiền tệ tài khoản, loại bỏ lỗi lệch 100 lần số dư tài sản ròng sau khi đồng bộ.
+- **[transactions/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/transactions/route.ts)**: Sửa lỗi chia cứng `100` trong tin nhắn cảnh báo Telegram vượt hạn mức ngân sách gây hiển thị số tiền bé hơn 100 lần so với thực tế ở các danh mục VND.
+- **[BudgetManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/BudgetManager.tsx)**: Thêm nút "Xóa" hạn mức và chức năng "Sửa nhanh" (click điền lại dữ liệu cũ vào form thiết lập hạn mức).
+- **[AccountList.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AccountList.tsx)**: Thêm các nút "Sửa" và "Xóa" xuất hiện khi hover group trên từng dòng tài sản, tích hợp modal chỉnh sửa và xác nhận xóa tài sản.
+- **[page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**: 
+  - Truyền callback load lại tài khoản `fetchAccounts` vào prop `onSuccess` của `<AccountList />` để cập nhật Net Worth tức thì.
+  - Tự động kích hoạt ngầm (silent trigger) việc chạy Giao dịch định kỳ (`recurring/execute`) và thông báo Lịch thanh toán (`bills/notify`) bằng phương thức `POST` mỗi khi người dùng tải/mở Dashboard chính, giúp hệ thống hoạt động hoàn toàn tự động mà không cần click tay.
+
+### Refactored:
+- Loại bỏ hoàn toàn hard-code `USER_ID = "owner"` hoặc `userId: 'owner'` ở 12 file API routes, thay thế bằng hàm dynamic `getUserIdFromSession()` để hỗ trợ đa người dùng:
+  - `src/app/api/v1/recurring/[id]/route.ts`
+  - `src/app/api/v1/recurring/route.ts`
+  - `src/app/api/v1/recurring/execute/route.ts`
+  - `src/app/api/v1/bills/[id]/route.ts`
+  - `src/app/api/v1/bills/route.ts`
+  - `src/app/api/v1/bills/notify/route.ts`
+  - `src/app/api/v1/snapshots/history/route.ts`
+  - `src/app/api/v1/scenarios/calculate/route.ts`
+  - `src/app/api/v1/reports/pdf/route.ts`
+  - `src/app/api/v1/reports/excel/route.ts`
+  - `src/app/api/v1/cashflow/daily/route.ts`
+  - `src/app/api/v1/alerts/route.ts`
+
 ## [2026-07-29] — 4 Core Missing Features Implementation
 ### Added: Giao Dịch Định Kỳ Tự Động + P&L + Bill Reminders + AI Academy Gemini
 

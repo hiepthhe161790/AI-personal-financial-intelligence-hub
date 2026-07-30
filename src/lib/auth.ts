@@ -51,3 +51,11 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET || 'default_super_secret_nextauth_jwt_key',
 };
+
+import { getServerSession } from 'next-auth';
+
+export async function getUserIdFromSession() {
+  const session = await getServerSession(authOptions);
+  return (session?.user as { id?: string })?.id || 'owner';
+}
+

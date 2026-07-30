@@ -6,7 +6,7 @@ import TransactionModel from "@/models/Transaction";
 import AccountModel from "@/models/Account";
 import BudgetModel from "@/models/Budget";
 import ValuationSnapshotModel from "@/models/ValuationSnapshot";
-import { majorToMinor } from "@/domain/money";
+import { majorToMinor, minorToMajor } from "@/domain/money";
 import { sendTelegramAlert } from "@/lib/telegram";
 import { authOptions } from "@/lib/auth";
 
@@ -157,8 +157,8 @@ export async function POST(request: Request) {
             const previousTotalSpentMinor = totalSpentMinor - amountMinor;
             const previousUsedPercent = (previousTotalSpentMinor / limitMinor) * 100;
 
-            const totalSpentVND = totalSpentMinor / 100;
-            const limitVND = limitMinor / 100;
+            const totalSpentVND = minorToMajor(totalSpentMinor, budget.currency);
+            const limitVND = minorToMajor(limitMinor, budget.currency);
 
             if (usedPercent >= 100 && previousUsedPercent < 100) {
               await sendTelegramAlert(

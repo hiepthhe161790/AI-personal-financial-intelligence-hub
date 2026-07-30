@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { BillReminderModel } from "@/models/BillReminder";
-
-const USER_ID = "owner";
+import { getUserIdFromSession } from "@/lib/auth";
 
 export async function GET() {
   await connectToDatabase();
-  const bills = await BillReminderModel.find({ userId: USER_ID })
+  const userId = await getUserIdFromSession();
+  const bills = await BillReminderModel.find({ userId })
     .sort({ dueDayOfMonth: 1 })
     .lean();
   return NextResponse.json({ success: true, data: bills });
@@ -14,6 +14,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   await connectToDatabase();
+  const userId = await getUserIdFromSession();
   const body = await req.json();
   const { name, amountMinor, currency, category, dueDayOfMonth, reminderDaysBefore, notes } = body;
 
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
   }
 
   const created = await BillReminderModel.create({
-    userId: USER_ID,
+    userId,
     name: name.trim(),
     amountMinor: Math.round(Number(amountMinor || 0)),
     currency: currency || "VND",

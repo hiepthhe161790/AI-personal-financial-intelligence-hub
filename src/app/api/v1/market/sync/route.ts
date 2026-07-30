@@ -4,6 +4,7 @@ import { connectToDatabase } from "@/lib/db";
 import AccountModel from "@/models/Account";
 import ValuationSnapshotModel from "@/models/ValuationSnapshot";
 import { authOptions } from "@/lib/auth";
+import { majorToMinor, minorToMajor } from "@/domain/money";
 
 async function getUserId() {
   const session = await getServerSession(authOptions);
@@ -115,9 +116,10 @@ export async function POST() {
       }
 
       const oldBalanceMinor = account.currentBalanceMinor;
-      const newBalanceMinor = Math.round(quantity * pricePerUnit * 100); // 100 minor units = 1 VND
+      const newBalanceMajor = quantity * pricePerUnit;
+      const newBalanceMinor = majorToMinor(newBalanceMajor, account.currency);
       const diffMinor = newBalanceMinor - oldBalanceMinor;
-      totalDiffVND += diffMinor / 100;
+      totalDiffVND += minorToMajor(diffMinor, account.currency);
 
       // Only update if there is a change
       if (diffMinor !== 0) {
@@ -144,9 +146,9 @@ export async function POST() {
         ticker: ticker.toUpperCase(),
         quantity,
         pricePerUnit,
-        oldBalance: oldBalanceMinor / 100,
-        newBalance: newBalanceMinor / 100,
-        diff: diffMinor / 100,
+        oldBalance: minorToMajor(oldBalanceMinor, account.currency),
+        newBalance: minorToMajor(newBalanceMinor, account.currency),
+        diff: minorToMajor(diffMinor, account.currency),
       });
     }
 

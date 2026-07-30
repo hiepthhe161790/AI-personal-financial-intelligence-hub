@@ -6,6 +6,7 @@ import TransactionModel from '@/models/Transaction';
 import WealthGoalModel from '@/models/WealthGoal';
 import { computeNetWorth } from '@/domain/net-worth';
 import { minorToMajor } from '@/domain/money';
+import { getUserIdFromSession } from '@/lib/auth';
 
 const VND = (amount: number) =>
   new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
@@ -14,7 +15,7 @@ export async function GET() {
   try {
     await connectToDatabase();
 
-    const userId = 'owner';
+    const userId = await getUserIdFromSession();
     const now = new Date();
     const thirtyDaysAgo = new Date(now);
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

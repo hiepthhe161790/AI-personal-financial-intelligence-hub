@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { connectToDatabase } from "@/lib/db";
+import { getUserIdFromSession } from "@/lib/auth";
+import UserSettingModel from "@/models/UserSetting";
+import { decryptText } from "@/lib/encryption";
 
 const ACADEMY_SYSTEM_PROMPT = `Bạn là AI Financial Mentor — Chuyên gia tư vấn tài chính cá nhân và đầu tư dài hạn, được tích hợp trong AI Personal Financial Intelligence Hub.
 
@@ -29,13 +33,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: "Câu hỏi không được để trống." }, { status: 400 });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  await connectToDatabase();
+  const userId = await getUserIdFromSession();
+
+  // Retrieve user custom API Key if available, fallback to env variable
+  const userSettings = await UserSettingModel.findOne({ userId }).lean();
+  let apiKey = process.env.GEMINI_API_KEY;
+
+  if (userSettings?.geminiApiKeyEncrypted) {
+    try {
+      apiKey = decryptText(userSettings.geminiApiKeyEncrypted);
+    } catch (e) {
+      console.error("[Academy/Chat] Failed to decrypt user API key:", e);
+    }
+  }
 
   // Fallback: no real API key configured
   if (!apiKey || apiKey === "mock_dev_key" || apiKey.length <= 10) {
     return NextResponse.json({
       success: true,
-      reply: `📚 [Chế độ Demo] Câu hỏi của bạn: "${question}"\n\nĐể nhận phân tích AI thật từ Gemini, hãy cấu hình GEMINI_API_KEY trong file .env của hệ thống. Truy cập aistudio.google.com để lấy API Key miễn phí.`,
+      reply: `📚 [Chế độ Demo] Câu hỏi của bạn: "${question}"\n\nĐể nhận phân tích AI thật từ Gemini, hãy cấu hình GEMINI_API_KEY trong file .env hoặc cài đặt API Key cá nhân trong phần Cài đặt.`,
     });
   }
 

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { RecurringTransactionModel } from "@/models/RecurringTransaction";
-
-const USER_ID = "owner";
+import { getUserIdFromSession } from "@/lib/auth";
 
 export async function GET() {
   await connectToDatabase();
-  const items = await RecurringTransactionModel.find({ userId: USER_ID })
+  const userId = await getUserIdFromSession();
+  const items = await RecurringTransactionModel.find({ userId })
     .sort({ createdAt: -1 })
     .lean();
   return NextResponse.json({ success: true, data: items });
@@ -14,6 +14,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   await connectToDatabase();
+  const userId = await getUserIdFromSession();
   const body = await req.json();
   const { accountId, type, amountMinor, currency, category, notes, dayOfMonth } = body;
 
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
   }
 
   const created = await RecurringTransactionModel.create({
-    userId: USER_ID,
+    userId,
     accountId,
     type,
     amountMinor: Math.round(Number(amountMinor)),

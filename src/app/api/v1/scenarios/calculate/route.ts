@@ -5,6 +5,7 @@ import AccountModel from '@/models/Account';
 import { computeNetWorth } from '@/domain/net-worth';
 import { majorToMinor } from '@/domain/money';
 import { calculateScenarioProjection } from '@/domain/simulation';
+import { getUserIdFromSession } from '@/lib/auth';
 
 const ScenarioRequestSchema = z.object({
   initialNetWorthMajor: z.number().optional(),
@@ -43,7 +44,8 @@ export async function POST(request: Request) {
       initialNetWorthMinor = majorToMinor(initialNetWorthMajor, 'VND');
     } else {
       await connectToDatabase();
-      const accounts = await AccountModel.find({ userId: 'owner', isArchived: false }).lean();
+      const userId = await getUserIdFromSession();
+      const accounts = await AccountModel.find({ userId, isArchived: false }).lean();
       const netWorth = computeNetWorth(accounts);
       initialNetWorthMinor = Math.max(0, netWorth.netWorthMinor);
     }

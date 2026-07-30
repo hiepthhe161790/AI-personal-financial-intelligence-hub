@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import { RecurringTransactionModel } from "@/models/RecurringTransaction";
 import { TransactionModel } from "@/models/Transaction";
-
-const USER_ID = "owner";
+import { getUserIdFromSession } from "@/lib/auth";
 
 /**
  * POST /api/v1/recurring/execute
@@ -13,6 +12,7 @@ const USER_ID = "owner";
  */
 export async function POST() {
   await connectToDatabase();
+  const userId = await getUserIdFromSession();
 
   const now = new Date();
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`; // e.g. "2026-07"
@@ -20,7 +20,7 @@ export async function POST() {
 
   // Get all active recurring templates for this user
   const templates = await RecurringTransactionModel.find({
-    userId: USER_ID,
+    userId,
     isActive: true,
   }).lean();
 
@@ -42,7 +42,7 @@ export async function POST() {
 
     // Create the actual Transaction in the ledger
     await TransactionModel.create({
-      userId: USER_ID,
+      userId,
       accountId: t.accountId,
       type: t.type,
       amountMinor: t.amountMinor,

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { AccountSummary } from '@/domain/net-worth';
 import { formatMoney } from '@/domain/money';
 import {
@@ -15,12 +16,16 @@ import {
   Clock,
   AlertTriangle,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Edit2,
+  Trash2
 } from 'lucide-react';
+import EditAccountModal from './EditAccountModal';
 
 interface AccountListProps {
   accounts: AccountSummary[];
   loading: boolean;
+  onSuccess?: () => void;
 }
 
 const TYPE_ICONS: Record<string, { icon: React.ElementType; color: string; label: string }> = {
@@ -35,7 +40,25 @@ const TYPE_ICONS: Record<string, { icon: React.ElementType; color: string; label
   LIABILITY: { icon: CreditCard, color: 'text-rose-400 bg-rose-500/10 border-rose-500/20', label: 'Khoản Nợ' },
 };
 
-export default function AccountList({ accounts, loading }: AccountListProps) {
+export default function AccountList({ accounts, loading, onSuccess }: AccountListProps) {
+  const [selectedAccount, setSelectedAccount] = useState<AccountSummary | null>(null);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa tài sản này?')) return;
+    try {
+      const res = await fetch(`/api/v1/accounts/${id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (!res.ok || data.status === 'error') {
+        throw new Error(data.message || 'Lỗi khi xóa tài sản');
+      }
+      if (onSuccess) onSuccess();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Đã xảy ra lỗi khi xóa');
+    }
+  };
+
   if (loading) {
     return (
       <div className="space-y-3">
@@ -106,40 +129,69 @@ export default function AccountList({ accounts, loading }: AccountListProps) {
               </div>
             </div>
 
-            <div className="text-right shrink-0">
-              <div
-                className={`text-lg sm:text-xl font-bold font-mono tracking-tight ${
-                  isLiability ? 'text-rose-400' : 'text-emerald-400'
-                }`}
-              >
-                {isLiability ? '-' : ''}
-                {formatMoney(acc.currentBalanceMinor, acc.currency)}
-              </div>
-              {/* P&L for investment accounts */}
-              {!isLiability && acc.costBasisMinor && acc.costBasisMinor > 0 && (() => {
-                const pnl = acc.currentBalanceMinor - acc.costBasisMinor;
-                const pnlPct = ((pnl / acc.costBasisMinor) * 100).toFixed(1);
-                const isProfit = pnl >= 0;
-                return (
-                  <div className={`flex items-center justify-end gap-1 mt-0.5 text-xs font-semibold ${
-                    isProfit ? 'text-emerald-400' : 'text-rose-400'
-                  }`}>
-                    {isProfit
-                      ? <TrendingUp className="w-3 h-3" />
-                      : <TrendingDown className="w-3 h-3" />}
-                    <span>{isProfit ? '+' : ''}{formatMoney(Math.abs(pnl), acc.currency)}</span>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
-                      isProfit ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+            <div className="flex items-center gap-3.5 shrink-0">
+              <div className="text-right">
+                <div
+                  className={`text-lg sm:text-xl font-bold font-mono tracking-tight ${
+                    isLiability ? 'text-rose-400' : 'text-emerald-400'
+                  }`}
+                >
+                  {isLiability ? '-' : ''}
+                  {formatMoney(acc.currentBalanceMinor, acc.currency)}
+                </div>
+                {/* P&L for investment accounts */}
+                {!isLiability && acc.costBasisMinor && acc.costBasisMinor > 0 && (() => {
+                  const pnl = acc.currentBalanceMinor - acc.costBasisMinor;
+                  const pnlPct = ((pnl / acc.costBasisMinor) * 100).toFixed(1);
+                  const isProfit = pnl >= 0;
+                  return (
+                    <div className={`flex items-center justify-end gap-1 mt-0.5 text-xs font-semibold ${
+                      isProfit ? 'text-emerald-400' : 'text-rose-400'
                     }`}>
-                      {isProfit ? '+' : ''}{pnlPct}%
-                    </span>
-                  </div>
-                );
-              })()}
+                      {isProfit
+                        ? <TrendingUp className="w-3 h-3" />
+                        : <TrendingDown className="w-3 h-3" />}
+                      <span>{isProfit ? '+' : ''}{formatMoney(Math.abs(pnl), acc.currency)}</span>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                        isProfit ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+                      }`}>
+                        {isProfit ? '+' : ''}{pnlPct}%
+                      </span>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Edit/Delete Actions */}
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 max-sm:opacity-100 transition-opacity duration-200 pl-2 border-l border-slate-800">
+                <button
+                  onClick={() => setSelectedAccount(acc)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all cursor-pointer shrink-0"
+                  title="Chỉnh sửa tài sản"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleDelete(acc._id)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer shrink-0"
+                  title="Xóa tài sản"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         );
       })}
+
+      <EditAccountModal
+        isOpen={!!selectedAccount}
+        onClose={() => setSelectedAccount(null)}
+        onSuccess={() => {
+          if (onSuccess) onSuccess();
+        }}
+        account={selectedAccount}
+      />
     </div>
   );
 }

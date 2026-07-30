@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db';
 import TransactionModel from '@/models/Transaction';
+import { getUserIdFromSession } from '@/lib/auth';
 
 export interface DailyFlow {
   date: string;              // "YYYY-MM-DD"
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
 
-    const userId = 'owner';
+    const userId = await getUserIdFromSession();
     const daysParam = request.nextUrl.searchParams.get('days');
     const days = Math.min(Math.max(parseInt(daysParam ?? '30', 10), 7), 90);
 

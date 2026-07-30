@@ -4,12 +4,14 @@ import ValuationSnapshotModel from '@/models/ValuationSnapshot';
 import AccountModel from '@/models/Account';
 import { computeNetWorth } from '@/domain/net-worth';
 import { minorToMajor } from '@/domain/money';
+import { getUserIdFromSession } from '@/lib/auth';
 
 export async function GET() {
   try {
     await connectToDatabase();
+    const userId = await getUserIdFromSession();
 
-    const snapshots = await ValuationSnapshotModel.find({ userId: 'owner' })
+    const snapshots = await ValuationSnapshotModel.find({ userId })
       .sort({ valuationDate: 1 })
       .lean();
 
@@ -24,7 +26,7 @@ export async function GET() {
 
     // If no history exists yet, generate 6 months of baseline history so UI renders nicely
     if (timelinePoints.length === 0) {
-      const accounts = await AccountModel.find({ userId: 'owner', isArchived: false }).lean();
+      const accounts = await AccountModel.find({ userId, isArchived: false }).lean();
       const currentNetWorth = computeNetWorth(accounts);
       const currentAssetsMajor = minorToMajor(currentNetWorth.totalAssetsMinor, 'VND');
       const currentLiabilitiesMajor = minorToMajor(currentNetWorth.totalLiabilitiesMinor, 'VND');
@@ -61,8 +63,9 @@ export async function GET() {
 export async function POST() {
   try {
     await connectToDatabase();
+    const userId = await getUserIdFromSession();
 
-    const accounts = await AccountModel.find({ userId: 'owner', isArchived: false }).lean();
+    const accounts = await AccountModel.find({ userId, isArchived: false }).lean();
     const netWorth = computeNetWorth(accounts);
 
     const firstAccount = accounts[0];
@@ -71,7 +74,7 @@ export async function POST() {
     }
 
     const snapshot = await ValuationSnapshotModel.create({
-      userId: 'owner',
+      userId,
       accountId: firstAccount._id,
       amountMinor: netWorth.netWorthMinor,
       valuationDate: new Date(),

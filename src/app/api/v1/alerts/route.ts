@@ -5,6 +5,7 @@ import TransactionModel from '@/models/Transaction';
 import WealthGoalModel from '@/models/WealthGoal';
 import AccountModel from '@/models/Account';
 import { minorToMajor } from '@/domain/money';
+import { getUserIdFromSession } from '@/lib/auth';
 
 export type AlertSeverity = 'info' | 'warning' | 'danger' | 'success';
 
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
 
-    const userId = 'owner';
+    const userId = await getUserIdFromSession();
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const thirtyDaysAgo = new Date(now);
