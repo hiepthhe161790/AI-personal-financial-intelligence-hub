@@ -14,7 +14,8 @@ import {
 import {
   History,
   Camera,
-  Loader2
+  Loader2,
+  Sparkles
 } from 'lucide-react';
 import { formatMoney, minorToMajor } from '@/domain/money';
 
@@ -160,7 +161,10 @@ export default function NetWorthHistoryChart() {
               className="sr-only peer"
             />
             <div className="relative w-8 h-4.5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-slate-400 peer-checked:after:bg-indigo-400 after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-indigo-950/80 border peer-checked:border-indigo-500/30"></div>
-            <span>Dự báo 12 tháng 🔮</span>
+            <div className="flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Dự báo 12 tháng</span>
+            </div>
           </label>
 
           <button

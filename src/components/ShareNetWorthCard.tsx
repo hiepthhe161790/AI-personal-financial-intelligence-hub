@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Share2, Download, X, Copy, CheckCircle2 } from 'lucide-react';
+import { Share2, Download, X, Copy, CheckCircle2, Lightbulb } from 'lucide-react';
 import { NetWorthOverview } from '@/domain/net-worth';
 import { formatMoney } from '@/domain/money';
 
@@ -148,8 +148,9 @@ export default function ShareNetWorthCard({ data, isPrivate = false }: ShareNetW
               </button>
             </div>
 
-            <p className="text-center text-[10px] text-slate-400">
-              💡 Chụp màn hình thẻ trên để chia sẻ lên mạng xã hội
+            <p className="text-center text-[10px] text-slate-450 flex items-center justify-center gap-1">
+              <Lightbulb className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <span>Chụp màn hình thẻ trên để chia sẻ lên mạng xã hội</span>
             </p>
           </div>
         </div>

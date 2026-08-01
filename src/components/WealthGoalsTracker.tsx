@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Target, Home, Car, Calendar, Compass, Plus, Trash2, Loader2, Sparkles, AlertCircle, HelpCircle } from 'lucide-react';
-import { minorToMajor } from '@/domain/money';
+import { minorToMajor, formatNumericInput } from '@/domain/money';
 
 interface WealthGoal {
   _id: string;
@@ -17,11 +17,11 @@ interface WealthGoal {
 }
 
 const CATEGORY_OPTIONS = [
-  { label: 'Mua nhà 🏠', value: 'HOUSE' },
-  { label: 'Mua xe 🚗', value: 'CAR' },
-  { label: 'Quỹ hưu trí 👵', value: 'RETIREMENT' },
-  { label: 'Du lịch / Nghỉ dưỡng ✈️', value: 'TRAVEL' },
-  { label: 'Mục tiêu khác 🎯', value: 'OTHER' },
+  { label: 'Mua nhà', value: 'HOUSE' },
+  { label: 'Mua xe', value: 'CAR' },
+  { label: 'Quỹ hưu trí', value: 'RETIREMENT' },
+  { label: 'Du lịch / Nghỉ dưỡng', value: 'TRAVEL' },
+  { label: 'Mục tiêu khác', value: 'OTHER' },
 ];
 
 export default function WealthGoalsTracker() {
@@ -70,8 +70,8 @@ export default function WealthGoalsTracker() {
     setError(null);
 
     try {
-      const parsedTarget = parseFloat(targetAmountMajor);
-      const parsedCurrent = parseFloat(currentAmountMajor || '0');
+      const parsedTarget = parseFloat(targetAmountMajor.replace(/,/g, ''));
+      const parsedCurrent = parseFloat((currentAmountMajor || '0').replace(/,/g, ''));
 
       if (isNaN(parsedTarget) || parsedTarget <= 0) {
         throw new Error('Số tiền mục tiêu phải lớn hơn 0');
@@ -114,7 +114,7 @@ export default function WealthGoalsTracker() {
 
   const handleAdjustSaved = async (goalId: string, currentSavedMinor: number, action: 'DEPOSIT' | 'WITHDRAW') => {
     setError(null);
-    const parsedAmountMajor = parseFloat(adjustAmountMajor);
+    const parsedAmountMajor = parseFloat(adjustAmountMajor.replace(/,/g, ''));
 
     if (isNaN(parsedAmountMajor) || parsedAmountMajor <= 0) {
       alert('Vui lòng nhập số tiền hợp lệ lớn hơn 0');
@@ -328,10 +328,10 @@ export default function WealthGoalsTracker() {
                         <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cập nhật số dư tích lũy</div>
                         <div className="flex gap-2">
                           <input
-                            type="number"
+                            type="text"
                             placeholder="Số tiền (VND)"
                             value={adjustAmountMajor}
-                            onChange={(e) => setAdjustAmountMajor(e.target.value)}
+                            onChange={(e) => setAdjustAmountMajor(formatNumericInput(e.target.value))}
                             className="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500"
                           />
                           <button
@@ -372,7 +372,7 @@ export default function WealthGoalsTracker() {
               <input
                 type="text"
                 required
-                placeholder="VD: Mua căn hộ Vinhomes 🏢"
+                placeholder="VD: Mua căn hộ Vinhomes, biệt thự..."
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
@@ -398,11 +398,11 @@ export default function WealthGoalsTracker() {
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Cần tích lũy (VND)</label>
                 <input
-                  type="number"
+                  type="text"
                   required
-                  placeholder="VD: 2000000000"
+                  placeholder="VD: 2,000,000,000"
                   value={targetAmountMajor}
-                  onChange={(e) => setTargetAmountMajor(e.target.value)}
+                  onChange={(e) => setTargetAmountMajor(formatNumericInput(e.target.value))}
                   className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
                 />
               </div>
@@ -410,10 +410,10 @@ export default function WealthGoalsTracker() {
               <div>
                 <label className="block text-[11px] font-semibold text-slate-400 mb-1">Đã tích lũy (VND)</label>
                 <input
-                  type="number"
-                  placeholder="VD: 500000000"
+                  type="text"
+                  placeholder="VD: 500,000,000"
                   value={currentAmountMajor}
-                  onChange={(e) => setCurrentAmountMajor(e.target.value)}
+                  onChange={(e) => setCurrentAmountMajor(formatNumericInput(e.target.value))}
                   className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
                 />
               </div>

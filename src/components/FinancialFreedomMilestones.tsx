@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Award, Compass, Heart, ShieldAlert, Sparkles } from 'lucide-react';
+import { Award, Compass, Heart, ShieldAlert, Sparkles, Lightbulb } from 'lucide-react';
 import { minorToMajor } from '@/domain/money';
 
 interface FinancialFreedomMilestonesProps {
@@ -76,8 +76,9 @@ export default function FinancialFreedomMilestones({ currentNetWorthMinor }: Fin
           className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
         />
 
-        <p className="text-[10px] text-slate-500 leading-normal">
-          💡 Kéo thanh trượt để thay đổi mức chi tiêu dự trù. Hệ thống sẽ tính toán lại mục tiêu của các cột mốc tương ứng thời gian thực.
+        <p className="text-[10px] text-slate-500 leading-normal flex items-start gap-1">
+          <Lightbulb className="w-3.5 h-3.5 text-indigo-400 shrink-0 mt-0.5" />
+          <span>Kéo thanh trượt để thay đổi mức chi tiêu dự trù. Hệ thống sẽ tính toán lại mục tiêu của các cột mốc tương ứng thời gian thực.</span>
         </p>
       </div>
 

@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IBudget extends Document {
   userId: string;
-  category: string;      // Category name (e.g., Eating 🍔)
+  category: string;      // Category name (e.g., Eating)
   limitMinor: number;    // Spending limit in minor units
   currency: string;      // VND, USD
   period: string;        // 'MONTHLY', etc.

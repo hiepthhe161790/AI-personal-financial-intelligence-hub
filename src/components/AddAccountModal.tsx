@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Plus, X, Loader2 } from 'lucide-react';
 import { AccountType } from '@/models/Account';
+import { formatNumericInput } from '@/domain/money';
 
 interface AddAccountModalProps {
   onSuccess: () => void;
@@ -42,7 +43,7 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
     setError(null);
 
     try {
-      const parsedAmount = parseFloat(amountMajor);
+      const parsedAmount = parseFloat(amountMajor.replace(/,/g, ''));
       if (isNaN(parsedAmount) || parsedAmount < 0) {
         throw new Error('Vui lòng nhập số tiền hợp lệ (không âm)');
       }
@@ -57,9 +58,9 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
           currency,
           notes,
           ticker: (type === 'GOLD' || type === 'STOCK') ? ticker.trim().toUpperCase() : undefined,
-          quantity: (type === 'GOLD' || type === 'STOCK') ? parseFloat(quantity) : undefined,
+          quantity: (type === 'GOLD' || type === 'STOCK') ? parseFloat(quantity.replace(/,/g, '')) : undefined,
           costBasisMajor: INVESTMENT_TYPES.includes(type) && costBasisMajor
-            ? parseFloat(costBasisMajor)
+            ? parseFloat(costBasisMajor.replace(/,/g, ''))
             : undefined,
         }),
       });
@@ -188,12 +189,11 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                       {type === 'STOCK' ? 'Số lượng Cổ Phiếu' : 'Số lượng (Chỉ/Lượng)'} <span className="text-emerald-400">*</span>
                     </label>
                     <input
-                      type="number"
-                      step="any"
+                      type="text"
                       required
-                      placeholder={type === 'STOCK' ? 'VD: 1000' : 'VD: 5.5'}
+                      placeholder={type === 'STOCK' ? 'VD: 1,000' : 'VD: 5.5'}
                       value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
+                      onChange={(e) => setQuantity(formatNumericInput(e.target.value))}
                       className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                     />
                   </div>
@@ -205,12 +205,11 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                   Số Tiền Hàng / Giá Trị Hiện Tại (Đơn vị chính) <span className="text-emerald-400">*</span>
                 </label>
                 <input
-                  type="number"
-                  step="any"
+                  type="text"
                   required
-                  placeholder="VD: 50000000 (Nhập 0 nếu muốn tự động đồng bộ theo Ticker & Số lượng)"
+                  placeholder="VD: 50,000,000 (Nhập 0 nếu muốn tự động đồng bộ theo Ticker & Số lượng)"
                   value={amountMajor}
-                  onChange={(e) => setAmountMajor(e.target.value)}
+                  onChange={(e) => setAmountMajor(formatNumericInput(e.target.value))}
                   className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-emerald-500 text-sm"
                 />
               </div>
@@ -222,11 +221,10 @@ export default function AddAccountModal({ onSuccess }: AddAccountModalProps) {
                     💰 Tổng Vốn Đã Bỏ Ra / Giá Vốn (để tính Lãi/Lỗ)
                   </label>
                   <input
-                    type="number"
-                    step="any"
-                    placeholder="VD: 40000000 (để trống nếu không cần theo dõi P&L)"
+                    type="text"
+                    placeholder="VD: 40,000,000 (để trống nếu không cần theo dõi P&L)"
                     value={costBasisMajor}
-                    onChange={(e) => setCostBasisMajor(e.target.value)}
+                    onChange={(e) => setCostBasisMajor(formatNumericInput(e.target.value))}
                     className="w-full px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-sm"
                   />
                   <p className="text-[10px] text-slate-500 mt-1">Nhập tổng số tiền thực đã bỏ ra mua tài sản này. Hệ thống sẽ tự tính % lãi/lỗ so với giá trị hiện tại.</p>

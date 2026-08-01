@@ -2,8 +2,9 @@
 "use client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import { LogIn, LogOut, ShieldCheck, Sun, Moon, Settings, Key, X, Loader2, Check } from "lucide-react";
+import { LogIn, LogOut, ShieldCheck, Sun, Moon, Settings, Key, X, Loader2, Check, Lightbulb } from "lucide-react";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useTheme } from "./ThemeProvider";
 
 export default function UserAuthHeader() {
@@ -16,6 +17,11 @@ export default function UserAuthHeader() {
   const [hasSavedKey, setHasSavedKey] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const fetchSettings = async () => {
     try {
@@ -134,7 +140,7 @@ export default function UserAuthHeader() {
       )}
 
       {/* Settings Modal (Gemini API Key configuration) */}
-      {isSettingsOpen && (
+      {mounted && isSettingsOpen && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 w-full max-w-md shadow-2xl relative animate-in zoom-in-95 duration-200 text-slate-200">
             <button
@@ -149,7 +155,7 @@ export default function UserAuthHeader() {
                 <Key className="w-5 h-5 text-indigo-400" />
               </div>
               <div>
-                <h3 className="font-bold text-base text-slate-100">Cấu Hình API Key Cá Nhân</h3>
+                <h3 className="font-bold text-base text-slate-100">Cấu Hinh API Key Cá Nhân</h3>
                 <p className="text-xs text-slate-400">Thiết lập khóa API Gemini của riêng bạn</p>
               </div>
             </div>
@@ -184,16 +190,19 @@ export default function UserAuthHeader() {
                 </div>
               )}
 
-              <p className="text-xs text-slate-400 leading-relaxed bg-slate-950/50 p-3 rounded-xl border border-slate-800/50">
-                💡 <strong>Lợi ích:</strong> Điền API Key của riêng bạn để sử dụng các tính năng phân tích AI mà không bị giới hạn hạn mức chung của hệ thống. Bạn có thể lấy Key miễn phí tại{" "}
-                <a
-                  href="https://aistudio.google.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-indigo-400 hover:underline font-semibold"
-                >
-                  Google AI Studio
-                </a>.
+              <p className="text-xs text-slate-400 leading-relaxed bg-slate-950/50 p-3 rounded-xl border border-slate-800/50 flex items-start gap-1.5">
+                <Lightbulb className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Lợi ích:</strong> Điền API Key của riêng bạn để sử dụng các tính năng phân tích AI mà không bị giới hạn hạn mức chung của hệ thống. Bạn có thể lấy Key miễn phí tại{" "}
+                  <a
+                    href="https://aistudio.google.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-indigo-400 hover:underline font-semibold"
+                  >
+                    Google AI Studio
+                  </a>.
+                </span>
               </p>
 
               <div className="flex justify-end gap-3 pt-2">
@@ -228,7 +237,8 @@ export default function UserAuthHeader() {
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -6,7 +6,9 @@ import {
   Calendar, Landmark, Loader2, AlertCircle, Sparkles,
   Search, X, Filter, ChevronDown,
 } from "lucide-react";
-import { formatMoney } from "@/domain/money";
+import { formatMoney, formatNumericInput } from "@/domain/money";
+import CategoryIcon, { getCleanCategoryName } from "@/components/CategoryIcon";
+import CategorySelect from "@/components/CategorySelect";
 
 interface Account {
   _id: string;
@@ -33,25 +35,27 @@ interface CashFlowLedgerProps {
 }
 
 const EXPENSE_CATEGORIES = [
-  "Ăn uống 🍔",
-  "Cà phê & Đi chợ ☕",
-  "Nhà cửa & Tiền thuê 🏠",
-  "Di chuyển & Xăng xe 🚗",
-  "Mua sắm & Quần áo 🛍️",
-  "Hóa đơn & Tiện ích ⚡",
-  "Giải trí & Du lịch 🎬",
-  "Y tế & Sức khỏe 🏥",
-  "Đầu tư & Tiết kiệm 📈",
-  "Khoản nợ & Lãi suất 💸",
-  "Chi phí khác 🌀"
+  "Ăn uống & Cà phê",
+  "Đi chợ & Siêu thị",
+  "Nhà cửa & Tiền thuê",
+  "Di chuyển & Xăng xe",
+  "Mua sắm & Quần áo",
+  "Hóa đơn & Tiện ích",
+  "Giải trí & Du lịch",
+  "Y tế & Sức khỏe",
+  "Giáo dục & Học tập",
+  "Quà tặng & Hiếu hỷ",
+  "Đầu tư & Tiết kiệm",
+  "Khoản nợ & Lãi suất",
+  "Chi phí khác"
 ];
 
 const INCOME_CATEGORIES = [
-  "Lương thưởng 💼",
-  "Kinh doanh 🏪",
-  "Đầu tư & Lãi suất 📊",
-  "Được tặng & Quà biếu 🎁",
-  "Thu nhập khác 🪙"
+  "Lương & Thưởng",
+  "Kinh doanh & Làm thêm",
+  "Đầu tư & Lãi suất",
+  "Được tặng & Quà biếu",
+  "Thu nhập khác"
 ];
 
 const ALL_CATEGORIES = [...new Set([...EXPENSE_CATEGORIES, ...INCOME_CATEGORIES])];
@@ -119,7 +123,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
       // Type filter
       if (filterType !== "ALL" && tx.type !== filterType) return false;
       // Category filter
-      if (filterCategory !== "ALL" && tx.category !== filterCategory) return false;
+      if (filterCategory !== "ALL" && getCleanCategoryName(tx.category) !== getCleanCategoryName(filterCategory)) return false;
       // Date from
       if (filterDateFrom && tx.occurredOn < filterDateFrom) return false;
       // Date to (inclusive)
@@ -172,7 +176,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
         body: JSON.stringify({
           accountId: formData.accountId,
           type: formData.type,
-          amountMajor: parseFloat(formData.amountMajor),
+          amountMajor: parseFloat(formData.amountMajor.replace(/,/g, '')),
           category: formData.category,
           occurredOn: new Date(formData.occurredOn).toISOString(),
           notes: formData.notes
@@ -242,7 +246,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
           className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 transition-all cursor-pointer"
         >
           <PlusCircle className="w-4 h-4" />
-          <span>{showAddForm ? "Đóng Form" : "Ghi chép thu chi ✍️"}</span>
+          <span>{showAddForm ? "Đóng Form" : "Ghi chép thu chi"}</span>
         </button>
       </div>
 
@@ -307,11 +311,10 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
               <label className="text-xs font-bold text-slate-400 uppercase">Số tiền</label>
               <div className="relative">
                 <input
-                  type="number"
-                  step="any"
-                  placeholder="Ví dụ: 50000"
+                  type="text"
+                  placeholder="Ví dụ: 50,000"
                   value={formData.amountMajor}
-                  onChange={(e) => setFormData(prev => ({ ...prev, amountMajor: e.target.value }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, amountMajor: formatNumericInput(e.target.value) }))}
                   className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl pl-3 pr-12 py-2 text-xs font-bold text-slate-100 focus:outline-none focus:border-emerald-500/50"
                 />
                 <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-mono">
@@ -323,15 +326,13 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
             {/* Category selection */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase">Danh mục</label>
-              <select
+              <CategorySelect
                 value={formData.category}
-                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
-              >
-                {(formData.type === "EXPENSE" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES).map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
+                onChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
+                options={formData.type === "EXPENSE" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES}
+                className="mt-1"
+                borderClass="border-slate-800 focus:border-emerald-500/50 text-xs"
+              />
             </div>
 
             {/* Date picker */}
@@ -454,16 +455,13 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
               {/* Category filter */}
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase">Danh mục</label>
-                <select
+                <CategorySelect
                   value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                  className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500/50"
-                >
-                  <option value="ALL">Tất cả danh mục</option>
-                  {ALL_CATEGORIES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
+                  onChange={(val) => setFilterCategory(val)}
+                  options={["ALL", ...ALL_CATEGORIES]}
+                  className="mt-1"
+                  borderClass="border-slate-700 focus:border-emerald-550/50 text-xs"
+                />
               </div>
 
               {/* Date from */}
@@ -521,7 +519,7 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
             <p className="text-xs text-slate-500">
               {hasActiveFilters
                 ? "Không tìm thấy giao dịch nào khớp với bộ lọc hiện tại."
-                : "Chưa có giao dịch thu chi nào được ghi chép. Hãy dùng nút \"Ghi chép thu chi ✍️\" ở trên để ghi nhận."}
+                : "Chưa có giao dịch thu chi nào được ghi chép. Hãy dùng nút \"Ghi chép thu chi\" ở trên để ghi nhận."}
             </p>
             {hasActiveFilters && (
               <button
@@ -550,7 +548,8 @@ export default function CashFlowLedger({ accounts, onTransactionChanged }: CashF
 
                     <div className="space-y-0.5">
                       <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
-                        <span>{tx.category}</span>
+                        <CategoryIcon category={tx.category} className="w-3.5 h-3.5 text-slate-400" />
+                        <span>{getCleanCategoryName(tx.category)}</span>
                         {tx.notes && (
                           <span className="text-[10px] font-normal text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">
                             {tx.notes}

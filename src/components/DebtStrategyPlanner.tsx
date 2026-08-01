@@ -4,9 +4,9 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
   Scale, ArrowRight, Zap, Target, TrendingUp, Info, HelpCircle,
-  AlertTriangle, ShieldCheck, DollarSign, Calendar, RefreshCw
+  AlertTriangle, ShieldCheck, DollarSign, Calendar, RefreshCw, Lightbulb
 } from "lucide-react";
-import { formatMoney, minorToMajor } from "@/domain/money";
+import { formatMoney, minorToMajor, formatNumericInput, parseNumericInput } from "@/domain/money";
 
 interface Account {
   _id: string;
@@ -216,9 +216,9 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold text-slate-400 uppercase">Trả tối thiểu / tháng</label>
                   <input
-                    type="number"
-                    value={debt.minPayment}
-                    onChange={(e) => handleDebtChange(index, "minPayment", parseInt(e.target.value, 10) || 0)}
+                    type="text"
+                    value={formatNumericInput(debt.minPayment)}
+                    onChange={(e) => handleDebtChange(index, "minPayment", parseNumericInput(e.target.value))}
                     className="w-full bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500/50 font-mono"
                   />
                 </div>
@@ -243,8 +243,9 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
               onChange={(e) => setExtraPayment(Number(e.target.value))}
               className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
             />
-            <p className="text-[10px] text-slate-400">
-              💡 Đây là khoản tiền thừa ra từ ngân sách thu chi của bạn để tập trung dứt điểm nợ nhanh hơn.
+            <p className="text-[10px] text-slate-400 flex items-start gap-1">
+              <Lightbulb className="w-3.5 h-3.5 text-indigo-400 shrink-0 mt-0.5" />
+              <span>Đây là khoản tiền thừa ra từ ngân sách thu chi của bạn để tập trung dứt điểm nợ nhanh hơn.</span>
             </p>
           </div>
         </div>
@@ -311,7 +312,10 @@ export default function DebtStrategyPlanner({ accounts }: { accounts: Account[] 
 
           {/* Methodology Advice Banner */}
           <div className="p-4 rounded-2xl bg-slate-900/40 border border-slate-800 text-xs text-slate-400 space-y-2">
-            <div className="font-bold text-slate-300">💡 Chọn Chiến Lược Nào?</div>
+            <div className="font-bold text-slate-300 flex items-center gap-1">
+              <Lightbulb className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <span>Chọn Chiến Lược Nào?</span>
+            </div>
             <p className="text-[10px]">
               * **Chọn Avalanche (Thác đổ):** Nếu bạn muốn tiết kiệm tối đa tiền lãi suất trả cho ngân hàng.
             </p>

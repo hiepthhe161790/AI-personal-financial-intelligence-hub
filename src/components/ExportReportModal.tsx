@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Download,
   FileSpreadsheet,
@@ -11,6 +11,7 @@ import {
   Loader2,
   CheckCircle2,
 } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { NetWorthOverview } from '@/domain/net-worth';
 import { formatMoney } from '@/domain/money';
 
@@ -24,6 +25,11 @@ export default function ExportReportModal({ netWorthData }: ExportReportModalPro
   const [isOpen, setIsOpen] = useState(false);
   const [excelStatus, setExcelStatus] = useState<DownloadStatus>('idle');
   const [pdfStatus, setPdfStatus] = useState<DownloadStatus>('idle');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleDownload = async (
     type: 'excel' | 'pdf',
@@ -117,7 +123,7 @@ export default function ExportReportModal({ netWorthData }: ExportReportModalPro
         <span className="hidden sm:inline">Xuất Báo Cáo</span>
       </button>
 
-      {isOpen && (
+      {mounted && isOpen && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
             {/* Header */}
@@ -208,7 +214,8 @@ export default function ExportReportModal({ netWorthData }: ExportReportModalPro
               <span>Dữ liệu báo cáo được xử lý cục bộ trên server của bạn. Không chia sẻ với bên thứ ba.</span>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

@@ -87,9 +87,9 @@ export async function GET(request: NextRequest) {
           id: `budget-over-${budget.category}`,
           type: 'BUDGET_OVERRUN',
           severity: 'danger',
-          title: `🚨 Vượt ngân sách: ${budget.category}`,
+          title: `Vượt ngân sách: ${budget.category}`,
           message: `Đã chi ${formatMoney(spent)} / ${formatMoney(budget.limitMinor)} (${(ratio * 100).toFixed(0)}%). Hãy kiểm soát chi tiêu!`,
-          icon: '🚨',
+          icon: 'AlertOctagon',
           createdAt: now.toISOString(),
         });
       } else if (ratio >= BUDGET_WARNING_RATIO) {
@@ -97,9 +97,9 @@ export async function GET(request: NextRequest) {
           id: `budget-warn-${budget.category}`,
           type: 'BUDGET_WARNING',
           severity: 'warning',
-          title: `⚠️ Sắp vượt ngân sách: ${budget.category}`,
+          title: `Sắp vượt ngân sách: ${budget.category}`,
           message: `Đã chi ${formatMoney(spent)} / ${formatMoney(budget.limitMinor)} (${(ratio * 100).toFixed(0)}%). Còn ${formatMoney(budget.limitMinor - spent)} trong tháng.`,
-          icon: '⚠️',
+          icon: 'AlertTriangle',
           createdAt: now.toISOString(),
         });
       }
@@ -117,9 +117,9 @@ export async function GET(request: NextRequest) {
           id: `goal-done-${goal._id}`,
           type: 'GOAL_COMPLETED',
           severity: 'success',
-          title: `✅ Hoàn thành mục tiêu: ${goal.name}`,
-          message: `Bạn đã tích lũy đủ ${formatMoney(goal.targetAmountMinor)}. Chúc mừng! 🎉`,
-          icon: '✅',
+          title: `Hoàn thành mục tiêu: ${goal.name}`,
+          message: `Bạn đã tích lũy đủ ${formatMoney(goal.targetAmountMinor)}. Chúc mừng!`,
+          icon: 'Trophy',
           createdAt: now.toISOString(),
         });
       } else if (ratio >= GOAL_NEAR_RATIO) {
@@ -127,9 +127,9 @@ export async function GET(request: NextRequest) {
           id: `goal-near-${goal._id}`,
           type: 'GOAL_NEAR',
           severity: 'success',
-          title: `🎯 Gần đạt mục tiêu: ${goal.name}`,
+          title: `Gần đạt mục tiêu: ${goal.name}`,
           message: `Đã tích lũy ${formatMoney(goal.currentAmountMinor)} / ${formatMoney(goal.targetAmountMinor)} (${(ratio * 100).toFixed(1)}%). Chỉ còn ${formatMoney(goal.targetAmountMinor - goal.currentAmountMinor)} nữa!`,
-          icon: '🎯',
+          icon: 'Target',
           createdAt: now.toISOString(),
         });
       }
@@ -144,9 +144,9 @@ export async function GET(request: NextRequest) {
             id: `goal-deadline-${goal._id}`,
             type: 'GOAL_DEADLINE',
             severity: 'warning',
-            title: `⏰ Mục tiêu sắp đến hạn: ${goal.name}`,
-            message: `Còn ${daysLeft} ngày đến hạn. Tiến độ hiện tại: ${(ratio * 100).toFixed(1)}%.`,
-            icon: '⏰',
+            title: `Mục tiêu sắp đến hạn: ${goal.name}`,
+            message: `Còn ${daysLeft} ngày đến hạn. Tiến độ hiện tại: ${(ratio * 105).toFixed(1)}%.`,
+            icon: 'Clock',
             createdAt: now.toISOString(),
           });
         }
@@ -165,9 +165,9 @@ export async function GET(request: NextRequest) {
             id: `milestone-${milestone}`,
             type: 'NET_WORTH_MILESTONE',
             severity: 'success',
-            title: `🏆 Đạt mốc tài sản mới!`,
-            message: `Tài sản ròng của bạn vừa vượt mốc ${formatMoney(milestone)}! Thành tích tuyệt vời 💪`,
-            icon: '🏆',
+            title: `Đạt mốc tài sản mới!`,
+            message: `Tài sản ròng của bạn vừa vượt mốc ${formatMoney(milestone)}! Thành tích tuyệt vời`,
+            icon: 'Trophy',
             createdAt: now.toISOString(),
           });
           break; // only show the most recent milestone
@@ -178,6 +178,7 @@ export async function GET(request: NextRequest) {
     // ── 4. Abnormal large transactions (last 30 days) ─────────────────────────
     const allExpenses = await TransactionModel.find({
       userId,
+      type: 'EXPENSE',
       occurredOn: { $gte: thirtyDaysAgo },
     })
       .sort({ amountMinor: -1 })
@@ -200,9 +201,9 @@ export async function GET(request: NextRequest) {
           id: `large-tx-${bigTx._id}`,
           type: 'LARGE_TRANSACTION',
           severity: 'warning',
-          title: `⚡ Giao dịch lớn bất thường`,
+          title: `Giao dịch lớn bất thường`,
           message: `Phát hiện giao dịch ${formatMoney(bigTx.amountMinor)} (danh mục: ${bigTx.category}) trong 30 ngày qua. Hãy xác nhận đây là chi tiêu hợp lệ.`,
-          icon: '⚡',
+          icon: 'Zap',
           createdAt: now.toISOString(),
         });
       }
@@ -226,9 +227,9 @@ export async function GET(request: NextRequest) {
         id: 'stale-accounts',
         type: 'STALE_ACCOUNTS',
         severity: 'info',
-        title: `💡 ${staleAccounts.length} tài khoản chưa cập nhật`,
+        title: `${staleAccounts.length} tài khoản chưa cập nhật`,
         message: `${names}${staleAccounts.length > 3 ? ' và các tài khoản khác' : ''} chưa được định giá trong hơn 30 ngày. Hãy cập nhật để báo cáo chính xác hơn.`,
-        icon: '💡',
+        icon: 'Lightbulb',
         createdAt: now.toISOString(),
       });
     }

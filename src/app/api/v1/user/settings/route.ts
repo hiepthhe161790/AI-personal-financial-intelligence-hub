@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { connectToDatabase } from "@/lib/db";
 import UserSettingModel from "@/models/UserSetting";
 import { authOptions } from "@/lib/auth";
-import { encryptText } from "@/lib/encryption";
+import { encryptText, decryptText } from "@/lib/encryption";
 
 async function getUserId() {
   const session = await getServerSession(authOptions);
@@ -17,11 +17,15 @@ export async function GET() {
 
     const settings = await UserSettingModel.findOne({ userId }).lean();
     const hasApiKey = !!settings?.geminiApiKeyEncrypted;
+    const hasTelegramBotToken = !!settings?.telegramBotTokenEncrypted;
+    const telegramChatId = settings?.telegramChatIdEncrypted ? decryptText(settings.telegramChatIdEncrypted) : "";
 
     return NextResponse.json({
       status: "success",
       data: {
         hasApiKey,
+        hasTelegramBotToken,
+        telegramChatId,
       },
     });
   } catch (error: unknown) {
@@ -33,19 +37,32 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { geminiApiKey } = body;
+    const { geminiApiKey, telegramBotToken, telegramChatId } = body;
 
     const userId = await getUserId();
     await connectToDatabase();
 
-    let geminiApiKeyEncrypted = null;
-    if (geminiApiKey && geminiApiKey.trim() !== "") {
-      geminiApiKeyEncrypted = encryptText(geminiApiKey.trim());
+    const updateFields: any = {};
+    if (geminiApiKey !== undefined) {
+      updateFields.geminiApiKeyEncrypted = geminiApiKey && geminiApiKey.trim() !== "" ? encryptText(geminiApiKey.trim()) : null;
+    }
+
+    const isClearTelegram = telegramBotToken === "" && telegramChatId === "";
+    if (isClearTelegram) {
+      updateFields.telegramBotTokenEncrypted = null;
+      updateFields.telegramChatIdEncrypted = null;
+    } else {
+      if (telegramBotToken !== undefined && telegramBotToken.trim() !== "") {
+        updateFields.telegramBotTokenEncrypted = encryptText(telegramBotToken.trim());
+      }
+      if (telegramChatId !== undefined && telegramChatId.trim() !== "") {
+        updateFields.telegramChatIdEncrypted = encryptText(telegramChatId.trim());
+      }
     }
 
     const settings = await UserSettingModel.findOneAndUpdate(
       { userId },
-      { geminiApiKeyEncrypted },
+      { $set: updateFields },
       { new: true, upsert: true }
     );
 
@@ -53,6 +70,8 @@ export async function POST(request: Request) {
       status: "success",
       data: {
         hasApiKey: !!settings.geminiApiKeyEncrypted,
+        hasTelegramBotToken: !!settings.telegramBotTokenEncrypted,
+        telegramChatId: settings.telegramChatIdEncrypted ? decryptText(settings.telegramChatIdEncrypted) : "",
       },
     });
   } catch (error: unknown) {

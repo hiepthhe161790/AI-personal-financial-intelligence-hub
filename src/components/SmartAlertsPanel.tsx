@@ -1,14 +1,27 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Bell, BellOff, ChevronDown, ChevronUp, X, CheckCircle2 } from 'lucide-react';
+import { 
+  Bell, BellOff, ChevronDown, ChevronUp, X, CheckCircle2,
+  AlertOctagon, AlertTriangle, Trophy, Target, Clock, Zap, Lightbulb 
+} from 'lucide-react';
 import type { FinancialAlert, AlertSeverity } from '@/app/api/v1/alerts/route';
 
-const SEVERITY_STYLES: Record<AlertSeverity, { border: string; bg: string; badge: string; dot: string }> = {
-  danger: { border: 'border-rose-500/40', bg: 'bg-rose-500/10', badge: 'bg-rose-500', dot: 'bg-rose-400' },
-  warning: { border: 'border-amber-500/40', bg: 'bg-amber-500/10', badge: 'bg-amber-500', dot: 'bg-amber-400' },
-  success: { border: 'border-emerald-500/40', bg: 'bg-emerald-500/10', badge: 'bg-emerald-500', dot: 'bg-emerald-400' },
-  info: { border: 'border-slate-600/60', bg: 'bg-slate-800/50', badge: 'bg-slate-500', dot: 'bg-slate-400' },
+const SEVERITY_STYLES: Record<AlertSeverity, { border: string; bg: string; badge: string; dot: string; iconText: string }> = {
+  danger: { border: 'border-rose-500/40', bg: 'bg-rose-500/10', badge: 'bg-rose-500', dot: 'bg-rose-400', iconText: 'text-rose-450' },
+  warning: { border: 'border-amber-500/40', bg: 'bg-amber-500/10', badge: 'bg-amber-500', dot: 'bg-amber-400', iconText: 'text-amber-450' },
+  success: { border: 'border-emerald-500/40', bg: 'bg-emerald-500/10', badge: 'bg-emerald-500', dot: 'bg-emerald-400', iconText: 'text-emerald-450' },
+  info: { border: 'border-slate-600/60', bg: 'bg-slate-800/50', badge: 'bg-slate-500', dot: 'bg-slate-400', iconText: 'text-sky-400' },
+};
+
+const ALERT_ICONS = {
+  AlertOctagon,
+  AlertTriangle,
+  Trophy,
+  Target,
+  Clock,
+  Zap,
+  Lightbulb,
 };
 
 const DISMISSED_KEY = 'smart_alerts_dismissed';
@@ -74,9 +87,17 @@ export default function SmartAlertsPanel({ netWorthMinor = 0 }: SmartAlertsPanel
   return (
     <div className="bg-slate-950 dark:bg-slate-900/60 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
       {/* Header bar */}
-      <button
+      <div
         onClick={() => setCollapsed((p) => !p)}
-        className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-800/40 transition-colors cursor-pointer group"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setCollapsed((p) => !p);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-800/40 transition-colors cursor-pointer group focus:outline-none"
       >
         <div className="flex items-center gap-3">
           <div className={`w-9 h-9 rounded-xl flex items-center justify-center border transition-colors ${urgentCount > 0
@@ -119,7 +140,7 @@ export default function SmartAlertsPanel({ netWorthMinor = 0 }: SmartAlertsPanel
             : <ChevronUp className="w-4 h-4 text-slate-400 group-hover:text-slate-100 transition-colors" />
           }
         </div>
-      </button>
+      </div>
 
       {/* Alert list */}
       {!collapsed && (
@@ -143,8 +164,11 @@ export default function SmartAlertsPanel({ netWorthMinor = 0 }: SmartAlertsPanel
                   key={alert.id}
                   className={`flex items-start gap-3 p-3.5 rounded-2xl border ${s.border} ${s.bg} animate-in fade-in slide-in-from-top-1 duration-200`}
                 >
-                  {/* Severity dot */}
-                  <span className={`mt-1 w-2 h-2 rounded-full shrink-0 ${s.dot}`} />
+                  {/* Alert Icon */}
+                  {(() => {
+                    const IconComponent = ALERT_ICONS[alert.icon as keyof typeof ALERT_ICONS] || AlertTriangle;
+                    return <IconComponent className={`w-4 h-4 shrink-0 mt-0.5 ${s.iconText}`} />;
+                  })()}
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">

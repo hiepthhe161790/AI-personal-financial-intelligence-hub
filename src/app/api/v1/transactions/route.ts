@@ -162,11 +162,13 @@ export async function POST(request: Request) {
 
             if (usedPercent >= 100 && previousUsedPercent < 100) {
               await sendTelegramAlert(
-                `🚨 *BÁO ĐỘNG VƯỢT NGÂN SÁCH*\n\nBạn đã chi tiêu vượt quá hạn mức của danh mục *${category}*!\n\n• Đã tiêu: *${totalSpentVND.toLocaleString('vi-VN')} đ*\n• Hạn mức: *${limitVND.toLocaleString('vi-VN')} đ*\n• Tỷ lệ: *${usedPercent.toFixed(1)}%*\n\nVui lòng thắt chặt chi tiêu danh mục này.`
+                `🚨 *BÁO ĐỘNG VƯỢT NGÂN SÁCH*\n\nBạn đã chi tiêu vượt quá hạn mức của danh mục *${category}*!\n\n• Đã tiêu: *${totalSpentVND.toLocaleString('vi-VN')} đ*\n• Hạn mức: *${limitVND.toLocaleString('vi-VN')} đ*\n• Tỷ lệ: *${usedPercent.toFixed(1)}%*\n\nVui lòng thắt chặt chi tiêu danh mục này.`,
+                userId
               );
             } else if (usedPercent >= 80 && previousUsedPercent < 80) {
               await sendTelegramAlert(
-                `⚠️ *CẢNH BÁO TIỆM CẬN HẠN MỨC*\n\nChi tiêu của bạn cho danh mục *${category}* đã chạm ngưỡng cảnh báo!\n\n• Đã tiêu: *${totalSpentVND.toLocaleString('vi-VN')} đ*\n• Hạn mức: *${limitVND.toLocaleString('vi-VN')} đ*\n• Tỷ lệ: *${usedPercent.toFixed(1)}%*\n\nHãy cân đối các khoản chi tiêu tiếp theo.`
+                `⚠️ *CẢNH BÁO TIỆM CẬN HẠN MỨC*\n\nChi tiêu của bạn cho danh mục *${category}* đã chạm ngưỡng cảnh báo!\n\n• Đã tiêu: *${totalSpentVND.toLocaleString('vi-VN')} đ*\n• Hạn mức: *${limitVND.toLocaleString('vi-VN')} đ*\n• Tỷ lệ: *${usedPercent.toFixed(1)}%*\n\nHãy cân đối các khoản chi tiêu tiếp theo.`,
+                userId
               );
             }
           }

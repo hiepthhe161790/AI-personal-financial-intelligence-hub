@@ -3,9 +3,25 @@ import { connectToDatabase } from "@/lib/db";
 import { BillReminderModel } from "@/models/BillReminder";
 import { getUserIdFromSession } from "@/lib/auth";
 
-async function sendTelegramMessage(text: string): Promise<boolean> {
-  const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+import UserSettingModel from "@/models/UserSetting";
+import { decryptText } from "@/lib/encryption";
+
+async function sendTelegramMessage(text: string, userId: string): Promise<boolean> {
+  let botToken = process.env.TELEGRAM_BOT_TOKEN;
+  let chatId = process.env.TELEGRAM_CHAT_ID;
+
+  try {
+    const settings = await UserSettingModel.findOne({ userId }).lean();
+    if (settings?.telegramBotTokenEncrypted) {
+      botToken = decryptText(settings.telegramBotTokenEncrypted);
+    }
+    if (settings?.telegramChatIdEncrypted) {
+      chatId = decryptText(settings.telegramChatIdEncrypted);
+    }
+  } catch (err) {
+    console.error("[Bills/Notify] Failed to read user telegram settings:", err);
+  }
+
   if (!botToken || !chatId || botToken === "your_telegram_bot_token_here") {
     console.log("[Bills/Notify] Telegram not configured, skipping.");
     return false;
@@ -72,7 +88,7 @@ export async function POST() {
       (bill.notes ? `📝 Ghi chú: ${bill.notes}\n` : "") +
       `\n<i>AI Financial Hub — Nhắc nhở tự động</i>`;
 
-    const sent = await sendTelegramMessage(msg);
+    const sent = await sendTelegramMessage(msg, userId);
     if (sent) {
       await BillReminderModel.findByIdAndUpdate(bill._id, { lastNotifiedMonth: currentMonth });
       notified.push(String(bill._id));

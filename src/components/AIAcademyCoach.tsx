@@ -221,7 +221,7 @@ ${selectedLesson.contentMarkdown}
             </h4>
 
             {/* Chat messages */}
-            <div className="space-y-3 max-h-72 overflow-y-auto pr-1 scroll-smooth">
+            <div className="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1 scroll-smooth">
               {chatHistory.map((msg, idx) => (
                 <div
                   key={idx}

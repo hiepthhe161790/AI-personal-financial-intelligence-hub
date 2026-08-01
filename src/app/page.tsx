@@ -326,7 +326,7 @@ export default function Home() {
                 className="px-3.5 py-2 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
               >
                 <Camera className="w-4 h-4 text-teal-400" />
-                <span>Scan Sao Kê (AI OCR) 📷</span>
+                <span>Scan Sao Kê (AI OCR)</span>
               </button>
 
               <button
@@ -335,7 +335,7 @@ export default function Home() {
                 className="px-3.5 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm disabled:opacity-50"
               >
                 <RefreshCw className={`w-4 h-4 text-indigo-400 ${syncing ? 'animate-spin' : ''}`} />
-                <span>{syncing ? 'Đang đồng bộ...' : 'Đồng Bộ Giá 🔄'}</span>
+                <span>{syncing ? 'Đang đồng bộ...' : 'Đồng Bộ Giá'}</span>
               </button>
 
               <button
@@ -343,7 +343,7 @@ export default function Home() {
                 className="px-3.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
               >
                 <Scale className="w-4 h-4 text-amber-400" />
-                <span>Tái Cân Đối Danh Mục ⚖️</span>
+                <span>Tái Cân Đối Danh Mục</span>
               </button>
 
               <ShareNetWorthCard data={netWorthData} isPrivate={isPrivate} />

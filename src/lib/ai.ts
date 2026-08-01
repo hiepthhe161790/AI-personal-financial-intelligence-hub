@@ -175,7 +175,7 @@ function generateLocalFallbackBrief(pack: EvidencePack): AIResearchBrief {
   }
 
   if (categoriesToCut.length === 0) {
-    categoriesToCut.push("Ăn uống 🍔", "Cà phê & Đi chợ ☕");
+    categoriesToCut.push("Ăn uống", "Cà phê & Đi chợ");
   }
 
   // Compound interest calculation: FV = P * [((1 + r/n)^(nt) - 1) / (r/n)]

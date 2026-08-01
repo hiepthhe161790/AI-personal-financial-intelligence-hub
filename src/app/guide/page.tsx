@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
   HelpCircle, ArrowLeft, Key, QrCode, AlertCircle, Sparkles, BookOpen,
-  Send, ShieldCheck, Database, Award, Info, Scale, Check, ListTodo, Plus, Landmark, PieChart, CheckSquare
+  Send, ShieldCheck, Database, Award, Info, Scale, Check, ListTodo, Plus, Landmark, PieChart, CheckSquare, Bot
 } from 'lucide-react';
 
 type TabType = 'budget' | 'telegram' | 'goals' | 'cockpit' | 'ocr' | 'rebalance' | 'audit';
@@ -23,13 +23,13 @@ function GuideContent() {
   }, [tabParam]);
 
   const tabs = [
-    { id: 'budget', label: '💰 Luồng Hạn Mức Chi Tiêu', icon: ListTodo },
-    { id: 'telegram', label: '🤖 Liên Kết Telegram Bot', icon: Send },
-    { id: 'goals', label: '🎯 Luồng Dự Báo Tích Sản', icon: Award },
-    { id: 'cockpit', label: '🚀 Bảng Điều Khiển Cockpit', icon: CheckSquare },
-    { id: 'ocr', label: '📸 Quản Lý Net Worth & AI OCR', icon: Landmark },
-    { id: 'rebalance', label: '⚖️ Tái Cân Đối & Giả Lập Nợ', icon: Scale },
-    { id: 'audit', label: '🔍 Kiểm Toán Tính Năng', icon: Database },
+    { id: 'budget', label: 'Luồng Hạn Mức Chi Tiêu', icon: ListTodo },
+    { id: 'telegram', label: 'Liên Kết Telegram Bot', icon: Send },
+    { id: 'goals', label: 'Luồng Dự Báo Tích Sản', icon: Award },
+    { id: 'cockpit', label: 'Bảng Điều Khiển Cockpit', icon: CheckSquare },
+    { id: 'ocr', label: 'Quản Lý Net Worth & AI OCR', icon: Landmark },
+    { id: 'rebalance', label: 'Tái Cân Đối & Giả Lập Nợ', icon: Scale },
+    { id: 'audit', label: 'Kiểm Toán Tính Năng', icon: Database },
   ] as const;
 
   return (
@@ -112,7 +112,7 @@ function GuideContent() {
                         Cuộn màn hình xuống thẻ **Quản Lý Hạn Mức Chi Tiêu (Budget)**. 
                         Ở panel **Thiết Lập Ngân Sách** bên phải:
                         <br />
-                        - Chọn danh mục chi tiêu muốn khống chế, ví dụ: **Ăn uống 🍔**.
+                        - Chọn danh mục chi tiêu muốn khống chế, ví dụ: **Ăn uống**.
                         <br />
                         - Nhập số tiền hạn mức tối đa cho tháng đó, ví dụ: <code className="text-emerald-400 font-mono font-bold">1.500.000</code> đ.
                         <br />
@@ -133,7 +133,7 @@ function GuideContent() {
                         <br />
                         - Nhập số tiền chi thực tế, ví dụ: <code className="text-rose-400 font-mono font-bold">150.000</code> đ.
                         <br />
-                        - Chọn đúng danh mục **Ăn uống 🍔** mà bạn đã đặt hạn mức ở bước 1.
+                        - Chọn đúng danh mục **Ăn uống** mà bạn đã đặt hạn mức ở bước 1.
                         <br />
                         - Nhập ghi chú (ví dụ: *Đi ăn trưa với đồng nghiệp*) và bấm **Thêm Giao Dịch**.
                       </p>
@@ -146,7 +146,7 @@ function GuideContent() {
                       <p className="text-[11px] text-slate-400 leading-relaxed">
                         Nhìn lại thẻ **Quản Lý Hạn Mức Chi Tiêu (Budget)**:
                         <br />
-                        - Danh mục **Ăn uống 🍔** đã tự động cập nhật số tiền đã tiêu lên **150.000 đ** và phần trạng thái hiển thị **10% đã tiêu**.
+                        - Danh mục **Ăn uống** đã tự động cập nhật số tiền đã tiêu lên **150.000 đ** và phần trạng thái hiển thị **10% đã tiêu**.
                         <br />
                         - Nếu bạn tiếp tục thêm các giao dịch khác làm tổng số tiền tiêu vượt **80%** hạn mức (ví dụ tiêu quá 1.200.000đ), thanh tiến trình sẽ chuyển sang **Màu Vàng** cảnh báo. Nếu vượt quá **100%**, thanh tiến trình chuyển sang **Màu Đỏ** báo động đỏ.
                       </p>
@@ -170,7 +170,7 @@ function GuideContent() {
                 <div className="border-b border-slate-800 pb-4">
                   <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
                     <span className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                      🤖
+                      <Bot className="w-4 h-4" />
                     </span>
                     <span>Liên Kết & Cấu Hình Telegram Bot Cảnh Báo</span>
                   </h2>

@@ -24,7 +24,7 @@ const STEPS = [
       'AI Financial Hub giúp bạn theo dõi tài sản ròng, phân tích rủi ro, lên kế hoạch tài chính, và nhận cảnh báo thông minh — tất cả trong một nền tảng duy nhất.',
     tips: [
       '📊 Biểu đồ tài sản real-time',
-      '🤖 AI phân tích & cảnh báo tài chính',
+      'AI phân tích & cảnh báo tài chính',
       '🎯 Theo dõi mục tiêu & tự do tài chính',
       '📤 Xuất báo cáo Excel/PDF chuyên nghiệp',
     ],

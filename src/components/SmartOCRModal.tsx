@@ -198,7 +198,7 @@ export default function SmartOCRModal({ isOpen, onClose, onSuccess }: SmartOCRMo
                 Danh sách tài sản nhận diện ({result.items.length})
               </h4>
 
-              <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-56 overflow-y-auto custom-scrollbar pr-1">
                 {result.items.map((item, idx) => (
                   <div
                     key={idx}

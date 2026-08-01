@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Target, CheckSquare, Square, TrendingUp, Sparkles, Award, HelpCircle } from 'lucide-react';
-import { formatMoney } from '@/domain/money';
+import { formatMoney, formatNumericInput } from '@/domain/money';
 
 interface PersonalWealthTrackerProps {
   currentNetWorthVND: number;
@@ -11,9 +11,9 @@ interface PersonalWealthTrackerProps {
 
 export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWealthTrackerProps) {
   const [targetMonthlySavings, setTargetMonthlySavings] = useState(15000000); // Default 15m / month
-  const [currentMonthSavings, setCurrentMonthSavings] = useState(10000000); // Saved so far
+  const [currentMonthSavings, setCurrentMonthSavings] = useState(0); // Dynamically computed
   const [editingTarget, setEditingTarget] = useState(false);
-  const [tempTarget, setTempTarget] = useState('15000000');
+  const [tempTarget, setTempTarget] = useState('15,000,000');
 
   const [checklist, setChecklist] = useState([
     {
@@ -42,19 +42,75 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
     },
   ]);
 
+  // Load target savings & checklist from localStorage on mount
+  useEffect(() => {
+    const savedTarget = localStorage.getItem('target_monthly_savings');
+    if (savedTarget) {
+      setTargetMonthlySavings(Number(savedTarget));
+      setTempTarget(formatNumericInput(savedTarget));
+    }
+    
+    const savedChecklist = localStorage.getItem('discipline_checklist_v1');
+    if (savedChecklist) {
+      try {
+        setChecklist(JSON.parse(savedChecklist));
+      } catch (e) {
+        console.error('Failed to parse checklist:', e);
+      }
+    }
+  }, []);
+
+  // Fetch actual monthly savings (VND major) dynamically when Net Worth changes
+  useEffect(() => {
+    const fetchCurrentMonthSavings = async () => {
+      try {
+        const res = await fetch('/api/v1/transactions?limit=100');
+        const json = await res.json();
+        if (json.status === 'success') {
+          const txs = json.data.transactions;
+          const now = new Date();
+          const startOfMonthStr = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+          
+          let netSavingsMinor = 0;
+          for (const tx of txs) {
+            const occurredOnStr = tx.occurredOn.slice(0, 10);
+            if (occurredOnStr >= startOfMonthStr) {
+              if (tx.type === 'INCOME') {
+                netSavingsMinor += tx.amountMinor;
+              } else {
+                netSavingsMinor -= tx.amountMinor;
+              }
+            }
+          }
+          // Net savings = income - expense for this month. 
+          // VND minor matches major unit since VND factor is 1
+          setCurrentMonthSavings(Math.max(0, netSavingsMinor));
+        }
+      } catch (err) {
+        console.error('Failed to calculate current month savings:', err);
+      }
+    };
+
+    fetchCurrentMonthSavings();
+  }, [currentNetWorthVND]);
+
   const toggleChecklist = (id: string) => {
-    setChecklist((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item))
-    );
+    setChecklist((prev) => {
+      const next = prev.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item));
+      localStorage.setItem('discipline_checklist_v1', JSON.stringify(next));
+      return next;
+    });
   };
 
   const progressPercent = Math.min(100, Math.round((currentMonthSavings / targetMonthlySavings) * 100));
   const completedCount = checklist.filter((c) => c.completed).length;
 
   const handleSaveTarget = () => {
-    const parsed = Number(tempTarget);
+    const cleanValue = tempTarget.replace(/,/g, '');
+    const parsed = Number(cleanValue);
     if (!isNaN(parsed) && parsed > 0) {
       setTargetMonthlySavings(parsed);
+      localStorage.setItem('target_monthly_savings', String(parsed));
     }
     setEditingTarget(false);
   };
@@ -71,7 +127,7 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
               <span>Mục Tiêu Tích Sản Hàng Tháng Của Bạn</span>
               <Link href="/guide?tab=cockpit" title="Xem hướng dẫn sử dụng Cockpit & Checklist">
-                <HelpCircle className="w-4 h-4 text-slate-400 hover:text-emerald-450 transition-colors cursor-pointer" />
+                <HelpCircle className="w-4 h-4 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer" />
               </Link>
               <span className="px-2.5 py-0.5 text-[10px] font-extrabold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 Personal Cockpit
@@ -83,7 +139,7 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
 
         <button
           onClick={() => {
-            setTempTarget(targetMonthlySavings.toString());
+            setTempTarget(formatNumericInput(String(targetMonthlySavings)));
             setEditingTarget(!editingTarget);
           }}
           className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 border border-slate-700 transition-all cursor-pointer"
@@ -97,9 +153,9 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
         <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-3 animate-in fade-in duration-200">
           <span className="text-xs font-bold text-slate-300 shrink-0">Mục tiêu tiết kiệm tháng (VNĐ):</span>
           <input
-            type="number"
+            type="text"
             value={tempTarget}
-            onChange={(e) => setTempTarget(e.target.value)}
+            onChange={(e) => setTempTarget(formatNumericInput(e.target.value))}
             className="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
           />
           <button
@@ -143,7 +199,7 @@ export default function PersonalWealthTracker({ currentNetWorthVND }: PersonalWe
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-            Checklist Kỷ Luật Tài Chính Hàng Tháng ({completedCount}/{checklist.length})
+            Checklist Kỷ Luật Tài Chỉ Hàng Tháng ({completedCount}/{checklist.length})
           </h4>
           <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
             <Award className="w-3.5 h-3.5" />

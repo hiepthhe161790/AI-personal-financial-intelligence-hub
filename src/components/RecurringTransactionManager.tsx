@@ -3,6 +3,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Repeat, Plus, Trash2, ArrowUpCircle, ArrowDownCircle, Play, CheckCircle2, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
+import { formatNumericInput } from '@/domain/money';
+import CategoryIcon, { getCleanCategoryName } from '@/components/CategoryIcon';
+import CategorySelect from '@/components/CategorySelect';
 
 interface Account { _id: string; name: string; type: string; }
 
@@ -23,8 +26,28 @@ function formatVND(minor: number) {
   return minor.toLocaleString('vi-VN') + ' ₫';
 }
 
-const INCOME_CATEGORIES = ['Lương / Thưởng 💼', 'Thu nhập phụ 💰', 'Cho thuê 🏠', 'Cổ tức 📈', 'Khác'];
-const EXPENSE_CATEGORIES = ['Tiền thuê nhà 🏠', 'Trả góp vay 🏦', 'Bảo hiểm 🛡️', 'Điện/Nước/Internet 💡', 'Học phí 📚', 'Khác'];
+const INCOME_CATEGORIES = [
+  "Lương & Thưởng",
+  "Kinh doanh & Làm thêm",
+  "Đầu tư & Lãi suất",
+  "Được tặng & Quà biếu",
+  "Thu nhập khác"
+];
+const EXPENSE_CATEGORIES = [
+  "Ăn uống & Cà phê",
+  "Đi chợ & Siêu thị",
+  "Nhà cửa & Tiền thuê",
+  "Di chuyển & Xăng xe",
+  "Mua sắm & Quần áo",
+  "Hóa đơn & Tiện ích",
+  "Giải trí & Du lịch",
+  "Y tế & Sức khỏe",
+  "Giáo dục & Học tập",
+  "Quà tặng & Hiếu hỷ",
+  "Đầu tư & Tiết kiệm",
+  "Khoản nợ & Lãi suất",
+  "Chi phí khác"
+];
 
 export default function RecurringTransactionManager() {
   const [items, setItems] = useState<RecurringTx[]>([]);
@@ -38,7 +61,7 @@ export default function RecurringTransactionManager() {
     accountId: '',
     type: 'EXPENSE' as 'INCOME' | 'EXPENSE',
     amountMinor: '',
-    category: 'Tiền thuê nhà 🏠',
+    category: 'Nhà cửa & Tiền thuê',
     notes: '',
     dayOfMonth: '1',
   });
@@ -71,7 +94,7 @@ export default function RecurringTransactionManager() {
         body: JSON.stringify({
           accountId: form.accountId,
           type: form.type,
-          amountMinor: Number(form.amountMinor.replace(/\D/g, '')),
+          amountMinor: Number(form.amountMinor.replace(/,/g, '')),
           category: form.category,
           notes: form.notes,
           dayOfMonth: Number(form.dayOfMonth),
@@ -187,9 +210,9 @@ export default function RecurringTransactionManager() {
               <label className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Số tiền (₫) *</label>
               <input
                 className="mt-1 w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-indigo-500"
-                placeholder="10.000.000"
+                placeholder="10,000,000"
                 value={form.amountMinor}
-                onChange={e => setForm(f => ({ ...f, amountMinor: e.target.value }))}
+                onChange={e => setForm(f => ({ ...f, amountMinor: formatNumericInput(e.target.value) }))}
               />
             </div>
             <div>
@@ -204,15 +227,13 @@ export default function RecurringTransactionManager() {
             </div>
             <div className="col-span-2">
               <label className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Danh mục *</label>
-              <select
-                className="mt-1 w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-xs focus:outline-none focus:border-indigo-500 cursor-pointer"
+              <CategorySelect
                 value={form.category}
-                onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-              >
-                {(form.type === 'INCOME' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES).map(c => (
-                  <option key={c}>{c}</option>
-                ))}
-              </select>
+                onChange={(val) => setForm(f => ({ ...f, category: val }))}
+                options={form.type === 'INCOME' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES}
+                className="mt-1"
+                borderClass="border-slate-700 focus:border-indigo-500 text-xs"
+              />
             </div>
             <div className="col-span-2">
               <label className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Ghi chú</label>
@@ -268,7 +289,10 @@ export default function RecurringTransactionManager() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-bold text-slate-100">{item.category}</span>
+                      <span className="text-sm font-bold text-slate-100 flex items-center gap-1.5">
+                        <CategoryIcon category={item.category} className="w-4 h-4 text-indigo-400" />
+                        <span>{getCleanCategoryName(item.category)}</span>
+                      </span>
                       {alreadyRan && (
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3" /> Đã ghi tháng này

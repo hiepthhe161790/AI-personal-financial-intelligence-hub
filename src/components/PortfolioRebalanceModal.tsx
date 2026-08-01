@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Scale, X, ArrowUpRight, ArrowDownRight, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Scale, X, ArrowUpRight, ArrowDownRight, CheckCircle2, AlertTriangle, ShieldCheck, Lightbulb } from 'lucide-react';
 import { NetWorthOverview } from '@/domain/net-worth';
 import { calculatePortfolioRebalance, DEFAULT_TARGET_ALLOCATION, TargetAllocation } from '@/domain/portfolio-rebalance';
 import { formatMoney } from '@/domain/money';
@@ -136,7 +136,7 @@ export default function PortfolioRebalanceModal({
             Phân Tích Từng Nhóm Tài Sản ({analysis.categories.length})
           </h4>
 
-          <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+          <div className="space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar pr-1">
             {analysis.categories.map((cat) => {
               const isBuy = cat.action === 'BUY';
               const isSell = cat.action === 'SELL';
@@ -183,8 +183,9 @@ export default function PortfolioRebalanceModal({
                     </span>
                   </div>
 
-                  <div className="text-xs text-slate-400 bg-slate-900/80 p-2 rounded-xl border border-slate-800/60">
-                    💡 <span className="text-slate-300 font-semibold">{cat.recommendation}</span>
+                  <div className="text-xs text-slate-400 bg-slate-900/80 p-2 rounded-xl border border-slate-800/60 flex items-center gap-1.5">
+                    <Lightbulb className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                    <span className="text-slate-300 font-semibold">{cat.recommendation}</span>
                   </div>
                 </div>
               );

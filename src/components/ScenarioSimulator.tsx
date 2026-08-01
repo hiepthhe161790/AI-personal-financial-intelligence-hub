@@ -22,19 +22,21 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { ScenarioResult } from '@/domain/simulation';
-import { formatMoney, minorToMajor } from '@/domain/money';
+import { formatMoney, minorToMajor, formatNumericInput } from '@/domain/money';
 
 interface ScenarioSimulatorProps {
   currentNetWorthMinor: number;
 }
 
 export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimulatorProps) {
-  const [initialNetWorthMajor, setInitialNetWorthMajor] = useState<number>(minorToMajor(currentNetWorthMinor, 'VND'));
-  const [monthlyContributionMajor, setMonthlyContributionMajor] = useState<number>(10000000); // 10M VND default
+  const [initialNetWorthMajor, setInitialNetWorthMajor] = useState<string>(
+    currentNetWorthMinor > 0 ? formatNumericInput(String(minorToMajor(currentNetWorthMinor, 'VND'))) : ''
+  );
+  const [monthlyContributionMajor, setMonthlyContributionMajor] = useState<string>('10,000,000'); // 10M VND default
   const [annualReturnRatePercent, setAnnualReturnRatePercent] = useState<number>(8.5); // 8.5% default
   const [annualInflationRatePercent, setAnnualInflationRatePercent] = useState<number>(3.0); // 3% inflation
   const [horizonYears, setHorizonYears] = useState<number>(10);
-  const [targetGoalMajor, setTargetGoalMajor] = useState<number>(2000000000); // 2 Billion VND default
+  const [targetGoalMajor, setTargetGoalMajor] = useState<string>('2,000,000,000'); // 2 Billion VND default
 
   const [simulationData, setSimulationData] = useState<ScenarioResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -42,23 +44,26 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
   // Sync initial net worth if props update
   useEffect(() => {
     if (currentNetWorthMinor > 0) {
-      setInitialNetWorthMajor(minorToMajor(currentNetWorthMinor, 'VND'));
+      setInitialNetWorthMajor(formatNumericInput(String(minorToMajor(currentNetWorthMinor, 'VND'))));
     }
   }, [currentNetWorthMinor]);
 
   const runSimulation = useCallback(async () => {
     setLoading(true);
     try {
+      const initNW = parseFloat(initialNetWorthMajor.replace(/,/g, '')) || 0;
+      const monthlyCont = parseFloat(monthlyContributionMajor.replace(/,/g, '')) || 0;
+      const targetG = parseFloat(targetGoalMajor.replace(/,/g, '')) || 0;
       const res = await fetch('/api/v1/scenarios/calculate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          initialNetWorthMajor,
-          monthlyContributionMajor,
+          initialNetWorthMajor: initNW,
+          monthlyContributionMajor: monthlyCont,
           annualReturnRatePercent,
           annualInflationRatePercent,
           horizonYears,
-          targetGoalMajor: targetGoalMajor > 0 ? targetGoalMajor : undefined,
+          targetGoalMajor: targetG > 0 ? targetG : undefined,
         }),
       });
 
@@ -122,14 +127,13 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               Tài Sản Khởi Điểm (VND)
             </label>
             <input
-              type="number"
-              step="any"
+              type="text"
               value={initialNetWorthMajor}
-              onChange={(e) => setInitialNetWorthMajor(parseFloat(e.target.value) || 0)}
+              onChange={(e) => setInitialNetWorthMajor(formatNumericInput(e.target.value))}
               className="w-full px-4 py-2.5 bg-slate-900 dark:bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
-              {formatMoney(initialNetWorthMajor, 'VND')}
+              {formatMoney(parseFloat(initialNetWorthMajor.replace(/,/g, '')) || 0, 'VND')}
             </div>
           </div>
 
@@ -140,14 +144,13 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               Tiết Kiệm Mới / Tháng (VND)
             </label>
             <input
-              type="number"
-              step="any"
+              type="text"
               value={monthlyContributionMajor}
-              onChange={(e) => setMonthlyContributionMajor(parseFloat(e.target.value) || 0)}
+              onChange={(e) => setMonthlyContributionMajor(formatNumericInput(e.target.value))}
               className="w-full px-4 py-2.5 bg-slate-900 dark:bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
-              {formatMoney(monthlyContributionMajor, 'VND')}/tháng
+              {formatMoney(parseFloat(monthlyContributionMajor.replace(/,/g, '')) || 0, 'VND')}/tháng
             </div>
           </div>
 
@@ -203,14 +206,13 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
               Mục Tiêu Tài Sản Tới Hạn (VND)
             </label>
             <input
-              type="number"
-              step="any"
+              type="text"
               value={targetGoalMajor}
-              onChange={(e) => setTargetGoalMajor(parseFloat(e.target.value) || 0)}
+              onChange={(e) => setTargetGoalMajor(formatNumericInput(e.target.value))}
               className="w-full px-4 py-2.5 bg-slate-900 dark:bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono text-sm focus:outline-none focus:border-emerald-500"
             />
             <div className="text-[11px] text-slate-400">
-              {formatMoney(targetGoalMajor, 'VND')}
+              {formatMoney(parseFloat(targetGoalMajor.replace(/,/g, '')) || 0, 'VND')}
             </div>
           </div>
 
@@ -259,7 +261,7 @@ export default function ScenarioSimulator({ currentNetWorthMinor }: ScenarioSimu
           <div className="rounded-2xl bg-gradient-to-r from-purple-950/60 to-slate-900 border border-purple-500/40 p-5 space-y-1">
             <div className="text-xs font-semibold text-purple-400 uppercase flex items-center gap-1.5">
               <Target className="w-3.5 h-3.5" />
-              Tiến Độ Mục Tiêu ({formatMoney(targetGoalMajor, 'VND')})
+              Tiến Độ Mục Tiêu ({formatMoney(parseFloat(targetGoalMajor.replace(/,/g, '')) || 0, 'VND')})
             </div>
             {simulationData.targetGoalAchieved ? (
               <div className="text-xl font-extrabold text-emerald-400 flex items-center gap-2">

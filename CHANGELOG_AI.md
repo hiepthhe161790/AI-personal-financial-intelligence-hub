@@ -2,6 +2,88 @@
 
 Nhật ký ghi lại toàn bộ thay đổi do AI (Antigravity) thực hiện trên dự án này.
 
+## [2026-08-01] — Thay thế emoji danh mục bằng Lucide Icons & Tự động thêm dấu phẩy cho ô input số tiền
+
+### Added:
+- **[CategoryIcon.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/CategoryIcon.tsx)**: [NEW] Component mới dùng để lọc bỏ emoji trong tên danh mục và hiển thị Lucide Icon phù hợp tương ứng. Đã dọn dẹp sạch toàn bộ emoji khỏi các điều kiện so khớp (mapping logic conditions) để tăng độ nhất quán và sạch sẽ cho mã nguồn.
+- **[CategorySelect.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/CategorySelect.tsx)**: [NEW] Component Dropdown lựa chọn danh mục tùy chỉnh hỗ trợ hiển thị Lucide Icon song hành với nhãn văn bản, thay thế hoàn toàn cho thẻ HTML `<select>` mặc định của trình duyệt để khắc phục vấn đề mất biểu tượng.
+
+### Modified:
+- **[UserSetting.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/models/UserSetting.ts)**: 
+  - Thêm trường `telegramBotTokenEncrypted` và `telegramChatIdEncrypted` vào schema để lưu trữ thông tin cấu hình Telegram riêng biệt của từng người dùng.
+  - Bổ sung đoạn code vô hiệu hóa cache model (`delete mongoose.models.UserSetting`) giúp buộc Mongoose biên dịch lại Schema mới khi chạy Hot-reload trong môi trường Development (tránh việc Server dùng lại cache Schema cũ không nhận diện các trường Telegram mới thêm vào).
+- **[route.ts (user/settings)](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/user/settings/route.ts)**: 
+  - Cập nhật API GET và POST để hỗ trợ lưu trữ, mã hóa AES-256 cũng như truy vấn giải mã cấu hình Telegram Bot Token và Chat ID.
+  - Sửa lỗi ghi đè dữ liệu: Thực hiện cập nhật từng phần (partial updates). Tránh việc người dùng chỉ thay đổi Chat ID/Token làm mất giá trị của trường còn lại (chỉ thiết lập về `null` khi người dùng nhấn nút xóa cấu hình gửi cả 2 trường rỗng).
+- **[page.tsx (settings)](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/settings/page.tsx)**: Thiết kế thêm phần cấu hình Telegram Bot, giao diện gồm trạng thái kết nối, ô nhập Token/Chat ID, hỗ trợ lưu và xóa thông tin trực tiếp vào database.
+- **[UserAuthHeader.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/UserAuthHeader.tsx)** & **[ExportReportModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ExportReportModal.tsx)**: 
+  - Khắc phục triệt để lỗi layout bị cắt xén (clipping/overflow) do thẻ `<header>` cha sử dụng các thuộc tính `backdrop-filter` và `sticky` tạo ra Containing Block độc lập giới hạn phần tử con.
+  - Sử dụng React `createPortal` để đưa (teleport) trực tiếp mã HTML của modal Settings và modal Xuất báo cáo ra thẻ `document.body`, đảm bảo các modal luôn hiển thị đầy đủ và căn giữa màn hình trình duyệt.
+- **[telegram.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/lib/telegram.ts)**: Nhận thêm tham số `userId` tùy chọn để truy xuất động Token/Chat ID tương ứng trong Database thay vì phụ thuộc cứng vào file `.env`.
+- **[transactions/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/transactions/route.ts)** & **[bills/notify/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/bills/notify/route.ts)**: Truyền `userId` vào dịch vụ gửi thông báo Telegram để hỗ trợ lấy Token/Chat ID động của từng tài khoản người dùng từ Database.
+- **[OnboardingModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/OnboardingModal.tsx)**, **[BudgetManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/BudgetManager.tsx)**, **[guide/page.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/guide/page.tsx)** & **[WealthGoalsTracker.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/WealthGoalsTracker.tsx)**: 
+  - Loại bỏ hoàn toàn các emoji robot `🤖` cổ điển và thay thế bằng icon vector `<Bot />` của Lucide.
+  - Đồng bộ danh sách danh mục `CATEGORY_OPTIONS` trong [BudgetManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/BudgetManager.tsx#L19) và [RecurringTransactionManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/RecurringTransactionManager.tsx#L36) khớp chính xác 100% với danh mục của Sổ Nhật Ký [CashFlowLedger.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/CashFlowLedger.tsx#L37).
+  - Tái cấu trúc phân loại danh mục khoa học hơn: Thay thế "Cà phê & Đi chợ" và "Ăn uống" cũ bằng **"Ăn uống & Cà phê"** và **"Đi chợ & Siêu thị"** riêng biệt; bổ sung thêm danh mục quan trọng **"Giáo dục & Học tập"** và **"Quà tặng & Hiếu hỷ"**.
+  - Loại bỏ biểu tượng tòa nhà `🏢` khỏi phần văn bản gợi ý (placeholder) trong form điền mục tiêu tài chính tại [WealthGoalsTracker.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/WealthGoalsTracker.tsx#L375) để tạo sự thống nhất.
+- **[CategoryIcon.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/CategoryIcon.tsx)**: Phân tách logic khớp biểu tượng: Danh mục chứa "cà phê" khớp với icon `Coffee`, danh mục chứa "đi chợ" hoặc "siêu thị" khớp với icon cửa hàng `Store`.
+- **[globals.css](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/globals.css)**: Định nghĩa lớp tiện ích `.custom-scrollbar` với thiết kế thanh cuộn mỏng (width 6px), các góc bo tròn, màu thanh cuộn tối (`#334155`) và nền trong suốt, hỗ trợ cả công cụ kết xuất Webkit lẫn Firefox.
+- **[CategorySelect.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/CategorySelect.tsx)**, **[PortfolioRebalanceModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/PortfolioRebalanceModal.tsx)**, **[SmartOCRModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/SmartOCRModal.tsx)** & **[AIAcademyCoach.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AIAcademyCoach.tsx)**: Áp dụng lớp `.custom-scrollbar` vào toàn bộ danh sách thả xuống, danh mục tái cân đối tài sản, kết quả quét OCR sao kê và khung chat hội thoại Gemini để loại bỏ thanh cuộn mặc định màu trắng cồng kềnh của trình duyệt, giúp giao diện đồng điệu, sang trọng hơn.
+- **[money.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/domain/money.ts)**: Thêm các hàm `formatNumericInput` để tự động thêm dấu phẩy `,` phân tách phần nghìn khi nhập số, và `parseNumericInput` để chuyển đổi chuỗi định dạng ngược về kiểu số thực.
+- **[db.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/lib/db.ts)**: 
+  - Bổ sung cơ chế tự động chạy di cư dữ liệu (database migration) mỗi khi kết nối MongoDB thành công, giúp tự động làm sạch và loại bỏ toàn bộ emoji trong trường `category` của các bản ghi giao dịch, ngân sách, và giao dịch định kỳ cũ trong DB.
+  - Cập nhật ánh xạ di cư tự động đổi tên toàn bộ các danh mục cũ (Ăn uống, Cà phê & Đi chợ, Học tập, Giải trí, Di chuyển, Mua sắm, v.v.) sang các danh mục chuẩn mới tương ứng trong cơ sở dữ liệu để đảm bảo tính đồng nhất dòng tiền lịch sử.
+- **[route.ts (alerts)](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/alerts/route.ts)**: 
+  - Loại bỏ các emoji (`🚨`, `⚠️`, `✅`, `🎯`, `⏰`, `🏆`, `⚡`, `💡`) ra khỏi tiêu đề thông báo thông minh của hệ thống. Thay vào đó, trường `icon` trả về tên dạng chuỗi của Lucide Icon (`AlertOctagon`, `AlertTriangle`, `Trophy`, `Target`, `Clock`, `Zap`, `Lightbulb`).
+  - Sửa lỗi logic truy vấn cảnh báo giao dịch lớn bất thường: Bổ sung điều kiện lọc `type: 'EXPENSE'` để bỏ qua các khoản thu nhập (như Lương thưởng) và chỉ cảnh báo đối với các khoản chi phí thực tế.
+- **[SmartAlertsPanel.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/SmartAlertsPanel.tsx)**: 
+  - Nhận tên icon dạng chuỗi từ API trả về và hiển thị động biểu tượng vector Lucide tương ứng thay thế cho emoji.
+  - Thay thế thẻ `<button>` tiêu đề (Header bar) thành thẻ `<div>` (có đầy đủ thuộc tính `role="button"`, `tabIndex`, keydown handler) để khắc phục lỗi console lồng thẻ `<button>` con "Đóng tất cả", chấm dứt triệt để lỗi Hydration của Next.js.
+- **[Budget.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/models/Budget.ts)**: Loại bỏ emoji cổ điển khỏi phần bình luận mô tả kiểu dữ liệu của `category`.
+- **[page.tsx (guide)](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/guide/page.tsx)**: Loại bỏ toàn bộ emoji `"Ăn uống 🍔"` trong tài liệu hướng dẫn sử dụng dòng tiền để thống nhất với danh mục sạch.
+- **[page.tsx (main)](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/page.tsx)**: Loại bỏ các emoji thừa (`📷`, `🔄`, `⚖️`) khỏi nhãn của các nút công cụ phân tích (Scan Sao Kê, Đồng Bộ Giá, Tái Cân Đối Danh Mục) do đã hiển thị các icon tương ứng của Lucide.
+- **[AddAccountModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/AddAccountModal.tsx)**: Chuyển các trường số lượng, số dư ban đầu, giá vốn sang dạng nhập chuỗi có tự động định dạng dấu phẩy khi gõ, đồng thời parse lại chuỗi trước khi gửi dữ liệu tạo mới tài khoản.
+- **[EditAccountModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/EditAccountModal.tsx)**: Đồng bộ định dạng số dư ban đầu và giá vốn tài sản khi load thông tin cũng như khi gõ thay đổi số dư, loại bỏ dấu phẩy trước khi submit sửa đổi.
+- **[BudgetManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/BudgetManager.tsx)**: 
+  - Hiển thị danh sách hạn mức với `<CategoryIcon />` và tên danh mục đã làm sạch emoji.
+  - Loại bỏ hoàn toàn emoji ở các chuỗi khai báo danh mục tĩnh (`CATEGORY_OPTIONS`).
+  - Thiết lập ô input hạn mức chi tiêu thành dạng text tự động thêm dấu phẩy phân tách phần nghìn và xử lý parse giá trị trước khi lưu.
+  - Thay thế thẻ select HTML truyền thống bằng `<CategorySelect />` để khôi phục biểu tượng Lucide tương ứng bên cạnh tùy chọn.
+- **[CashFlowLedger.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/CashFlowLedger.tsx)**:
+  - Hiển thị danh sách lịch sử thu chi với Lucide Icon động thay cho emoji.
+  - Loại bỏ hoàn toàn emoji khỏi danh sách hằng số danh mục thu chi (`EXPENSE_CATEGORIES`, `INCOME_CATEGORIES`).
+  - Cập nhật hàm lọc dữ liệu sử dụng tên danh mục đã được làm sạch để tránh lệch khớp kết quả do emoji cũ trong DB.
+  - Tự động thêm dấu phẩy phân tách phần nghìn khi người dùng nhập số tiền giao dịch và parse dữ liệu trước khi gửi API.
+  - Thay thế thẻ select ở form nhập giao dịch và dropdown bộ lọc nâng cao bằng `<CategorySelect />`.
+  - Loại bỏ hoàn toàn emoji bút viết `✍️` khỏi nhãn nút bấm ghi chép và thông báo trống lịch sử giao dịch.
+- **[RecurringTransactionManager.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/RecurringTransactionManager.tsx)**:
+  - Áp dụng `<CategoryIcon />` trong danh sách giao dịch định kỳ.
+  - Loại bỏ hoàn toàn emoji khỏi danh sách hằng số danh mục (`INCOME_CATEGORIES`, `EXPENSE_CATEGORIES`).
+  - Áp dụng định dạng động phần nghìn bằng dấu phẩy cho trường nhập số tiền giao dịch định kỳ.
+  - Thay thế thẻ select bằng `<CategorySelect />` khi tạo giao dịch định kỳ.
+- **[NetWorthHistoryChart.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/NetWorthHistoryChart.tsx)**:
+  - Thay thế emoji `🔮` của nút bật tắt "Dự báo 12 tháng" bằng icon `<Sparkles />` của Lucide.
+- **[WealthGoalsTracker.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/WealthGoalsTracker.tsx)**:
+  - Loại bỏ emoji hiển thị trong dropdown các loại mục tiêu tài chính.
+  - Chuyển đổi các ô nhập số tiền nạp/rút, số tiền cần tích lũy, số tiền đã tích lũy thành dạng input tự động thêm dấu phẩy phân tách phần nghìn và parse lại khi submit/lưu.
+- **[ScenarioSimulator.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ScenarioSimulator.tsx)**:
+  - Chuyển đổi các ô nhập Tài sản khởi điểm, Tiết kiệm thêm hàng tháng, Mục tiêu tài sản cuối kỳ thành dạng tự động phân tách phần nghìn bằng dấu phẩy và thực hiện parse trước khi chạy tính toán mô phỏng.
+- **[DebtStrategyPlanner.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/DebtStrategyPlanner.tsx)**:
+  - Chuyển đổi ô nhập số tiền trả nợ tối thiểu hàng tháng thành dạng text tự động thêm dấu phẩy phần nghìn và parse ngược về số thực khi cập nhật thông tin nợ.
+  - Thay thế emoji bóng đèn `💡` tại các nhãn gợi ý chiến lược bằng icon vector `<Lightbulb />` của Lucide.
+- **[FinancialFreedomMilestones.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/FinancialFreedomMilestones.tsx)**:
+  - Thay thế emoji bóng đèn `💡` ở hướng dẫn kéo thanh trượt chi tiêu bằng icon `<Lightbulb />` của Lucide.
+- **[PortfolioRebalanceModal.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/PortfolioRebalanceModal.tsx)**:
+  - Thay thế emoji bóng đèn `💡` ở dòng kiến nghị tái cơ cấu tài sản bằng icon `<Lightbulb />` của Lucide.
+- **[ShareNetWorthCard.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/ShareNetWorthCard.tsx)**:
+  - Thay thế emoji bóng đèn `💡` ở chân trang chia sẻ tài sản bằng icon `<Lightbulb />` của Lucide.
+- **[UserAuthHeader.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/UserAuthHeader.tsx)**:
+  - Thay thế emoji bóng đèn `💡` ở hướng dẫn lợi ích API Key bằng icon `<Lightbulb />` của Lucide.
+- **[PersonalWealthTracker.tsx](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/components/PersonalWealthTracker.tsx)**:
+  - Hiện thực hóa tính năng lưu trữ mục tiêu tích sản hàng tháng (`targetMonthlySavings`) và trạng thái checklist kỷ luật tài chính cá nhân vào `localStorage` để lưu trữ lâu dài.
+  - Tự động hóa việc tính toán "Đã tích lũy tháng này" (`currentMonthSavings`) bằng cách tải danh sách giao dịch và tính hiệu số giữa thu nhập và chi tiêu của tháng hiện hành từ cơ sở dữ liệu thay vì sử dụng dữ liệu giả (mock data).
+  - Tích hợp thêm dấu phẩy phân tách phần nghìn cho ô nhập liệu mục tiêu tích sản.
+
 ## [2026-07-31] — Budgets & Accounts CRUD & Dynamic User ID Refactoring
 ### Added:
 - **[accounts/[id]/route.ts](file:///d:/sontayweb/AI-personal-financial-intelligence-hub/src/app/api/v1/accounts/[id]/route.ts)**: [NEW] Route API hỗ trợ `PUT` để sửa thông tin/số dư tài sản (tự động tạo `ValuationSnapshot` khi thay đổi số dư) và `DELETE` để soft-delete tài sản (`isArchived: true`).

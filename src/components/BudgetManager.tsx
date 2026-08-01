@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Target, AlertCircle, HelpCircle, Plus, Loader2, Trash2, Edit } from 'lucide-react';
-import { minorToMajor } from '@/domain/money';
+import { Target, AlertCircle, HelpCircle, Plus, Loader2, Trash2, Edit, Bot } from 'lucide-react';
+import { minorToMajor, formatNumericInput } from '@/domain/money';
+import CategoryIcon, { getCleanCategoryName } from '@/components/CategoryIcon';
+import CategorySelect from '@/components/CategorySelect';
 
 interface Budget {
   _id: string;
@@ -15,14 +17,19 @@ interface Budget {
 }
 
 const CATEGORY_OPTIONS = [
-  'Ăn uống 🍔',
-  'Di chuyển 🚗',
-  'Mua sắm 🛍️',
-  'Nhà cửa 🏠',
-  'Giải trí 🎮',
-  'Sức khỏe 🏥',
-  'Học tập 📚',
-  'Khác 💸'
+  "Ăn uống & Cà phê",
+  "Đi chợ & Siêu thị",
+  "Nhà cửa & Tiền thuê",
+  "Di chuyển & Xăng xe",
+  "Mua sắm & Quần áo",
+  "Hóa đơn & Tiện ích",
+  "Giải trí & Du lịch",
+  "Y tế & Sức khỏe",
+  "Giáo dục & Học tập",
+  "Quà tặng & Hiếu hỷ",
+  "Đầu tư & Tiết kiệm",
+  "Khoản nợ & Lãi suất",
+  "Chi phí khác"
 ];
 
 export default function BudgetManager() {
@@ -38,7 +45,7 @@ export default function BudgetManager() {
 
   const handleQuickEdit = (cat: string, limitVnd: number) => {
     setCategory(cat);
-    setLimitMajor(String(limitVnd));
+    setLimitMajor(formatNumericInput(String(limitVnd)));
     const input = document.getElementById('budget-limit-input');
     if (input) {
       input.focus();
@@ -85,7 +92,7 @@ export default function BudgetManager() {
     setError(null);
 
     try {
-      const parsedLimit = parseFloat(limitMajor);
+      const parsedLimit = parseFloat(limitMajor.replace(/,/g, ''));
       if (isNaN(parsedLimit) || parsedLimit < 0) {
         throw new Error('Vui lòng nhập hạn mức hợp lệ (lớn hơn hoặc bằng 0)');
       }
@@ -150,7 +157,10 @@ export default function BudgetManager() {
       {/* Telegram Guide Banner */}
       {showGuide && (
         <div className="rounded-2xl bg-indigo-950/20 border border-indigo-500/20 p-4 text-xs text-slate-300 space-y-2 animate-in slide-in-from-top duration-200">
-          <p className="font-bold text-indigo-400">🤖 Hướng dẫn cấu hình nhận cảnh báo qua Telegram Bot:</p>
+          <p className="font-bold text-indigo-400 flex items-center gap-1.5">
+            <Bot className="w-4 h-4 text-indigo-450" />
+            <span>Hướng dẫn cấu hình nhận cảnh báo qua Telegram Bot:</span>
+          </p>
           <ol className="list-decimal pl-4 space-y-1 text-slate-400">
             <li>Tìm kiếm bot <code className="text-slate-200">@BotFather</code> trên Telegram để tạo Bot mới và nhận <code className="text-slate-200">Token</code>.</li>
             <li>Tìm kiếm bot <code className="text-slate-200">@userinfobot</code> trên Telegram để lấy <code className="text-slate-200">Chat ID</code> của bạn.</li>
@@ -189,7 +199,10 @@ export default function BudgetManager() {
                   <div key={b._id} className="p-4 rounded-2xl bg-slate-900/50 dark:bg-slate-950 border border-slate-800 space-y-2.5 flex flex-col justify-between shadow-sm">
                     <div className="space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-200 text-sm">{b.category}</span>
+                        <span className="font-bold text-slate-200 text-sm flex items-center gap-1.5">
+                          <CategoryIcon category={b.category} className="w-4 h-4 text-indigo-400" />
+                          <span>{getCleanCategoryName(b.category)}</span>
+                        </span>
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => handleQuickEdit(b.category, limitVND)}
@@ -261,28 +274,24 @@ export default function BudgetManager() {
           <form onSubmit={handleSaveBudget} className="space-y-4">
             <div>
               <label className="block text-[11px] font-semibold text-slate-400 mb-1">Chọn Danh Mục</label>
-              <select
+              <CategorySelect
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
-              >
-                {CATEGORY_OPTIONS.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => setCategory(val)}
+                options={CATEGORY_OPTIONS}
+                className="mt-1"
+                borderClass="border-slate-800 focus:border-indigo-550 text-xs"
+              />
             </div>
 
             <div>
               <label className="block text-[11px] font-semibold text-slate-400 mb-1">Hạn mức chi tiêu tháng (VND)</label>
               <input
                 id="budget-limit-input"
-                type="number"
+                type="text"
                 required
-                placeholder="VD: 3000000"
+                placeholder="VD: 3,000,000"
                 value={limitMajor}
-                onChange={(e) => setLimitMajor(e.target.value)}
+                onChange={(e) => setLimitMajor(formatNumericInput(e.target.value))}
                 className="w-full px-3 py-2 bg-slate-950 dark:bg-slate-900 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-indigo-500 text-xs"
               />
             </div>
